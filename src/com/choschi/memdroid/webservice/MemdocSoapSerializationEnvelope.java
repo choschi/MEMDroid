@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.xmlpull.v1.XmlSerializer;
 
-import android.util.Log;
 
 /**
  * 

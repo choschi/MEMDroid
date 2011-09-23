@@ -1,5 +1,16 @@
 package com.choschi.memdroid.webservice;
 
+import com.choschi.memdroid.webservice.parameters.ModuleRequestParams;
+import com.choschi.memdroid.webservice.parameters.ServerRequestParams;
+import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
+import com.choschi.memdroid.webservice.requests.BackgroundSoapRequest;
+import com.choschi.memdroid.webservice.requests.ModuleLoginRequest;
+import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
+import com.choschi.memdroid.webservice.requests.ServerLoginRequest;
+import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
+import com.choschi.memdroid.webservice.requests.ServerSessionIdRequest;
+import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
+
 import android.util.Log;
 import android.widget.TextView;
 
@@ -67,17 +78,20 @@ public class Client {
 	 */
 	
 	public void login (String username, String password){
-		this.username = username;
-		this.password = password;
-		SoapRequestParams params = new SoapRequestParams();
-		params.setAction("http://memdoc.webservices.yosemite.www.memdoc.org/MemdocServer/getServerSessionIdRequest");
-		params.setMethod("getServerSessionIdRequest");
-		params.setNamespace("http://memdoc.webservices.yosemite.www.memdoc.org");
-		params.setUrl("http://memdoctest.memdoc.org/memdocWsServer/MemdocServer");
-		Log.d (TAG,"init server session id request");
-		BackgroundSoapRequest request = new SessionIdRequest(Client.getInstance(),params);
-		request.execute(new SoapRequestParams[]{});
-		Log.d (TAG,"issued server sesion id request");		
+		if (!loggedIn){
+			log ("trying to login to the servers");
+			this.username = username;
+			this.password = password;
+			SoapRequestParams params = new ServerRequestParams();
+			params.setAction(BackgroundSoapRequest.ServerBaseAction+"getServerSessionIdRequest");
+			params.setMethod("getServerSessionIdRequest");
+			logcat ("init server session id request");
+			BackgroundSoapRequest request = new ServerSessionIdRequest(params);
+			request.execute(new SoapRequestParams[]{});
+			logcat ("issued server sesion id request");
+		}else{
+			log ("already logged in");
+		}
 	}
 	
 	/**
@@ -88,15 +102,13 @@ public class Client {
 	public void sessionIdReceived(ServerSessionIdResponse response){
 		this.sessionId = response.getSessionId();
 		log (response.toString());
-		SoapRequestParams params = new SoapRequestParams();
+		SoapRequestParams params = new ModuleRequestParams();
 		params.setAction("");
 		params.setMethod("login");
-		params.setNamespace("http://webservice.module.yosemite.www.memdoc.org/");
-		params.setUrl("http://195.176.223.108/modulewsserver/MemdocModule.php?wsdl");
-		Log.d (TAG,"init module login request");
-		BackgroundSoapRequest request = new ModuleLoginRequest(Client.getInstance(),params,username,password,sessionId);
+		logcat ("init module login request");
+		BackgroundSoapRequest request = new ModuleLoginRequest(params,username,password,sessionId);
 		request.execute(new SoapRequestParams[]{});
-		Log.d (TAG,"issued module login request");		
+		logcat ("issued module login request");		
 	}
 	
 	/**
@@ -110,27 +122,37 @@ public class Client {
 		this.moduleSessionId = response.getModuleSessionId();
 		this.signature = response.getSignature();
 		log (response.toString());
-		SoapRequestParams params = new SoapRequestParams();
-		params.setAction("http://memdoc.webservices.yosemite.www.memdoc.org/MemdocServer/loginRequest");
+		SoapRequestParams params = new ServerRequestParams();
+		params.setAction(BackgroundSoapRequest.ServerBaseAction+"loginRequest");
 		params.setMethod("login");
-		params.setNamespace("http://memdoc.webservices.yosemite.www.memdoc.org");
-		params.setUrl("http://memdoctest.memdoc.org/memdocWsServer/MemdocServer");
-		Log.d (TAG,"init server login request");
-		BackgroundSoapRequest request = new ServerLoginRequest(Client.getInstance(),params,"memdoctest.memdoc.org",sessionId,signature,userId);
+		logcat ("init server login request");
+		BackgroundSoapRequest request = new ServerLoginRequest(params,"memdoctest.memdoc.org",sessionId,signature,userId);
 		request.execute(new SoapRequestParams[]{});
-		Log.d (TAG,"issued server login request");
-	}
-	
-	public void serverLoggedIn (ServerLoginResponse response){
-		
+		logcat("issued server login request");
 	}
 	
 	/**
-	 * Appens a message text to the console view
+	 * last step successful -> set the logged in flag
+	 * tell the UI to display the after login screen
+	 * @param response
+	 */
+	
+	public void serverLoggedIn (ServerLoginResponse response){
+		this.loggedIn = response.getState();
+		log (response.toString());
+		// TODO tell the UI to show after login screen
+	}
+	
+	/**
+	 * Appends a message text to the console view
 	 * @param text
 	 */
 	
 	private void log (String text){
 		console.setText (console.getText()+"\n"+text);
+	}
+	
+	private void logcat(String text){
+		Log.d (TAG,text);
 	}
 }

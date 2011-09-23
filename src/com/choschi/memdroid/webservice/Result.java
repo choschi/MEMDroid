@@ -3,6 +3,10 @@ package com.choschi.memdroid.webservice;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
+import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
+import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
+
 import android.util.Log;
 
 /**
@@ -19,7 +23,8 @@ public class Result {
 	 */
 	
 	private enum Primitive {
-		getServerSessionIdResponse
+		getServerSessionIdResponse,
+		loginResponse
 	};
 	
 	/**
@@ -65,6 +70,8 @@ public class Result {
 		switch (type){
 			case getServerSessionIdResponse:
 				return new ServerSessionIdResponse (soapResponse);
+			case loginResponse:
+				return new ServerLoginResponse(soapResponse);
 		}
 		return null;
 	}

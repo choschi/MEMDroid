@@ -1,11 +1,14 @@
 package com.choschi.memdroid.webservice;
 
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
+import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesResponse;
 import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
+import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
 
 import android.util.Log;
 
@@ -32,7 +35,8 @@ public class Result {
 	 */
 	
 	private enum Complex {
-		loginResponse
+		loginResponse,
+		getListOfStudiesResponse,
 	}
 	
 	public static final String TAG = "Result";
@@ -51,6 +55,16 @@ public class Result {
 		try{
 			result = Result.handleObject((SoapObject) soapResponse);
 		}catch (Exception ex){Log.d(TAG,"not an object "+ex.getMessage());}
+		try{
+			result = Result.handleFault((SoapFault) soapResponse);
+		}catch (Exception ex){
+			Log.d(TAG,"not a fault "+ex.getMessage());
+		}
+		try{
+			result = Result.handleException ((Exception) soapResponse);
+		}catch (Exception ex){
+			Log.d(TAG,"not an exception "+ex.getMessage());
+		}
 		return result;
 	}
 	
@@ -92,7 +106,25 @@ public class Result {
 		switch (type){
 			case loginResponse:
 				return new ModuleLoginResponse (soapResponse);
+			case getListOfStudiesResponse:
+				return new ServerGetListOfStudiesResponse(soapResponse);
 		}
 		return null;
+	}
+	
+	/**
+	 * handles the soap fault responses
+	 */
+	
+	private static Result handleFault (SoapFault soapResponse){
+		return new SoapFaultResponse(soapResponse);
+	}
+	
+	/**
+	 * handles the exception responses
+	 */
+	
+	private static Result handleException (Exception soapResponse){
+		return new SoapFaultResponse(soapResponse);
 	}
 }

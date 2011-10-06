@@ -22,6 +22,11 @@ public class ServerSessionIdRequest extends BackgroundSoapRequest {
 	
 	@Override
 	protected void onPostExecute(Result result){
-		Client.getInstance().sessionIdReceived ((ServerSessionIdResponse)result);
+		try{
+			Client.getInstance().sessionIdReceived ((ServerSessionIdResponse)result);
+			return;
+		}catch (Exception ex){
+			super.onPostExecute(result);
+		}
 	}
 }

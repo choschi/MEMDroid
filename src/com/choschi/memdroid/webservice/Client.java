@@ -1,15 +1,23 @@
 package com.choschi.memdroid.webservice;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import com.choschi.memdroid.util.OnLoginListener;
 import com.choschi.memdroid.webservice.parameters.ModuleRequestParams;
 import com.choschi.memdroid.webservice.parameters.ServerRequestParams;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 import com.choschi.memdroid.webservice.requests.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
+import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesRequest;
+import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesResponse;
 import com.choschi.memdroid.webservice.requests.ServerLoginRequest;
 import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdRequest;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
+import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
 
 import android.util.Log;
 import android.widget.TextView;
@@ -27,6 +35,8 @@ import android.widget.TextView;
 public class Client {
 	
 	private static Client instance = new Client();
+	private List<OnLoginListener> listeners = new ArrayList<OnLoginListener>();
+	
 	 
     /**
      * private constructor, only class methods can create an instance of the class
@@ -60,6 +70,7 @@ public class Client {
 	private String moduleSessionId;
 	
 	private Boolean loggedIn = false;
+	private Boolean loggingIn = false;
 	
 	/**
 	 * console, may be used while developing to show on screen info to the tablet user
@@ -79,6 +90,7 @@ public class Client {
 	
 	public void login (String username, String password){
 		if (!loggedIn){
+			loggingIn = true;
 			log ("trying to login to the servers");
 			this.username = username;
 			this.password = password;
@@ -118,18 +130,21 @@ public class Client {
 	 */
 	
 	public void moduleLoggedIn (ModuleLoginResponse response){
-		this.userId = response.getUserId();
-		this.moduleSessionId = response.getModuleSessionId();
-		this.signature = response.getSignature();
-		log (response.toString());
-		SoapRequestParams params = new ServerRequestParams();
-		params.setAction(BackgroundSoapRequest.ServerBaseAction+"loginRequest");
-		params.setMethod("login");
-		logcat ("init server login request");
-		BackgroundSoapRequest request = new ServerLoginRequest(params,"memdoctest.memdoc.org",sessionId,signature,userId);
-		request.execute(new SoapRequestParams[]{});
-		logcat("issued server login request");
+		if (loggingIn){
+			this.userId = response.getUserId();
+			this.moduleSessionId = response.getModuleSessionId();
+			this.signature = response.getSignature();
+			log (response.toString());
+			SoapRequestParams params = new ServerRequestParams();
+			params.setAction(BackgroundSoapRequest.ServerBaseAction+"loginRequest");
+			params.setMethod("login");
+			logcat ("init server login request");
+			BackgroundSoapRequest request = new ServerLoginRequest(params,"memdoctest.memdoc.org",sessionId,signature,userId);
+			request.execute(new SoapRequestParams[]{});
+			logcat("issued server login request");
+		}
 	}
+	
 	
 	/**
 	 * last step successful -> set the logged in flag
@@ -138,10 +153,63 @@ public class Client {
 	 */
 	
 	public void serverLoggedIn (ServerLoginResponse response){
-		this.loggedIn = response.getState();
-		log (response.toString());
-		// TODO tell the UI to show after login screen
+		if (loggingIn){
+			this.loggedIn = response.getState();
+			log (response.toString());
+			loggingIn = false;
+			for (OnLoginListener listener:listeners){
+				listener.onLoginComplete(loggedIn);
+			}
+		}
 	}
+	
+	
+	/**
+	 * get a list of studies for the actual user
+	 */
+	
+	public void getListOfStudies (){
+		SoapRequestParams params = new ServerRequestParams();
+		params.setAction(BackgroundSoapRequest.ServerBaseAction+"getListOfStudiesRequest");
+		params.setMethod("getListOfStudies");
+		logcat ("init server "+params.getMethod()+" request");
+		logcat (Locale.getDefault().getDisplayLanguage());
+		String language = "de";
+		BackgroundSoapRequest request = new ServerGetListOfStudiesRequest(params,sessionId,language,"multicenter");
+		request.execute(new SoapRequestParams[]{});
+	}
+	
+	public void receivedListOfStudies (ServerGetListOfStudiesResponse response){
+		logcat ("received a list of studies");
+	}
+	
+	/**
+	 * register an OnLoginListener in this client
+	 * @param listener
+	 */
+	
+	public void registerOnLoginListener (OnLoginListener listener){
+		if (!listeners.contains(listener)){
+			listeners.add(listener);
+		}
+	}
+	
+	/**
+	 * terminal station for all soap faults, implement corresponding behaviour here
+	 * @param fault
+	 */
+	
+	public void handleFault(SoapFaultResponse fault){
+		log("a soap fault occured");
+		logcat (fault.toString());
+		if (loggingIn){
+			loggingIn = false;
+			for (OnLoginListener listener:listeners){
+				listener.onLoginComplete(false);
+			}
+		}
+	}
+	
 	
 	/**
 	 * Appends a message text to the console view
@@ -151,6 +219,11 @@ public class Client {
 	private void log (String text){
 		console.setText (console.getText()+"\n"+text);
 	}
+	
+	/**
+	 * logs a message to the log cat debug tool
+	 * @param text
+	 */
 	
 	private void logcat(String text){
 		Log.d (TAG,text);

@@ -3,8 +3,6 @@ package com.choschi.memdroid.webservice.requests;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import android.util.Log;
-
 import com.choschi.memdroid.webservice.Result;
 
 /**

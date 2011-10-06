@@ -31,6 +31,11 @@ public class ServerLoginRequest extends BackgroundSoapRequest {
 	
 	@Override
 	protected void onPostExecute(Result result){
-		Client.getInstance().serverLoggedIn ((ServerLoginResponse)result);
+		try{
+			Client.getInstance().serverLoggedIn ((ServerLoginResponse)result);
+			return;
+		}catch (Exception ex){
+			super.onPostExecute(result);
+		}
 	}
 }

@@ -27,6 +27,11 @@ public class ModuleLoginRequest extends BackgroundSoapRequest {
 	
 	@Override
 	protected void onPostExecute(Result result){
-		Client.getInstance().moduleLoggedIn ((ModuleLoginResponse)result);
+		try{
+			Client.getInstance().moduleLoggedIn ((ModuleLoginResponse)result);
+			return;
+		}catch (Exception ex){
+			super.onPostExecute(result);
+		}
 	}
 }

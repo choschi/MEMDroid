@@ -2,4 +2,8 @@
 <resources>
 	<string name="hello">Hello I\'am MEMDroid!</string>
     <string name="app_name">MEMDroid</string>
+    <string name="console">Console</string>
+    <string name="loginButton">Login</string>
+    <string name="password">webService1</string>
+    <string name="username">webservice</string>
 </resources>

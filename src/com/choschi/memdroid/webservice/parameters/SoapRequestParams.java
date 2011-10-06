@@ -7,9 +7,6 @@ package com.choschi.memdroid.webservice.parameters;
  */
 
 
-// TODO check if this class can be made superfluent by creating parameters directly in the request classes 
-// and defining main parts as static values on the BackgroundSoapRequest class
-
 public class SoapRequestParams {
 	private String soapAction;
 	private String soapMethod;

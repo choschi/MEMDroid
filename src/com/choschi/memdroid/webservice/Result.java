@@ -5,6 +5,9 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
+import com.choschi.memdroid.webservice.requests.ModuleUserDataResponse;
+import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse;
+import com.choschi.memdroid.webservice.requests.ServerGetListOfFormsResponse;
 import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesResponse;
 import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
@@ -27,7 +30,7 @@ public class Result {
 	
 	private enum Primitive {
 		getServerSessionIdResponse,
-		loginResponse
+		loginToServerResponse
 	};
 	
 	/**
@@ -35,8 +38,11 @@ public class Result {
 	 */
 	
 	private enum Complex {
-		loginResponse,
+		loginToModuleResponse,
 		getListOfStudiesResponse,
+		getListOfFormsResponse,
+		downloadFormDefinitionResponse,
+		getUserInformationResponse,
 	}
 	
 	public static final String TAG = "Result";
@@ -48,6 +54,7 @@ public class Result {
 	 */
 	
 	public static Result factory (Object soapResponse){
+		Log.d ("simple result", soapResponse.toString());
 		Result result = null;
 		try{
 			result = Result.handlePrimitive((SoapPrimitive) soapResponse);
@@ -75,6 +82,7 @@ public class Result {
 	 */
 	
 	private static Result handlePrimitive (SoapPrimitive soapResponse){
+		Log.d ("result", soapResponse.toString());
 		Primitive type = null;
 		for (Primitive possible : Primitive.values()){
 			if (soapResponse.getName().equalsIgnoreCase(possible.name())){
@@ -84,7 +92,7 @@ public class Result {
 		switch (type){
 			case getServerSessionIdResponse:
 				return new ServerSessionIdResponse (soapResponse);
-			case loginResponse:
+			case loginToServerResponse:
 				return new ServerLoginResponse(soapResponse);
 		}
 		return null;
@@ -97,6 +105,7 @@ public class Result {
 	 */
 	
 	private static Result handleObject (SoapObject soapResponse){
+		Log.d ("result", soapResponse.toString());
 		Complex type = null;
 		for (Complex possible : Complex.values()){
 			if (soapResponse.getName().equalsIgnoreCase(possible.name())){
@@ -104,10 +113,16 @@ public class Result {
 			}
 		}
 		switch (type){
-			case loginResponse:
+			case loginToModuleResponse:
 				return new ModuleLoginResponse (soapResponse);
 			case getListOfStudiesResponse:
 				return new ServerGetListOfStudiesResponse(soapResponse);
+			case getListOfFormsResponse:
+				return new ServerGetListOfFormsResponse(soapResponse);
+			case downloadFormDefinitionResponse:
+				return new ServerGetFormDefinitionResponse(soapResponse);
+			case getUserInformationResponse:
+				return new ModuleUserDataResponse(soapResponse);
 		}
 		return null;
 	}
@@ -117,6 +132,7 @@ public class Result {
 	 */
 	
 	private static Result handleFault (SoapFault soapResponse){
+		Log.d ("result", soapResponse.toString());
 		return new SoapFaultResponse(soapResponse);
 	}
 	

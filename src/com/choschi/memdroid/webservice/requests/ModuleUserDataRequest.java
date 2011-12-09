@@ -1,12 +1,10 @@
 package com.choschi.memdroid.webservice.requests;
 
-import android.util.Log;
-
 import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ModuleLoginRequest extends BackgroundSoapRequest {
+public class ModuleUserDataRequest extends BackgroundSoapRequest {
 
 	/**
 	 * Constructor
@@ -16,12 +14,9 @@ public class ModuleLoginRequest extends BackgroundSoapRequest {
 	 * @param sessionId, ServerSessionId obtained by call to the Server
 	 */
 	
-	public ModuleLoginRequest(SoapRequestParams params, String username, String password, String sessionId) {
+	public ModuleUserDataRequest(SoapRequestParams params, String userId) {
 		super(params);
-		request.addProperty ("passWord",password);
-		request.addProperty ("serverSessionId",sessionId);
-		request.addProperty ("userName",username);
-		Log.d ("request", request.toString());
+		request.addProperty("moduleSessionId",userId);
 	}
 	
 	/**
@@ -31,7 +26,7 @@ public class ModuleLoginRequest extends BackgroundSoapRequest {
 	@Override
 	protected void onPostExecute(Result result){
 		try{
-			Client.getInstance().moduleLoggedIn ((ModuleLoginResponse)result);
+			Client.getInstance().receivedUserData ((ModuleUserDataResponse)result);
 			return;
 		}catch (Exception ex){
 			super.onPostExecute(result);

@@ -3,6 +3,8 @@ package com.choschi.memdroid.webservice.requests;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import android.util.Log;
+
 import com.choschi.memdroid.webservice.Result;
 
 /**
@@ -16,6 +18,7 @@ public class ModuleLoginResponse extends Result {
 	private String moduleSessionId;
 	private String signature;
 	private String userId;
+	private String moduleId;
 	
 	/**
 	 * render the SoapObject in a more meaningful entity
@@ -23,9 +26,11 @@ public class ModuleLoginResponse extends Result {
 	 */
 	
 	public ModuleLoginResponse(SoapObject response){
+		Log.d ("reponse",response.toString());
 		moduleSessionId = ((SoapPrimitive)response.getProperty("moduleSessionId")).toString();
 		signature = ((SoapPrimitive)response.getProperty("signature")).toString();
 		userId = ((SoapPrimitive)response.getProperty("userId")).toString();
+		moduleId = (((SoapPrimitive)response.getProperty("moduleId")).toString());
 	}
 	
 	/**
@@ -56,6 +61,13 @@ public class ModuleLoginResponse extends Result {
 	}
 	
 	/**
+	 * @return the moduleId
+	 */
+	public String getModuleId() {
+		return moduleId;
+	}
+	
+	/**
 	 * convenience override for the log method
 	 */
 	
@@ -63,4 +75,6 @@ public class ModuleLoginResponse extends Result {
 	public String toString(){
 		return "ModuleSessionId: "+moduleSessionId;
 	}
+
+
 }

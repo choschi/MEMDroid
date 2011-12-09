@@ -4,6 +4,7 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.ksoap2.transport.Transport;
 
 import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.MemdocSoapSerializationEnvelope;
@@ -15,7 +16,16 @@ import android.util.Log;
 
 public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Result> {
 
-	public static String ModuleEndpoint = "http://195.176.223.108/modulewsserver/MemdocModule.php?wsdl";
+/**
+ * Final endpoints to use for developing use the test server ones...
+ */
+
+
+//	public static String ModuleEndpoint = "https://demomodule.memdoc.org/moduleWsServer/MemdocModule.php?wsdl";
+//	public static String ServerEndpoint = "https://memdocdemo.memdoc.org/memdocWsServer/MemdocServer?wsdl";
+
+	
+	public static String ModuleEndpoint = "http://195.176.223.108/moduleWsServer/MemdocModule.php?wsdl";
 	public static String ServerEndpoint = "http://memdoctest.memdoc.org/memdocWsServer/MemdocServer";
 	public static String ServerNamespace = "http://memdoc.webservices.yosemite.www.memdoc.org/";
 	public static String ModuleNamespace= "http://webservice.module.yosemite.www.memdoc.org/";
@@ -23,7 +33,7 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	
 	protected SoapRequestParams parameters;
 	protected SoapObject request;
-	protected SoapSerializationEnvelope envelope;
+	protected MemdocSoapSerializationEnvelope envelope;
 	
 	
 	/**
@@ -35,10 +45,11 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	public BackgroundSoapRequest(SoapRequestParams params){
 		this.parameters = params;
 		this.request = new SoapObject(parameters.getNamespace(), parameters.getMethod());
-		envelope = new MemdocSoapSerializationEnvelope(SoapEnvelope.VER11);
-	    envelope.setOutputSoapObject(request);
-	    envelope.setAddAdornments(false);
-	    envelope.implicitTypes = true;
+		this.envelope = new MemdocSoapSerializationEnvelope(SoapEnvelope.VER11);
+	    this.envelope.setOutputSoapObject(request);
+	    this.envelope.setAddAdornments(false);
+	    this.envelope.implicitTypes = true;
+	    this.envelope.dotNet = true;
 	}
 	
 	/**
@@ -51,10 +62,13 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	@Override
 	protected Result doInBackground(SoapRequestParams... params) {
 	    HttpTransportSE httpTransport = new HttpTransportSE(parameters.getUrl());
+	    httpTransport.debug = true;
 	    Result response = null;
 	    try {
 	    	httpTransport.call(parameters.getAction(), envelope);
-	    	response = Result.factory(envelope.getResponse());
+	    	Log.d ("request: ", httpTransport.requestDump);
+	    	Log.d ("response: ", httpTransport.responseDump);
+	    	response = Result.factory(envelope.getResponse());	
 	    }catch (Exception ex){
 	    	response = Result.factory(ex);
 	    }
@@ -68,6 +82,7 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	@Override
 	protected void onPostExecute(Result result){
 		try{
+			Log.d ("erronous reuslt", result.toString());
 			Client.getInstance().handleFault((SoapFaultResponse)result);
 		}catch (Exception ex){
 			Log.d ("BackgroundSoapRequest",ex.getMessage());

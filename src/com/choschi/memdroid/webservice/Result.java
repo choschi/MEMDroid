@@ -4,6 +4,7 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsResponse;
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
 import com.choschi.memdroid.webservice.requests.ModuleUserDataResponse;
 import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse;
@@ -43,6 +44,7 @@ public class Result {
 		getListOfFormsResponse,
 		downloadFormDefinitionResponse,
 		getUserInformationResponse,
+		getPatientFieldsResponse,
 	}
 	
 	public static final String TAG = "Result";
@@ -123,6 +125,8 @@ public class Result {
 				return new ServerGetFormDefinitionResponse(soapResponse);
 			case getUserInformationResponse:
 				return new ModuleUserDataResponse(soapResponse);
+			case getPatientFieldsResponse:
+				return new ModuleGetPatientFieldsResponse(soapResponse);
 		}
 		return null;
 	}

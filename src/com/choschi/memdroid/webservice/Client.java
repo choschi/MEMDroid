@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.Form;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.util.ClientListener;
@@ -12,6 +13,8 @@ import com.choschi.memdroid.webservice.parameters.ModuleRequestParams;
 import com.choschi.memdroid.webservice.parameters.ServerRequestParams;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 import com.choschi.memdroid.webservice.requests.BackgroundSoapRequest;
+import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsRequest;
+import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsResponse;
 import com.choschi.memdroid.webservice.requests.ModuleLoginRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
 import com.choschi.memdroid.webservice.requests.ModuleUserDataRequest;
@@ -48,8 +51,9 @@ public class Client {
 	public static final int LOGIN_SUCCESS = 0;
 	public static final int LOGIN_FAILED = 1;
 	public static final int REQUEST_FAILED = 3;
-	public static final int USER_DATA = 4;
-	public static final int STUDIES_LIST = 6;
+	public static final int USER_DATA = 10;
+	public static final int STUDIES_LIST = 20;
+	public static final int PATIENT_FIELDS = 30;
 
 	public static final int LOGIN_DIALOG = 0;
 	public static final int PROGRESS_DIALOG = 1;
@@ -89,6 +93,7 @@ public class Client {
 	private String moduleId;
 	
 	private ModuleUserDataResponse userData;
+	private ModuleGetPatientFieldsResponse patientFields;
 
 	private Study actualStudy;
 
@@ -233,14 +238,6 @@ public class Client {
 		if (loggedIn) {
 			userData = response;
 			log (response.toString());
-			/*
-			SoapRequestParams params = new ServerRequestParams();
-			params.setAction (BackgroundSoapRequest.ServerBaseAction+"loginRequest");
-			params.setMethod("login"); logcat ("init server login request");
-			BackgroundSoapRequest request = new
-			ServerLoginRequest(params,"memdoctest.memdoc.org",sessionId,signature,userId);
-			request.execute(new SoapRequestParams[]{}); logcat("issued server login request");
-			*/
 			for (ClientListener listener : listeners) {
 				listener.notify(Client.USER_DATA);
 			}
@@ -287,25 +284,19 @@ public class Client {
 	public void requestDataForStudy(Study study) {
 		if (this.loggedIn) {
 			
-			Log.d("study loader","study loading is disabled at the moment");
-			log("study loading disabled for instance");
+			//Log.d("study loader","study loading is disabled at the moment");
+			//log("study loading disabled for instance");
 			
-			//TODO not working for instance, concentrate on patient...
-			
-			/*
 			SoapRequestParams params = new ServerRequestParams();
-			params.setAction(BackgroundSoapRequest.ServerBaseAction
-					+ "getListOfFormsRequest");
+			params.setAction(BackgroundSoapRequest.ServerBaseAction + "GetListOfFormsRequest");
 			params.setMethod("getListOfForms");
 			logcat("init server " + params.getMethod() + " request");
 			logcat(Locale.getDefault().getDisplayLanguage());
 			String language = "de";
 			BackgroundSoapRequest request = new ServerGetListOfFormsRequest(
-					params, sessionId, language, study.getId(), "multicenter");
-			// BackgroundSoapRequest request = new
-			// ServerGetListOfFormsRequest(params,sessionId,language,"27","multicenter");
+					params, sessionId, language,  "multicenter", study.getName());
 			request.execute(new SoapRequestParams[] {});
-			*/
+			
 		}
 	}
 
@@ -341,6 +332,35 @@ public class Client {
 		logcat("received the form definitions");
 	}
 
+	
+	/**
+	 * Request all the fields for the patient search
+	 */
+	
+	public void requestPatientFields (){
+		if (this.loggedIn) {
+			if (this.patientFields != null) {
+				for (ClientListener listener : listeners) {
+					listener.notify(Client.PATIENT_FIELDS);
+				}
+			} else {
+				SoapRequestParams params = new ModuleRequestParams();
+				params.setMethod("getPatientFields");
+				logcat("init module " + params.getMethod() + " request");
+				String language = "de";
+				BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", userData.getDepartmentId());
+				request.execute(new SoapRequestParams[] {});
+			}
+		}
+	}
+	
+	public void receivedPatientFields (ModuleGetPatientFieldsResponse result){
+		patientFields = result;
+		for (ClientListener listener:listeners){
+			listener.notify(Client.PATIENT_FIELDS);
+		}
+	}
+	
 	/**
 	 * 
 	 */
@@ -378,6 +398,13 @@ public class Client {
 			}
 		}
 	}
+	
+	
+
+	public List<PatientField> getPatientFields() {
+		return patientFields.getFields();
+	}
+	
 
 	public List<Study> getListOfStudies() {
 		return this.studies;
@@ -426,5 +453,6 @@ public class Client {
 	private void logcat(String text) {
 		Log.d(TAG, text);
 	}
+
 
 }

@@ -28,7 +28,8 @@ public class ServerGetListOfStudiesResponse extends Result {
 	public ServerGetListOfStudiesResponse(SoapObject response){
 		studies = new ArrayList<Study>();
 		for (int i=0;i<response.getPropertyCount();i++){
-			studies.add(new Study (response.getPropertyAsString(i)));
+			//studies.add(new Study (response.getPropertyAsString(i)));
+			studies.add(new Study ((SoapObject)response.getProperty(i)));
 		}
 	}
 	

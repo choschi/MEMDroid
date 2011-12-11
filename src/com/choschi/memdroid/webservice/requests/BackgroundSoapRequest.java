@@ -82,7 +82,7 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	@Override
 	protected void onPostExecute(Result result){
 		try{
-			Log.d ("erronous reuslt", result.toString());
+			Log.d ("erronous result", result.toString());
 			Client.getInstance().handleFault((SoapFaultResponse)result);
 		}catch (Exception ex){
 			Log.d ("BackgroundSoapRequest",ex.getMessage());

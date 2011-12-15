@@ -5,7 +5,11 @@
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="12" />
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
+    <application 
+    	android:icon="@drawable/icon" 
+    	android:label="@string/app_name" 
+    	android:debuggable="true"
+    	android:theme="@android:style/Theme.Holo">
         <activity android:name=".MEMDroidActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -13,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-    </application>$
+		<activity android:name=".DisplayStudiesActivity"></activity>
+		<activity android:name=".DisplayQuestionnaireActivity"></activity>
+		<activity android:name=".DisplaySearchPatientActivity"></activity>
+    </application>
     <uses-permission android:name="android.permission.INTERNET" /> 
 </manifest>

@@ -1,10 +1,14 @@
 package com.choschi.memdroid;
 
+import com.choschi.memdroid.ui.StudyListFragment;
 import com.choschi.memdroid.util.ClientListener;
 import com.choschi.memdroid.webservice.Client;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +16,9 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -29,18 +36,57 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        TextView view = (TextView) findViewById(R.id.console);
-        Client.getInstance().setConsole (view);
+        setContentView(R.layout.fragment_layout);
+        //setContentView(R.layout.main);
+        //TextView view = (TextView) findViewById(R.id.console);
+        //Client.getInstance().setConsole (view);
     }
 	
 	@Override
 	
 	public void onResume (){
 		super.onResume();
+		/*
 		if (!Client.getInstance().isLoggedIn()){
 			showDialog(Client.LOGIN_DIALOG);
 		}
+		*/
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    /*
+	    case R.id.mainMenuPatient:
+	        
+	    	return true;
+	    */
+	    case R.id.mainMenuStudies:
+	        this.showDialog(Client.PROGRESS_DIALOG);
+	        Client.getInstance().requestListOfStudies();
+	        return true;
+	    
+	    case R.id.mainMenuLogin:
+	    	this.showLoginDialog();
+	    	return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	
+	public void showLoginDialog (){
+		if (!Client.getInstance().isLoggedIn()){
+			showDialog(Client.LOGIN_DIALOG);
+		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_menu, menu);
+	    return true;
 	}
 	
 	@Override
@@ -80,6 +126,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				Client.getInstance().registerClientListener(this);
 				Client.getInstance().login(username,password);
 		}
+		/*
 		if (v.getId() ==  findViewById(R.id.mainListButton).getId()){
 			Intent intent = new Intent(this, DisplayStudiesActivity.class);
 			startActivity(intent);
@@ -89,6 +136,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			startActivity(intent);
 			//Log.d ("searchbutton","pressed");
 		}
+		*/
 	}
 	
 	@Override 
@@ -96,13 +144,24 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 		switch (message){
 			case Client.LOGIN_SUCCESS:
 				progressDialog.dismiss();
-				Client.getInstance().requestUserData();
+				//Client.getInstance().requestUserData();
 			break;
 			case Client.LOGIN_FAILED:
 				showDialog(Client.LOGIN_DIALOG);
 			break;
 			case Client.USER_DATA:
 				showUserData();
+			break;
+			case Client.STUDIES_LIST:
+				progressDialog.dismiss();
+				FragmentManager manager = getFragmentManager();
+				FragmentTransaction transaction = manager.beginTransaction();
+				Fragment fragment = new StudyListFragment();
+				
+				transaction.replace(R.id.list_fragment_container, fragment);
+				transaction.addToBackStack(null);
+				
+				transaction.commit();
 			break;
 			default:
 				

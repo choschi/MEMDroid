@@ -39,7 +39,7 @@ import android.widget.TextView;
  * @author choschi
  * 
  *         Handles all the requests to the webservices to prevent double login
- *         and other issuers of the same nature it is implemented as singleton
+ *         and other issuers of the same nature, it is implemented as singleton
  * 
  */
 
@@ -441,7 +441,7 @@ public class Client {
 	 */
 
 	public void log(String text) {
-		console.setText(console.getText() + "\n" + text);
+		// console.setText(console.getText() + "\n" + text);
 	}
 
 	/**

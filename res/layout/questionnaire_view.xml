@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:orientation="horizontal"
+  	android:layout_width="fill_parent"
+  	android:layout_height="fill_parent"
+  	android:weightSum="1">
+   	<ListView 
+   		android:id="@+id/listOfStudies" 
+   		android:layout_width="fill_parent"
+   		android:layout_height="fill_parent"
+   		android:layout_weight="0.3"
+   		android:background="#00ff00">
+   	</ListView>
+   	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="0.7"
+		android:background="#ffffff">
+		<TextView 
+			style="@style/console"
+			android:text="@string/console" 
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"/>
+		<TextView
+			style="@style/console" 
+			android:id="@+id/consoleQuestionnaire"
+  			android:text="@string/hello" 
+  			android:layout_width="fill_parent" 
+  			android:layout_height="fill_parent"/>
+	</LinearLayout>		
+</LinearLayout>

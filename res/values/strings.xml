@@ -6,4 +6,8 @@
     <string name="loginButton">Login</string>
     <string name="password">webService1</string>
     <string name="username">webservice</string>
+    <string name="mainListButtonCaption">List of Studies</string>
+    <string name="mainSearchPatientButtonCaption">Search Patient</string>
+    <string name="menuPatient">Patient</string>
+    <string name="menuStudies">Studies</string>
 </resources>

@@ -6,11 +6,12 @@ import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ServerGetFormDefinitionRequest extends BackgroundSoapRequest {
 	
-	public ServerGetFormDefinitionRequest(SoapRequestParams params,String sessionId, String language, String formId) {
+	public ServerGetFormDefinitionRequest(SoapRequestParams params,String sessionId, String language, String formName, String version) {
 		super(params);
-		request.addProperty ("formId",formId);
+		request.addProperty ("formName",formName);
 		request.addProperty ("language",language);
-		request.addProperty ("sessionId",sessionId);
+		request.addProperty ("serverSessionId",sessionId);
+		request.addProperty ("version", version);
 	}
 	
 	/**

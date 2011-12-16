@@ -8,7 +8,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.TextView;
-
+//TODO remove this class after the new UI is implemented thoroughly
+@Deprecated
 public class DisplayQuestionnaireActivity extends Activity implements ClientListener {
 
 	private ProgressDialog progressDialog; 
@@ -19,7 +20,7 @@ public class DisplayQuestionnaireActivity extends Activity implements ClientList
 		setContentView(R.layout.questionnaire_view);
 		TextView view = (TextView) findViewById(R.id.consoleQuestionnaire);
 		Client.getInstance().registerClientListener(this);
-		Client.getInstance().setConsole (view);
+		//Client.getInstance().setConsole (view);
 		showDialog(Client.PROGRESS_DIALOG);
 		Client.getInstance().requestDataForStudy(Client.getInstance().getActualStudy());
 	}

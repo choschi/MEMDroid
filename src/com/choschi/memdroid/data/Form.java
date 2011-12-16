@@ -1,36 +1,26 @@
 package com.choschi.memdroid.data;
 
-public class Form {
+import org.ksoap2.serialization.SoapObject;
+
+public class Form extends SoapObjectParser{
 	
-	private String id;
+	private int id;
 	private String name;
 	private String type;
 	private String date;
+	private String studyName;
+	private String version;
 	
-	
-	public Form(String data) {
-		String[] values = this.parseData(data);
-		for (int i=0;i<values.length;i++){
-			if (values[i].length()>1){
-				setValue(i,dataToValue(values[i]));
-			}
+	public Form(SoapObject data) {
+		for (int i=0;i<data.getPropertyCount();i++){
+			setValue(i,data.getPropertyAsString(i));
 		}
-	}
-	
-	protected String[] parseData(String originalData){
-		String rawData = originalData.substring(8, originalData.length()-1);
-		return rawData.split(";");
-	}
-	
-	protected String dataToValue (String data){
-		data = data.trim();
-		return data.substring(5,data.length());
 	}
 	
 	protected void setValue(int index,String value){
 		switch (index){
 			case 0:
-				this.setId(value);
+				this.setId(parseInteger(value));
 			break;
 			case 1:
 				this.setName(value);
@@ -41,20 +31,26 @@ public class Form {
 			case 3:
 				this.setDate(value);
 			break;
+			case 4:
+				this.setStudyName(value);
+			break;
+			case 5:
+				this.setVersion(value);
+			break;
 		}
 	}
 
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -98,6 +94,34 @@ public class Form {
 	 */
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	/**
+	 * @return the studyName
+	 */
+	public String getStudyName() {
+		return studyName;
+	}
+
+	/**
+	 * @param studyName the studyName to set
+	 */
+	public void setStudyName(String studyName) {
+		this.studyName = studyName;
+	}
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 	
 }

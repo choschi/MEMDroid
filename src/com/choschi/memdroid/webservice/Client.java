@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.choschi.memdroid.data.PatientField;
+import android.util.Log;
+
 import com.choschi.memdroid.data.Form;
+import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.util.ClientListener;
 import com.choschi.memdroid.util.SHA256;
@@ -30,9 +32,6 @@ import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdRequest;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
 import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
-
-import android.util.Log;
-import android.widget.TextView;
 
 /**
  * 
@@ -111,13 +110,13 @@ public class Client {
 	 * tablet user
 	 */
 
-	private TextView console;
+	//private TextView console;
 	private List<Form> forms;
-
+	/*
 	public void setConsole(TextView target) {
 		console = target;
 	}
-
+	*/
 	/**
 	 * initiates the login process cascade of requests
 	 * 
@@ -272,6 +271,7 @@ public class Client {
 	public void receivedListOfStudies(ServerGetListOfStudiesResponse response) {
 		this.studies = response.getStudies();
 		for (ClientListener listener : listeners) {
+			Log.d ("client", "notifying listeners");
 			listener.notify(Client.STUDIES_LIST);
 		}
 	}
@@ -304,8 +304,6 @@ public class Client {
 		this.forms = result.getForms();
 		for (Form form : this.forms) {
 			Client.getInstance().requestFormDefinition(form);
-			// TODO remove the moment it works
-			break;
 		}
 		/*
 		 * for (ClientListener listener:listeners){
@@ -323,7 +321,7 @@ public class Client {
 			logcat(Locale.getDefault().getDisplayLanguage());
 			String language = "de";
 			BackgroundSoapRequest request = new ServerGetFormDefinitionRequest(
-					params, sessionId, language, form.getId());
+					params, sessionId, language, form.getStudyName(), form.getVersion());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}

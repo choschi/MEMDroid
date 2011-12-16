@@ -3,7 +3,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 
     <item android:id="@+id/mainMenuPatient" android:title="@string/menuPatient" android:visible="true" android:enabled="true" android:orderInCategory="2" android:menuCategory="system" android:showAsAction="always"></item>
+    
     -->
-    <item android:id="@+id/mainMenuStudies" android:title="@string/menuStudies" android:visible="true" android:enabled="true" android:orderInCategory="3" android:menuCategory="system" android:showAsAction="always"></item>
     <item android:id="@+id/mainMenuLogin" android:title="@string/loginButton" android:visible="true" android:orderInCategory="1" android:menuCategory="system" android:showAsAction="always" android:enabled="true"></item>
+    <item android:id="@+id/mainMenuUserdata" android:title="@string/menuUserdata" android:visible="true" android:enabled="false" android:orderInCategory="2" android:menuCategory="system" android:showAsAction="always"></item>
 </menu>

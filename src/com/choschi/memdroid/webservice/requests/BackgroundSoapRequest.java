@@ -2,17 +2,15 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-import org.ksoap2.transport.Transport;
+
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.MemdocSoapSerializationEnvelope;
 import com.choschi.memdroid.webservice.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
-
-import android.os.AsyncTask;
-import android.util.Log;
 
 public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Result> {
 

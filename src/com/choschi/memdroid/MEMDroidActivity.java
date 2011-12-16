@@ -1,19 +1,19 @@
 package com.choschi.memdroid;
 
-import com.choschi.memdroid.ui.StudyListFragment;
+import com.choschi.memdroid.fragment.PatientFragment;
+import com.choschi.memdroid.fragment.StudyListFragment;
+import com.choschi.memdroid.fragment.TabListener;
 import com.choschi.memdroid.util.ClientListener;
 import com.choschi.memdroid.webservice.Client;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,14 +32,12 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	private Button loginButton;
 	private Dialog loginDialog;
 	private ProgressDialog progressDialog;
+	//private Fragment studiesFragment;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_layout);
-        //setContentView(R.layout.main);
-        //TextView view = (TextView) findViewById(R.id.console);
-        //Client.getInstance().setConsole (view);
     }
 	
 	@Override
@@ -57,16 +55,6 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
-	    /*
-	    case R.id.mainMenuPatient:
-	        
-	    	return true;
-	    */
-	    case R.id.mainMenuStudies:
-	        this.showDialog(Client.PROGRESS_DIALOG);
-	        Client.getInstance().requestListOfStudies();
-	        return true;
-	    
 	    case R.id.mainMenuLogin:
 	    	this.showLoginDialog();
 	    	return true;
@@ -113,7 +101,9 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	}
 	
 	public void onClick(View v){
-		if(v.getId() == loginDialog.findViewById(R.id.loginButton).getId()){
+		Log.d ("onClick",""+v.getId());
+		switch (v.getId()){
+			case R.id.loginButton:
 				EditText usernameText = (EditText)loginDialog.findViewById(R.id.username);
 				EditText passwordText = (EditText)loginDialog.findViewById(R.id.password);
 				// TODO find out if this line of code hides the keyboard forever!
@@ -125,18 +115,8 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				showDialog(Client.PROGRESS_DIALOG);
 				Client.getInstance().registerClientListener(this);
 				Client.getInstance().login(username,password);
+			break;
 		}
-		/*
-		if (v.getId() ==  findViewById(R.id.mainListButton).getId()){
-			Intent intent = new Intent(this, DisplayStudiesActivity.class);
-			startActivity(intent);
-		}
-		if (v.getId() ==  findViewById(R.id.mainSearchPatientButton).getId()){
-			Intent intent = new Intent(this, DisplaySearchPatientActivity.class);
-			startActivity(intent);
-			//Log.d ("searchbutton","pressed");
-		}
-		*/
 	}
 	
 	@Override 
@@ -144,6 +124,22 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 		switch (message){
 			case Client.LOGIN_SUCCESS:
 				progressDialog.dismiss();
+				ActionBar actionBar = getActionBar();
+			    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			    actionBar.setDisplayShowTitleEnabled(false);
+			    
+			    Tab patient = actionBar.newTab()
+			            .setText(R.string.menuPatient)
+			            .setTabListener(new TabListener<PatientFragment>(
+			                    this, "patient", PatientFragment.class));
+			    actionBar.addTab(patient);
+			    
+			    Tab studies = actionBar.newTab()
+			            .setText(R.string.menuStudies)
+			            .setTabListener(new TabListener<StudyListFragment>(
+			                    this, "studies", StudyListFragment.class));
+			    actionBar.addTab(studies);
+			    
 				//Client.getInstance().requestUserData();
 			break;
 			case Client.LOGIN_FAILED:
@@ -154,14 +150,6 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			break;
 			case Client.STUDIES_LIST:
 				progressDialog.dismiss();
-				FragmentManager manager = getFragmentManager();
-				FragmentTransaction transaction = manager.beginTransaction();
-				Fragment fragment = new StudyListFragment();
-				
-				transaction.replace(R.id.list_fragment_container, fragment);
-				transaction.addToBackStack(null);
-				
-				transaction.commit();
 			break;
 			default:
 				

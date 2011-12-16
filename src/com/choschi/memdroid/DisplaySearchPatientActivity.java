@@ -20,7 +20,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
+//TODO remove this class after the new UI is implemented thoroughly
+@Deprecated
 public class DisplaySearchPatientActivity extends Activity implements ClientListener,OnItemClickListener {
 	
 	private List<Study> studies;
@@ -29,10 +30,10 @@ public class DisplaySearchPatientActivity extends Activity implements ClientList
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.patient_view);
+        //setContentView(R.layout.patient_view);
         TextView view = (TextView) findViewById(R.id.consoleStudies);
         Client.getInstance().registerClientListener(this);
-        Client.getInstance().setConsole (view);
+        //Client.getInstance().setConsole (view);
         showDialog(Client.PROGRESS_DIALOG);
         Client.getInstance().requestPatientFields();
     }

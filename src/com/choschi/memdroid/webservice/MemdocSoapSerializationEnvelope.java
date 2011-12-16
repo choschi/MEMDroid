@@ -2,19 +2,15 @@ package com.choschi.memdroid.webservice;
 
 import java.io.IOException;
 
-import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.xmlpull.v1.XmlSerializer;
-
-import android.util.Log;
 
 
 /**
  * 
  * @author choschi
- * TODO blabla out of date
- * The SoapSerializationEnvelope class does a priori not allow to have an empty body tag in the soap request.
- * So I was forced to introduce this possibility, as well as an alternative way to obtain the servers response.
+ * The SoapSerializationEnvelope class implements a few changes to the standard behaviour
+ * read more in the methods doc section
  */
 
 public class MemdocSoapSerializationEnvelope extends SoapSerializationEnvelope {

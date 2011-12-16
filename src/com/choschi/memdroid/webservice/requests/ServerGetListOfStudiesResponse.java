@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import android.util.Log;
-
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.webservice.Result;
 

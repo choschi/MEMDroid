@@ -19,6 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+//TODO remove this class after the new UI is implemented thoroughly
+
+@Deprecated
 public class DisplayStudiesActivity extends Activity implements ClientListener,OnItemClickListener {
 	
 	private List<Study> studies;
@@ -30,7 +33,7 @@ public class DisplayStudiesActivity extends Activity implements ClientListener,O
         setContentView(R.layout.study_view);
         TextView view = (TextView) findViewById(R.id.consoleStudies);
         Client.getInstance().registerClientListener(this);
-        Client.getInstance().setConsole (view);
+        //Client.getInstance().setConsole (view);
         showDialog(Client.PROGRESS_DIALOG);
         Client.getInstance().requestListOfStudies();
     }

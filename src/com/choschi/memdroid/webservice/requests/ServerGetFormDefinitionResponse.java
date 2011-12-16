@@ -8,8 +8,6 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import android.util.Log;
 
-import com.choschi.memdroid.data.Form;
-import com.choschi.memdroid.data.Question;
 import com.choschi.memdroid.data.SubForm;
 import com.choschi.memdroid.webservice.Result;
 

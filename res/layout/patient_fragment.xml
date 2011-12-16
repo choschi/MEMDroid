@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/patientFragmentView"
+    android:layout_marginTop="100dp">
+        <Button 
+        	android:id="@+id/patientSearchButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="50dp"
+	        android:layout_margin="5dp"
+	        android:textColor="#000"
+	        android:background="#fff"
+	        android:text="@string/patientSearchButtonCaption"/>
+	    <Button 
+        	android:id="@+id/patientNewButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="50dp"
+	        android:layout_margin="5dp"
+	        android:textColor="#000"
+	        android:background="#fff"
+	        android:text="@string/patientNewButtonCaption"/>
+</LinearLayout>

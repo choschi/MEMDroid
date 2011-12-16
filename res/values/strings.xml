@@ -4,10 +4,19 @@
     <string name="app_name">MEMDroid</string>
     <string name="console">Console</string>
     <string name="loginButton">Login</string>
+    <string name="logoutButton">Logout</string>
+    <string name="username">isch</string>
+	<string name="password">u7jER76j</string>
+    <!--
     <string name="password">webService1</string>
     <string name="username">webservice</string>
+    -->
     <string name="mainListButtonCaption">List of Studies</string>
     <string name="mainSearchPatientButtonCaption">Search Patient</string>
     <string name="menuPatient">Patient</string>
     <string name="menuStudies">Studies</string>
+    <string name="menuUserdata">User data</string>
+    <string name="patientNewButtonCaption">New Patient</string>
+    <string name="patientSearchButtonCaption">Search Patient</string>
+    <string name="patientNewSubmitButtonCaption">Save Patient</string>
 </resources>

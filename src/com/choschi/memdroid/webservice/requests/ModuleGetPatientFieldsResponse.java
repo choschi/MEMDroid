@@ -18,11 +18,6 @@ import com.choschi.memdroid.webservice.Result;
 
 public class ModuleGetPatientFieldsResponse extends Result {
 	
-	private String clinicId;
-	private String clinicName;
-	private String countryId;
-	private String departmentId;
-	private String departmentName;
 	private List<PatientField> fields;
 	
 	/**

@@ -9,8 +9,7 @@ public class ServerGetListOfFormsRequest extends BackgroundSoapRequest {
 	public ServerGetListOfFormsRequest(SoapRequestParams params,String sessionId, String language, String studyTypeId, String studyName) {
 		super(params);
 		request.addProperty ("language",language);
-		request.addProperty ("sessionId",sessionId);
-		//request.addProperty ("studyId",studyId);
+		request.addProperty ("serverSessionId",sessionId);
 		request.addProperty ("studyTypeId",studyTypeId);
 		request.addProperty ("studyName", studyName);
 	}

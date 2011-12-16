@@ -177,5 +177,19 @@ public class PatientField extends SoapObjectParser{
 	public void setRule(PatientFieldRule rule) {
 		this.rule = rule;
 	}
+
+	/**
+	 * @return the additionalCharacters
+	 */
+	public List<String> getAdditionalCharacters() {
+		return additionalCharacters;
+	}
+
+	/**
+	 * @param additionalCharacters the additionalCharacters to set
+	 */
+	public void setAdditionalCharacters(List<String> additionalCharacters) {
+		this.additionalCharacters = additionalCharacters;
+	}
 	
 }

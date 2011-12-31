@@ -8,27 +8,81 @@
 package com.choschi.memdroid;
 
 public final class R {
+    public static final class array {
+        public static final int countries=0x7f050000;
+        public static final int genders=0x7f050001;
+        public static final int languages=0x7f050002;
+    }
     public static final class attr {
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int debugview=0x7f050004;
-        public static final int linearLayout1=0x7f050008;
-        public static final int tableLayout1=0x7f050000;
-        public static final int tableRow1=0x7f050001;
-        public static final int tableRow2=0x7f050003;
-        public static final int tableRow3=0x7f050005;
-        public static final int tableRow4=0x7f050007;
-        public static final int tableRow5=0x7f050006;
-        public static final int textview=0x7f050002;
+        public static final int consoleQuestionnaire=0x7f080010;
+        public static final int consoleStudies=0x7f080017;
+        public static final int icon=0x7f080015;
+        public static final int listOfStudies=0x7f08000f;
+        public static final int loginBox=0x7f080000;
+        public static final int loginButton=0x7f080003;
+        public static final int mainContent=0x7f080004;
+        public static final int mainMenuLogin=0x7f080018;
+        public static final int mainMenuUserdata=0x7f080019;
+        public static final int password=0x7f080002;
+        public static final int patientDetailOutlet=0x7f080008;
+        public static final int patientFragmentView=0x7f080005;
+        public static final int patientNewButton=0x7f080007;
+        public static final int patientNewScroller=0x7f080009;
+        public static final int patientNewScrollerContainer=0x7f08000a;
+        public static final int patientNewSubmitButton=0x7f08000b;
+        public static final int patientSearchButton=0x7f080006;
+        public static final int patientSearchScroller=0x7f08000c;
+        public static final int patientSearchScrollerContainer=0x7f08000d;
+        public static final int patientSearchSearchButton=0x7f08000e;
+        public static final int studiesDetailOutlet=0x7f080014;
+        public static final int studiesFragmentView=0x7f080011;
+        public static final int studiesListOutlet=0x7f080012;
+        public static final int studiesSubListOutlet=0x7f080013;
+        public static final int studyName=0x7f080016;
+        public static final int username=0x7f080001;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int login_box=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int patient_fragment=0x7f030002;
+        public static final int patient_new_fragment=0x7f030003;
+        public static final int patient_search_fragment=0x7f030004;
+        public static final int questionnaire_view=0x7f030005;
+        public static final int studies_fragment=0x7f030006;
+        public static final int study_row=0x7f030007;
+        public static final int study_view=0x7f030008;
+    }
+    public static final class menu {
+        public static final int main_menu=0x7f070000;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int hello=0x7f040000;
+        public static final int app_name=0x7f060001;
+        public static final int console=0x7f060002;
+        public static final int hello=0x7f060000;
+        public static final int loginButton=0x7f060003;
+        public static final int logoutButton=0x7f060004;
+        /** 
+    <string name="password">webService1</string>
+    <string name="username">webservice</string>
+    
+         */
+        public static final int mainListButtonCaption=0x7f060007;
+        public static final int mainSearchPatientButtonCaption=0x7f060008;
+        public static final int menuPatient=0x7f060009;
+        public static final int menuStudies=0x7f06000a;
+        public static final int menuUserdata=0x7f06000b;
+        public static final int password=0x7f060006;
+        public static final int patientNewButtonCaption=0x7f06000c;
+        public static final int patientNewSubmitButtonCaption=0x7f06000e;
+        public static final int patientSearchButtonCaption=0x7f06000d;
+        public static final int username=0x7f060005;
+    }
+    public static final class style {
+        public static final int console=0x7f040000;
     }
 }

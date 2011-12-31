@@ -2,9 +2,7 @@ package com.choschi.memdroid.ui;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -13,9 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.ui.PatientFieldFactory.FieldType;
 
-public class PatientFormElement extends LinearLayout implements OnItemSelectedListener,OnKeyListener {
+public class PatientFormElement extends LinearLayout implements OnItemSelectedListener {
 
 	private LinearLayout left;
 	private LinearLayout right;
@@ -44,10 +43,7 @@ public class PatientFormElement extends LinearLayout implements OnItemSelectedLi
 				((Spinner)insert).setOnItemSelectedListener(this);
 			break;
 			case DATE:
-				Log.d ("FormElement","added datething");
-			break;
-			default:
-				((EditText)insert).setOnKeyListener(this);
+				Log.d ("FormElement","added date thing");
 			break;
 		}
 		right.addView(insert);
@@ -64,24 +60,26 @@ public class PatientFormElement extends LinearLayout implements OnItemSelectedLi
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		Log.d("Spinner", "selected"+arg2);
+		value = arg0.getItemAtPosition(arg2).toString();
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		Log.d ("Spinner", "nothing selected");
+		value = "";
 	}
 	
 	public String getValue(){
 		return value;
 	}
-
-	@Override
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		EditText text = (EditText) v;
-		value = text.getText().toString();
-		return false;
+	
+	public PatientFieldData getPatientFieldData(){
+		if (value == null){
+			View child = right.getChildAt(0);
+			value = ((EditText)child).getText().toString();
+		}
+		return new PatientFieldData (""+field.getFieldId(),value);
 	}
 }

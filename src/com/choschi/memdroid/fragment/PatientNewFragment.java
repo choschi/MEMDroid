@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.ui.PatientFieldFactory;
 import com.choschi.memdroid.ui.PatientFormElement;
 import com.choschi.memdroid.util.ClientListener;
@@ -39,7 +40,7 @@ public class PatientNewFragment extends Fragment implements ClientListener,OnCli
     	View view =  inflater.inflate(R.layout.patient_new_fragment, container, false);
     	View scroller = view.findViewById(R.id.patientNewScrollerContainer);
     	LinearLayout layout = (LinearLayout)scroller;
-    	List<PatientField> fields = Client.getInstance().getPatientFields();
+    	List<PatientField> fields = Client.getInstance().getPatientFieldsInsert();
     	formChildren = new ArrayList<PatientFormElement>();
     	for (PatientField field : fields){
     		//TODO implement a better way to select dates
@@ -73,8 +74,15 @@ public class PatientNewFragment extends Fragment implements ClientListener,OnCli
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
-			case R.id.patientSearchSearchButton:
-				Client.getInstance().savePatient(formChildren);
+			case R.id.patientNewSubmitButton:
+				PatientFieldData[] data = new PatientFieldData[formChildren.size()];
+				int counter = 0;
+				for (PatientFormElement item : formChildren){
+					data[counter] = item.getPatientFieldData();
+					counter++;
+				}
+					
+				Client.getInstance().savePatient(data);
 			break;
 		}
 	}

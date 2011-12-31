@@ -7,6 +7,7 @@ import java.util.Locale;
 import android.util.Log;
 
 import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.data.form.Form;
 import com.choschi.memdroid.ui.PatientFormElement;
@@ -22,6 +23,7 @@ import com.choschi.memdroid.webservice.requests.ModuleCreateNewPatientResponse;
 import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
+import com.choschi.memdroid.webservice.requests.ModuleSearchPatientRequest;
 import com.choschi.memdroid.webservice.requests.ModuleUserDataRequest;
 import com.choschi.memdroid.webservice.requests.ModuleUserDataResponse;
 import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionRequest;
@@ -98,7 +100,7 @@ public class Client {
 
 	private ModuleUserDataResponse userData;
 	//private ModuleGetPatientFieldsResponse patientFields;
-	private List<PatientField> patientFields;
+	private List<PatientField> patientFieldsInsert;
 
 	private Study actualStudy;
 
@@ -120,6 +122,7 @@ public class Client {
 	private List<Form> forms;
 	private boolean downloadingForms = false;
 	private int formCount = 0;
+	private List<PatientField> patientFieldsSearch;
 	/*
 	public void setConsole(TextView target) {
 		console = target;
@@ -245,7 +248,7 @@ public class Client {
 		if (loggedIn) {
 			userData = response;
 			log (response.toString());
-			requestPatientFields();
+			requestPatientFieldsInsert();
 			notify(Client.USER_DATA);
 		}
 	}
@@ -341,9 +344,9 @@ public class Client {
 	 * Request all the fields for the patient search
 	 */
 
-	public void requestPatientFields (){
+	public void requestPatientFieldsInsert (){
 		if (loggedIn) {
-			if (patientFields != null) {
+			if (patientFieldsInsert != null) {
 				notify(Client.PATIENT_FIELDS);
 			} else {
 				if (userData != null){
@@ -360,24 +363,66 @@ public class Client {
 		}
 	}
 	
+	public void requestPatientFieldsSearch (){
+		if (loggedIn) {
+			if (patientFieldsSearch != null) {
+				notify(Client.PATIENT_FIELDS);
+			} else {
+				if (userData != null){
+					SoapRequestParams params = new ModuleRequestParams();
+					params.setMethod("getPatientFields");
+					logcat("init module " + params.getMethod() + " request");
+					String language = "de";
+					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "search", userData.getDepartmentId());
+					request.execute(new SoapRequestParams[] {});
+				}else{
+					requestUserData();
+				}
+			}
+		}
+	}
+	
 	public void receivedPatientFields (List<PatientField> fields){
-		patientFields = fields;
-		notify(Client.PATIENT_FIELDS);
+		if (patientFieldsInsert == null){
+			patientFieldsInsert = fields;
+			requestPatientFieldsSearch();
+		}else{
+			patientFieldsSearch = fields;
+			notify(Client.PATIENT_FIELDS);
+		}
 	}
 
-	public void savePatient(List<PatientFormElement> data){
+	public void savePatient(PatientFieldData[] data){
 		if (loggedIn) {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("createNewPatient");
 			logcat("init module " + params.getMethod() + " request");
 			String language = "de";
-			BackgroundSoapRequest request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, userData.getDepartmentId());
+			BackgroundSoapRequestNew request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, userData.getDepartmentId());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
 	
 	public void createdPatient(ModuleCreateNewPatientResponse response){
-		
+		SoapRequestParams params = new ModuleRequestParams();
+		params.setMethod("getPatientFields");
+		logcat("init module " + params.getMethod() + " request");
+		String language = "de";
+		//BackgroundSoapRequestNew request = new ModuleSearchPatientRequest(params, moduleSessionId, language, ,userData.getDepartmentId());
+		//request.execute(new SoapRequestParams[] {});
+	}
+	
+	public void searchPatient(PatientFieldData[] search){
+		SoapRequestParams params = new ModuleRequestParams();
+		params.setMethod("searchPatient");
+		logcat("init module " + params.getMethod() + " request");
+		String language = "de";
+		BackgroundSoapRequestNew request = new ModuleSearchPatientRequest(params, moduleSessionId, language, search, userData.getDepartmentId());
+		request.execute(new SoapRequestParams[] {});
+	}
+	
+	public void receivedSearchedPatients(){
+		Log.d ("client","received patients");
 	}
 	
 	/**
@@ -436,10 +481,13 @@ public class Client {
 	}
 
 
-	public List<PatientField> getPatientFields() {
-		return patientFields;
+	public List<PatientField> getPatientFieldsInsert() {
+		return patientFieldsInsert;
 	}
-
+	
+	public List<PatientField> getPatientFieldsSearch() {
+		return patientFieldsSearch;
+	}
 
 	public List<Study> getListOfStudies() {
 		return this.studies;

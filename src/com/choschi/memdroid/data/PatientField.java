@@ -10,7 +10,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import com.choschi.memdroid.webservice.interfaces.Result;
 
-public class PatientField implements KvmSerializable,Result {
+public class PatientField extends SoapObjectParser implements KvmSerializable,Result {
 	
 	private String additionalCharacters;
 	private boolean allowValidationDeactivation;
@@ -32,21 +32,21 @@ public class PatientField implements KvmSerializable,Result {
 	
 	public PatientField (SoapObject input){
 		additionalCharacters = input.getProperty("additionalCharacters").toString();
-		allowValidationDeactivation = Boolean.parseBoolean(input.getProperty("allowValidationDeactivation").toString());
-		columnspan = Integer.parseInt(input.getProperty("columnspan").toString());
-		fieldId = Integer.parseInt(input.getProperty("fieldId").toString());
-		fieldPosition = Integer.parseInt(input.getProperty("fieldPosition").toString());
+		allowValidationDeactivation = parseBoolean(input.getProperty("allowValidationDeactivation").toString());
+		columnspan = parseInteger(input.getProperty("columnspan").toString());
+		fieldId = parseInteger(input.getProperty("fieldId").toString());
+		fieldPosition = parseInteger(input.getProperty("fieldPosition").toString());
 		fieldType = input.getProperty("fieldType").toString();
 		fixedFieldType = input.getProperty("fixedFieldType").toString();
-		groupNumber = Integer.parseInt(input.getProperty("fieldId").toString());
+		groupNumber = parseInteger(input.getProperty("fieldId").toString());
 		label = input.getProperty("label").toString();
-		lengthMax = Integer.parseInt(input.getProperty("lengthMax").toString());
-		lengthMin = Integer.parseInt(input.getProperty("lengthMin").toString());
-		patientlist = Boolean.parseBoolean(input.getProperty("patientlist").toString());
-		readOnly = Boolean.parseBoolean(input.getProperty("readOnly").toString());
-		required = Boolean.parseBoolean(input.getProperty("required").toString());
-		useTime = Boolean.parseBoolean(input.getProperty("useTime").toString());
-		useUnspecifiedGender = Boolean.parseBoolean(input.getProperty("useUnspecifiedGender").toString());
+		lengthMax = parseInteger(input.getProperty("lengthMax").toString());
+		lengthMin = parseInteger(input.getProperty("lengthMin").toString());
+		patientlist = parseBoolean(input.getProperty("patientlist").toString());
+		readOnly = parseBoolean(input.getProperty("readOnly").toString());
+		required = parseBoolean(input.getProperty("required").toString());
+		useTime = parseBoolean(input.getProperty("useTime").toString());
+		useUnspecifiedGender = parseBoolean(input.getProperty("useUnspecifiedGender").toString());
 		validationRegularExpression = input.getProperty("validationRegularExpression").toString();
 	}
 	
@@ -212,16 +212,16 @@ public class PatientField implements KvmSerializable,Result {
 			additionalCharacters = arg1.toString();
 			break;
 		case 1:
-			allowValidationDeactivation = Boolean.parseBoolean(arg1.toString());
+			allowValidationDeactivation = parseBoolean(arg1.toString());
 			break;
 		case 2:
-			columnspan = Integer.parseInt(arg1.toString());
+			columnspan = parseInteger(arg1.toString());
 			break;
 		case 3:
-			fieldId = Integer.parseInt(arg1.toString());
+			fieldId = parseInteger(arg1.toString());
 			break;
 		case 4:
-			fieldPosition = Integer.parseInt(arg1.toString());
+			fieldPosition = parseInteger(arg1.toString());
 			break;
 		case 5:
 			fieldType = arg1.toString();
@@ -230,31 +230,31 @@ public class PatientField implements KvmSerializable,Result {
 			fixedFieldType = arg1.toString();
 			break;
 		case 7:
-			groupNumber = Integer.parseInt(arg1.toString());
+			groupNumber = parseInteger(arg1.toString());
 			break;
 		case 8:
 			label = arg1.toString();
 			break;
 		case 9:
-			lengthMax = Integer.parseInt(arg1.toString());
+			lengthMax = parseInteger(arg1.toString());
 			break;
 		case 10:
-			lengthMin = Integer.parseInt(arg1.toString());
+			lengthMin = parseInteger(arg1.toString());
 			break;
 		case 11:
-			patientlist = Boolean.parseBoolean(arg1.toString());
+			patientlist = parseBoolean(arg1.toString());
 			break;
 		case 12:
-			readOnly = Boolean.parseBoolean(arg1.toString());
+			readOnly = parseBoolean(arg1.toString());
 			break;
 		case 13:
-			required = Boolean.parseBoolean(arg1.toString());
+			required = parseBoolean(arg1.toString());
 			break;
 		case 14:
-			useTime = Boolean.parseBoolean(arg1.toString());
+			useTime = parseBoolean(arg1.toString());
 			break;
 		case 15:
-			useUnspecifiedGender = Boolean.parseBoolean(arg1.toString());
+			useUnspecifiedGender = parseBoolean(arg1.toString());
 			break;
 		case 16: 
 			validationRegularExpression = arg1.toString();

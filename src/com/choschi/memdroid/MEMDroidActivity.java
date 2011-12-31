@@ -117,6 +117,23 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	public void notify (int message){
 		switch (message){
 			case Client.LOGIN_SUCCESS:
+				Client.getInstance().getUserData();
+			break;
+			case Client.LOGIN_FAILED:
+				showDialog(Client.LOGIN_DIALOG);
+			break;
+			case Client.USER_DATA:
+				showUserData();
+			break;
+			case Client.STUDIES_LIST:
+				progressDialog.dismiss();
+			break;
+			case Client.STUDY_DETAILS:
+				progressDialog.dismiss();
+			break;
+			case Client.SHOW_PROGRESS_DIALOG:
+				showDialog(Client.PROGRESS_DIALOG);
+			case Client.PATIENT_FIELDS:
 				progressDialog.dismiss();
 				ActionBar actionBar = getActionBar();
 			    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -133,26 +150,9 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			            .setTabListener(new TabListener<StudyFragment>(
 			                    this, "studies", StudyFragment.class));
 			    actionBar.addTab(studies);
-			    
-				//Client.getInstance().requestUserData();
-			break;
-			case Client.LOGIN_FAILED:
-				showDialog(Client.LOGIN_DIALOG);
-			break;
-			case Client.USER_DATA:
-				showUserData();
-			break;
-			case Client.STUDIES_LIST:
-				progressDialog.dismiss();
-			break;
-			case Client.STUDY_DETAILS:
-				Log.d ("client", "notifying listeners");
-				Log.d("activity","received study details");
-				progressDialog.dismiss();
-			break;
-			case Client.SHOW_PROGRESS_DIALOG:
-				showDialog(Client.PROGRESS_DIALOG);
+				break;
 			default:
+			
 				
 			break;
 		}

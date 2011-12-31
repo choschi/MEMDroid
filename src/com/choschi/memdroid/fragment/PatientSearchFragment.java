@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.ui.PatientFieldFactory;
 import com.choschi.memdroid.ui.PatientFormElement;
 import com.choschi.memdroid.util.ClientListener;
@@ -25,14 +26,13 @@ import com.choschi.memdroid.webservice.Client;
 public class PatientSearchFragment extends Fragment implements ClientListener,OnClickListener  {
 	
 	private List<PatientFormElement> formChildren;
-	private Integer[] idsToDisplay = new Integer[]{2,5,6,8};
+	//private Integer[] idsToDisplay = new Integer[]{2,5,6,8};
 	
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null){
         	Client.getInstance().registerClientListener(this);
-        	Client.getInstance().requestPatientFields();
         	Button newButton = (Button)getActivity().findViewById(R.id.patientSearchSearchButton);
         	newButton.setOnClickListener(this);
         }
@@ -43,11 +43,11 @@ public class PatientSearchFragment extends Fragment implements ClientListener,On
     	View view =  inflater.inflate(R.layout.patient_search_fragment, container, false);
     	View scroller = view.findViewById(R.id.patientSearchScrollerContainer);
     	LinearLayout layout = (LinearLayout)scroller;
-    	List<PatientField> fields = Client.getInstance().getPatientFields();
+    	List<PatientField> fields = Client.getInstance().getPatientFieldsSearch();
     	formChildren = new ArrayList<PatientFormElement>();
-    	List<Integer> toDisplay = Arrays.asList(idsToDisplay);
+    	//List<Integer> toDisplay = Arrays.asList(idsToDisplay);
     	for (PatientField field : fields){
-    		if (toDisplay.contains(field.getFieldId())){
+    		//if (toDisplay.contains(field.getFieldId())){
 	    		PatientFormElement child = PatientFieldFactory.factory(field,getActivity().getBaseContext());
 	    		if (child != null){
 	    			if (formChildren.size() > 0){
@@ -56,7 +56,7 @@ public class PatientSearchFragment extends Fragment implements ClientListener,On
 	    			formChildren.add(child);
 	    			layout.addView(child, layout.getChildCount());
 	    		}
-    		}
+    		//}
     	}
     	return view;
     }
@@ -79,9 +79,15 @@ public class PatientSearchFragment extends Fragment implements ClientListener,On
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
-			
 			case R.id.patientSearchSearchButton:
 				Log.d("patientFragment","searchPatient pressed");
+				PatientFieldData[] search = new PatientFieldData[formChildren.size()];
+				int counter = 0;
+				for (PatientFormElement item : formChildren){
+					search[counter] = item.getPatientFieldData();
+					counter++;
+				}
+				Client.getInstance().searchPatient(search);
 			break;
 			
 		}

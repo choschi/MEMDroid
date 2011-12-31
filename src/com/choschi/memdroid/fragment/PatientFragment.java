@@ -59,7 +59,7 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 	public void onClick(View v) {
 		// as long as there are no pateintFields these two fragment display nothing, so omit any action
 		try{
-			Client.getInstance().getPatientFields();
+			Client.getInstance().getPatientFieldsInsert();
 			switch (v.getId()){
 			case R.id.patientNewButton:
 					View newView = getActivity().findViewById(R.id.patientDetailOutlet);

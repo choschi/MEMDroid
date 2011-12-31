@@ -2,7 +2,7 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.serialization.SoapPrimitive;
 
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
  * wrapper for the Server session id request response
@@ -10,7 +10,7 @@ import com.choschi.memdroid.webservice.Result;
  *
  */
 
-public class ServerSessionIdResponse extends Result {
+public class ServerSessionIdResponse implements Result{
 	
 	private String sessionId;
 	

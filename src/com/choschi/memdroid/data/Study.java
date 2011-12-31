@@ -1,7 +1,12 @@
 package com.choschi.memdroid.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
+
+import com.choschi.memdroid.data.form.Form;
 
 
 public class Study extends SoapObjectParser {
@@ -12,6 +17,7 @@ public class Study extends SoapObjectParser {
 	private String startDate;
 	private String endDate;
 	
+	private List<Form> forms;
 	
 	@Deprecated
 	public Study (String data){
@@ -24,6 +30,7 @@ public class Study extends SoapObjectParser {
 	}
 	
 	public Study (SoapObject input){
+		forms = new ArrayList<Form>();
 		id = ((SoapPrimitive)input.getProperty(0)).toString();
 		name = ((SoapPrimitive)input.getProperty(1)).toString();
 		type = ((SoapPrimitive)input.getProperty(2)).toString();
@@ -129,5 +136,9 @@ public class Study extends SoapObjectParser {
 	@Override
 	public String toString(){
 		return "Study: "+this.getName()+"("+this.getId()+") from "+this.getStartDate()+" till "+this.getEndDate();
+	}
+	
+	public void addForm(Form form){
+		forms.add(form);
 	}
 }

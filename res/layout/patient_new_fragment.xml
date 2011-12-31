@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-  <Button 
-  	android:id="@+id/patientNewSubmitButton"
-  	android:layout_width="fill_parent"
-    android:layout_height="50dp"
-    android:layout_margin="5dp"
-    android:textColor="#000"
-    android:background="#fff"
-    android:text="@string/patientNewSubmitButtonCaption"/>
-  />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_marginLeft="10dp"
+	android:layout_height="match_parent">
+	<ScrollView android:id="@+id/patientNewScroller"
+		android:layout_width="match_parent" android:layout_height="match_parent"
+		android:layout_weight="1" android:orientation="vertical">
+		<LinearLayout android:id="@+id/patientNewScrollerContainer"
+			android:orientation="vertical" android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+
+	</ScrollView>
+	<LinearLayout android:layout_width="match_parent"
+		android:layout_height="match_parent" android:layout_weight="9"
+		android:orientation="vertical">
+		>
+		<Button android:id="@+id/patientNewSubmitButton"
+			android:layout_height="50dp"
+			android:layout_width="300dp"
+			android:layout_margin="5dp" android:textColor="#000"
+			android:background="#fff" android:text="@string/patientNewSubmitButtonCaption" />
+		/>
+	</LinearLayout>
+
 </LinearLayout>

@@ -3,7 +3,7 @@ package com.choschi.memdroid.webservice.requests;
 import android.util.Log;
 
 import com.choschi.memdroid.webservice.Client;
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ModuleLoginRequest extends BackgroundSoapRequest {

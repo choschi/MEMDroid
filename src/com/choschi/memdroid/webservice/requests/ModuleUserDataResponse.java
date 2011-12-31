@@ -5,7 +5,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import android.util.Log;
 
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
  * Wrapper for the Module login request response
@@ -13,7 +13,7 @@ import com.choschi.memdroid.webservice.Result;
  *
  */
 
-public class ModuleUserDataResponse extends Result {
+public class ModuleUserDataResponse implements Result{
 	
 	private String clinicId;
 	private String clinicName;

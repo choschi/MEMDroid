@@ -1,14 +1,12 @@
 package com.choschi.memdroid.fragment;
 
-import com.choschi.memdroid.R;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.view.View;
+
+import com.choschi.memdroid.R;
 
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
     private Fragment mFragment;
@@ -34,7 +32,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
         //if (mFragment == null) {
             // If not, instantiate and add it to the activity
             mFragment = Fragment.instantiate(mActivity, mClass.getName());
-            ft.add(R.id.list_fragment_container, mFragment, mTag);
+            ft.add(R.id.mainContent, mFragment, mTag);
         //} else {
             // If it exists, simply attach it in order to show it
         //    ft.add(mFragment);

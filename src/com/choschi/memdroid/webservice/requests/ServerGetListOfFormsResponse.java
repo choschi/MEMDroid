@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.Form;
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
  * Wrapper for the Module login request response
@@ -14,7 +14,7 @@ import com.choschi.memdroid.webservice.Result;
  *
  */
 
-public class ServerGetListOfFormsResponse extends Result {
+public class ServerGetListOfFormsResponse implements Result{
 	
 	private List<Form> forms;
 	

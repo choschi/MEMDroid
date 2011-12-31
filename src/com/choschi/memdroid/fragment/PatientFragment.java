@@ -2,7 +2,6 @@ package com.choschi.memdroid.fragment;
 
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,10 +16,9 @@ import com.choschi.memdroid.util.ClientListener;
 import com.choschi.memdroid.webservice.Client;
 
 public class PatientFragment extends Fragment implements ClientListener,OnClickListener  {
-
-	boolean mDualPane;
+	
 	int mCurCheckPosition = 0;
-
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -32,23 +30,9 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 			searchButton.setOnClickListener(this);
 		}
 
-
-		// Check to see if we have a frame in which to embed the details
-		// fragment directly in the containing UI.
-		View detailsFrame = getActivity().findViewById(R.id.details);
-		mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
-
 		if (savedInstanceState != null) {
 			// Restore last state for checked position.
 			mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-		}
-
-		if (mDualPane) {
-			Log.d ("patientFragment","omg it's dual pane");
-			// In dual-pane mode, the list view highlights the selected item.
-			//getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-			// Make sure our UI is in the correct state.
-			//showDetails(mCurCheckPosition);
 		}
 	}
 
@@ -73,41 +57,39 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()){
-		case R.id.patientNewButton:
-			if (mDualPane){
-				View view = getActivity().findViewById(R.id.details);
-				view.setVisibility(1);
-				Fragment newFragment = new PatientNewFragment();
-				FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-				// Replace whatever is in the fragment_container view with this fragment,
-				// and add the transaction to the back stack
-				transaction.replace(R.id.details, newFragment);
-				//transaction.addToBackStack(null);
-
-				// Commit the transaction
-				transaction.commit();
+		// as long as there are no pateintFields these two fragment display nothing, so omit any action
+		try{
+			Client.getInstance().getPatientFields();
+			switch (v.getId()){
+			case R.id.patientNewButton:
+					View newView = getActivity().findViewById(R.id.patientDetailOutlet);
+					newView.setVisibility(1);
+					Fragment newFragment = new PatientNewFragment();
+					FragmentTransaction newTransaction = getFragmentManager().beginTransaction();
+					// Replace whatever is in the fragment_container view with this fragment,
+					// and add the transaction to the back stack
+					newTransaction.replace(R.id.patientDetailOutlet, newFragment);
+					//transaction.addToBackStack(null);
+					// Commit the transaction
+					newTransaction.commit();
+					Log.d("patientFragment","newPatient pressed");
+				break;
+			case R.id.patientSearchButton:
+					View searchView = getActivity().findViewById(R.id.patientDetailOutlet);
+					searchView.setVisibility(1);
+					Fragment searchFragment = new PatientSearchFragment();
+					FragmentTransaction searchTransaction = getFragmentManager().beginTransaction();
+					// Replace whatever is in the fragment_container view with this fragment,
+					// and add the transaction to the back stack
+					searchTransaction.replace(R.id.patientDetailOutlet, searchFragment);
+					//transaction.addToBackStack(null);
+					// Commit the transaction
+					searchTransaction.commit();
+					Log.d("patientFragment","searchPatient pressed");
+				break;
 			}
-			Log.d("patienFragment","newPatient pressed");
-			break;
-		case R.id.patientSearchButton:
-			if (mDualPane){
-				View view = getActivity().findViewById(R.id.details);
-				view.setVisibility(1);
-				Fragment newFragment = new PatientSearchFragment();
-				FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-				// Replace whatever is in the fragment_container view with this fragment,
-				// and add the transaction to the back stack
-				transaction.replace(R.id.details, newFragment);
-				//transaction.addToBackStack(null);
-
-				// Commit the transaction
-				transaction.commit();
-			}
-			Log.d("patienFragment","searchPatient pressed");
-			break;
+		}catch (Exception ex){
+			
 		}
 	}
 }

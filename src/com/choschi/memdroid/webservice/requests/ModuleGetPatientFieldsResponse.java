@@ -8,7 +8,7 @@ import org.ksoap2.serialization.SoapObject;
 import android.util.Log;
 
 import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
  * Wrapper for the Module login request response
@@ -16,7 +16,7 @@ import com.choschi.memdroid.webservice.Result;
  *
  */
 
-public class ModuleGetPatientFieldsResponse extends Result {
+public class ModuleGetPatientFieldsResponse implements Result {
 	
 	private List<PatientField> fields;
 	

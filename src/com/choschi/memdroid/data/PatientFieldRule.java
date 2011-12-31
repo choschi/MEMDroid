@@ -22,4 +22,8 @@ public class PatientFieldRule {
 		validationRegularExpression = regex;
 	}
 	
+	public boolean isRequired(){
+		return required;
+	}
+	
 }

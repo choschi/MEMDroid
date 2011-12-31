@@ -9,7 +9,8 @@ import android.util.Log;
 
 import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.MemdocSoapSerializationEnvelope;
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.ResultFactory;
+import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Result> {
@@ -64,11 +65,12 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	    Result response = null;
 	    try {
 	    	httpTransport.call(parameters.getAction(), envelope);
-	    	Log.d ("request: ", httpTransport.requestDump);
-	    	Log.d ("response: ", httpTransport.responseDump);
-	    	response = Result.factory(envelope.getResponse());	
+	    	//Log.d ("request: ", httpTransport.requestDump);
+	    	//Log.d ("response: ", httpTransport.responseDump);
+	    	Log.d ("response",envelope.getResponse().toString()); 
+	    	response = ResultFactory.factory(envelope.getResponse());	
 	    }catch (Exception ex){
-	    	response = Result.factory(ex);
+	    	response = ResultFactory.factory(ex);
 	    }
 	    return response;
 	}

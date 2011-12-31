@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/patientFragmentView"
-    android:layout_marginTop="100dp">
+    android:id="@+id/patientFragmentView">
+    <LinearLayout
+    	android:orientation="vertical"
+    	android:layout_height="fill_parent"
+    	android:layout_width="fill_parent"
+    	android:layout_weight="3"
+    	android:layout_marginTop="100dp">
         <Button 
         	android:id="@+id/patientSearchButton"
 	        android:layout_width="fill_parent"
@@ -21,4 +26,12 @@
 	        android:textColor="#000"
 	        android:background="#fff"
 	        android:text="@string/patientNewButtonCaption"/>
+	</LinearLayout>
+	<LinearLayout 
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:id="@+id/patientDetailOutlet">
+	</LinearLayout>
 </LinearLayout>

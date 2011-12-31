@@ -1,11 +1,19 @@
 package com.choschi.memdroid.webservice.requests;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.ksoap2.serialization.SoapObject;
+
+import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.webservice.Client;
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequest {
+public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequestNew {
 
+	private List<PatientField> fields;
+	
 	/**
 	 * Constructor
 	 * @param params, inherited from BackgroundSoapRequest
@@ -22,6 +30,17 @@ public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequest {
 		request.addProperty("deptId",deptId);
 	}
 	
+	
+	@Override
+	protected Result parseResponse (SoapObject response){
+		fields = new ArrayList<PatientField>();
+		for (int i=0;i<response.getPropertyCount();i++){
+			fields.add(new PatientField((SoapObject) response.getProperty(i)));
+		}
+		return null;
+	}
+
+
 	/**
 	 * go back to the UI thread and tell it what to do
 	 */
@@ -29,7 +48,7 @@ public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequest {
 	@Override
 	protected void onPostExecute(Result result){
 		try{
-			Client.getInstance().receivedPatientFields ((ModuleGetPatientFieldsResponse)result);
+			Client.getInstance().receivedPatientFields (fields);
 			return;
 		}catch (Exception ex){
 			super.onPostExecute(result);

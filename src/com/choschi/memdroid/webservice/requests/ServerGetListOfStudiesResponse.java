@@ -6,7 +6,7 @@ import java.util.List;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.Study;
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
  * Wrapper for the Module login request response
@@ -14,7 +14,7 @@ import com.choschi.memdroid.webservice.Result;
  *
  */
 
-public class ServerGetListOfStudiesResponse extends Result {
+public class ServerGetListOfStudiesResponse implements Result{
 	
 	private List<Study> studies;
 	

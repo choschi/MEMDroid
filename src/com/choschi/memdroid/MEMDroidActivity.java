@@ -1,11 +1,5 @@
 package com.choschi.memdroid;
 
-import com.choschi.memdroid.fragment.PatientFragment;
-import com.choschi.memdroid.fragment.StudyListFragment;
-import com.choschi.memdroid.fragment.TabListener;
-import com.choschi.memdroid.util.ClientListener;
-import com.choschi.memdroid.webservice.Client;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -24,7 +18,12 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import com.choschi.memdroid.fragment.PatientFragment;
+import com.choschi.memdroid.fragment.StudyFragment;
+import com.choschi.memdroid.fragment.TabListener;
+import com.choschi.memdroid.util.ClientListener;
+import com.choschi.memdroid.webservice.Client;
 
 public class MEMDroidActivity extends Activity implements OnClickListener,ClientListener, OnCancelListener {
     /** Called when the activity is first created. */
@@ -37,18 +36,13 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_layout);
+        setContentView(R.layout.main);
     }
 	
 	@Override
 	
 	public void onResume (){
 		super.onResume();
-		/*
-		if (!Client.getInstance().isLoggedIn()){
-			showDialog(Client.LOGIN_DIALOG);
-		}
-		*/
 	}
 	
 	@Override
@@ -136,8 +130,8 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			    
 			    Tab studies = actionBar.newTab()
 			            .setText(R.string.menuStudies)
-			            .setTabListener(new TabListener<StudyListFragment>(
-			                    this, "studies", StudyListFragment.class));
+			            .setTabListener(new TabListener<StudyFragment>(
+			                    this, "studies", StudyFragment.class));
 			    actionBar.addTab(studies);
 			    
 				//Client.getInstance().requestUserData();
@@ -151,6 +145,13 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			case Client.STUDIES_LIST:
 				progressDialog.dismiss();
 			break;
+			case Client.STUDY_DETAILS:
+				Log.d ("client", "notifying listeners");
+				Log.d("activity","received study details");
+				progressDialog.dismiss();
+			break;
+			case Client.SHOW_PROGRESS_DIALOG:
+				showDialog(Client.PROGRESS_DIALOG);
 			default:
 				
 			break;
@@ -158,6 +159,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	}
 	
 	private void showUserData(){
+		/*
 		Log.d("MEMDroid", "showUserData");
 		TextView dataText = (TextView)findViewById(R.id.mainUserData);
 		dataText.setText(Client.getInstance().getUserText());
@@ -168,6 +170,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 		Button searchButton = (Button) findViewById(R.id.mainSearchPatientButton);
 		searchButton.setVisibility(View.VISIBLE);
 		searchButton.setOnClickListener(this);
+		*/
 	}
 
 	@Override

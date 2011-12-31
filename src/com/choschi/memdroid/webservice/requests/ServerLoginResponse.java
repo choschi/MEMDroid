@@ -2,8 +2,7 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.serialization.SoapPrimitive;
 
-
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
  * Wrapper for the Module login request response
@@ -11,7 +10,7 @@ import com.choschi.memdroid.webservice.Result;
  *
  */
 
-public class ServerLoginResponse extends Result {
+public class ServerLoginResponse implements Result{
 	
 	private Boolean state;
 	

@@ -6,17 +6,20 @@ import java.util.Locale;
 
 import android.util.Log;
 
-import com.choschi.memdroid.data.Form;
 import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.Study;
+import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.ui.PatientFormElement;
 import com.choschi.memdroid.util.ClientListener;
 import com.choschi.memdroid.util.SHA256;
 import com.choschi.memdroid.webservice.parameters.ModuleRequestParams;
 import com.choschi.memdroid.webservice.parameters.ServerRequestParams;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 import com.choschi.memdroid.webservice.requests.BackgroundSoapRequest;
+import com.choschi.memdroid.webservice.requests.BackgroundSoapRequestNew;
+import com.choschi.memdroid.webservice.requests.ModuleCreateNewPatientRequest;
+import com.choschi.memdroid.webservice.requests.ModuleCreateNewPatientResponse;
 import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsRequest;
-import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsResponse;
 import com.choschi.memdroid.webservice.requests.ModuleLoginRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
 import com.choschi.memdroid.webservice.requests.ModuleUserDataRequest;
@@ -37,8 +40,8 @@ import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
  * 
  * @author choschi
  * 
- *         Handles all the requests to the webservices to prevent double login
- *         and other issuers of the same nature, it is implemented as singleton
+ *         Handles all the requests to the webservices. To prevent double login
+ *         and other issues of the same nature, it is implemented as singleton
  * 
  */
 
@@ -50,8 +53,10 @@ public class Client {
 	public static final int LOGIN_SUCCESS = 0;
 	public static final int LOGIN_FAILED = 1;
 	public static final int REQUEST_FAILED = 3;
+	public static final int SHOW_PROGRESS_DIALOG = 4;
 	public static final int USER_DATA = 10;
 	public static final int STUDIES_LIST = 20;
+	public static final int STUDY_DETAILS = 21;
 	public static final int PATIENT_FIELDS = 30;
 
 	public static final int LOGIN_DIALOG = 0;
@@ -90,9 +95,10 @@ public class Client {
 	private String signature;
 	private String moduleSessionId;
 	private String moduleId;
-	
+
 	private ModuleUserDataResponse userData;
-	private ModuleGetPatientFieldsResponse patientFields;
+	//private ModuleGetPatientFieldsResponse patientFields;
+	private List<PatientField> patientFields;
 
 	private Study actualStudy;
 
@@ -112,11 +118,13 @@ public class Client {
 
 	//private TextView console;
 	private List<Form> forms;
+	private boolean downloadingForms = false;
+	private int formCount = 0;
 	/*
 	public void setConsole(TextView target) {
 		console = target;
 	}
-	*/
+	 */
 	/**
 	 * initiates the login process cascade of requests
 	 * 
@@ -200,12 +208,12 @@ public class Client {
 			this.loggedIn = response.getState();
 			log(response.toString());
 			loggingIn = false;
-			for (ClientListener listener : listeners) {
-				if (this.loggedIn) {
-					listener.notify(Client.LOGIN_SUCCESS);
-				} else {
-					listener.notify(Client.LOGIN_FAILED);
-				}
+			if (this.loggedIn) {
+				notify(Client.LOGIN_SUCCESS);
+				// although the userData is not necessary to do most stuff with MEMDroid it is necessary to obtain the patientFields, which it will automatically
+				requestUserData();
+			} else {
+				notify(Client.LOGIN_FAILED);
 			}
 		}
 	}
@@ -237,9 +245,8 @@ public class Client {
 		if (loggedIn) {
 			userData = response;
 			log (response.toString());
-			for (ClientListener listener : listeners) {
-				listener.notify(Client.USER_DATA);
-			}
+			requestPatientFields();
+			notify(Client.USER_DATA);
 		}
 	}
 
@@ -249,10 +256,9 @@ public class Client {
 
 	public void requestListOfStudies() {
 		if (this.loggedIn) {
+			notify(Client.SHOW_PROGRESS_DIALOG);
 			if (this.studies != null) {
-				for (ClientListener listener : listeners) {
-					listener.notify(Client.STUDIES_LIST);
-				}
+				notify(Client.STUDIES_LIST);
 			} else {
 				SoapRequestParams params = new ServerRequestParams();
 				params.setAction(BackgroundSoapRequest.ServerBaseAction
@@ -270,10 +276,8 @@ public class Client {
 
 	public void receivedListOfStudies(ServerGetListOfStudiesResponse response) {
 		this.studies = response.getStudies();
-		for (ClientListener listener : listeners) {
-			Log.d ("client", "notifying listeners");
-			listener.notify(Client.STUDIES_LIST);
-		}
+		Log.d ("client", "notifying listeners");
+		notify(Client.STUDIES_LIST);
 	}
 
 	/**
@@ -282,11 +286,12 @@ public class Client {
 	 */
 
 	public void requestDataForStudy(Study study) {
-		if (this.loggedIn) {
-			
+		if (this.loggedIn && !downloadingForms) {
+			downloadingForms  = true;
 			//Log.d("study loader","study loading is disabled at the moment");
 			//log("study loading disabled for instance");
-			
+			actualStudy = study;
+			notify (SHOW_PROGRESS_DIALOG);
 			SoapRequestParams params = new ServerRequestParams();
 			params.setAction(BackgroundSoapRequest.ServerBaseAction + "GetListOfFormsRequest");
 			params.setMethod("getListOfForms");
@@ -296,19 +301,14 @@ public class Client {
 			BackgroundSoapRequest request = new ServerGetListOfFormsRequest(
 					params, sessionId, language,  "multicenter", study.getName());
 			request.execute(new SoapRequestParams[] {});
-			
+
 		}
 	}
 
 	public void receivedListOfForms(ServerGetListOfFormsResponse result) {
-		this.forms = result.getForms();
-		for (Form form : this.forms) {
-			Client.getInstance().requestFormDefinition(form);
-		}
-		/*
-		 * for (ClientListener listener:listeners){
-		 * listener.notify(Client.STUDIES_LIST); }
-		 */
+		forms = result.getForms();
+		formCount = 0;
+		Client.getInstance().requestFormDefinition(forms.get(formCount));
 	}
 
 	public void requestFormDefinition(Form form) {
@@ -327,46 +327,76 @@ public class Client {
 	}
 
 	public void receivedFormDefinition(ServerGetFormDefinitionResponse result) {
-		logcat("received the form definitions");
+		forms.get(formCount).addDefinition(result);
+		formCount++;
+		if (formCount < forms.size()){
+			Client.getInstance().requestFormDefinition(forms.get(formCount));
+		}else{
+			notify(STUDY_DETAILS);
+		}
 	}
 
-	
+
 	/**
 	 * Request all the fields for the patient search
 	 */
-	
+
 	public void requestPatientFields (){
-		if (this.loggedIn) {
-			if (this.patientFields != null) {
-				for (ClientListener listener : listeners) {
-					listener.notify(Client.PATIENT_FIELDS);
-				}
+		if (loggedIn) {
+			if (patientFields != null) {
+				notify(Client.PATIENT_FIELDS);
 			} else {
-				SoapRequestParams params = new ModuleRequestParams();
-				params.setMethod("getPatientFields");
-				logcat("init module " + params.getMethod() + " request");
-				String language = "de";
-				BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", userData.getDepartmentId());
-				request.execute(new SoapRequestParams[] {});
+				if (userData != null){
+					SoapRequestParams params = new ModuleRequestParams();
+					params.setMethod("getPatientFields");
+					logcat("init module " + params.getMethod() + " request");
+					String language = "de";
+					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", userData.getDepartmentId());
+					request.execute(new SoapRequestParams[] {});
+				}else{
+					requestUserData();
+				}
 			}
 		}
 	}
 	
-	public void receivedPatientFields (ModuleGetPatientFieldsResponse result){
-		patientFields = result;
-		for (ClientListener listener:listeners){
-			listener.notify(Client.PATIENT_FIELDS);
+	public void receivedPatientFields (List<PatientField> fields){
+		patientFields = fields;
+		notify(Client.PATIENT_FIELDS);
+	}
+
+	public void savePatient(List<PatientFormElement> data){
+		if (loggedIn) {
+			SoapRequestParams params = new ModuleRequestParams();
+			params.setMethod("createNewPatient");
+			logcat("init module " + params.getMethod() + " request");
+			String language = "de";
+			BackgroundSoapRequest request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, userData.getDepartmentId());
+			request.execute(new SoapRequestParams[] {});
 		}
+	}
+	
+	public void createdPatient(ModuleCreateNewPatientResponse response){
+		
 	}
 	
 	/**
 	 * 
 	 */
 	
+	
+	public ModuleUserDataResponse getUserData(){
+		return userData;
+	}
+	
+	/**
+	 * 
+	 */
+
 	public String getUserText(){
 		return userData.getForDisplay();
 	}
-	
+
 	/**
 	 * register an OnLoginListener in this client
 	 * 
@@ -378,6 +408,14 @@ public class Client {
 			listeners.add(listener);
 		}
 	}
+
+
+	private void notify (int event){
+		for (ClientListener listener:listeners){
+			listener.notify(event);
+		}
+	}
+
 
 	/**
 	 * terminal station for all soap faults, implement corresponding behaviour
@@ -396,13 +434,12 @@ public class Client {
 			}
 		}
 	}
-	
-	
+
 
 	public List<PatientField> getPatientFields() {
-		return patientFields.getFields();
+		return patientFields;
 	}
-	
+
 
 	public List<Study> getListOfStudies() {
 		return this.studies;

@@ -2,9 +2,9 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.SoapFault;
 
-import com.choschi.memdroid.webservice.Result;
+import com.choschi.memdroid.webservice.interfaces.Result;
 
-public class SoapFaultResponse extends Result{
+public class SoapFaultResponse implements Result{
 	
 	private String message;
 	

@@ -19,4 +19,8 @@
     <string name="patientNewButtonCaption">New Patient</string>
     <string name="patientSearchButtonCaption">Search Patient</string>
     <string name="patientNewSubmitButtonCaption">Save Patient</string>
+    <string name="selectDepartment">Please select your department</string>
+    <string name="departmentDialogTitle">Choose Department</string>
+    <string name="loginDialogTitle">Please login</string>
+    <string name="select">Confirm selection</string>
 </resources>

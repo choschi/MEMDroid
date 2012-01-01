@@ -1,15 +1,14 @@
 package com.choschi.memdroid.webservice.requests;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
 import android.util.Log;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
@@ -18,11 +17,12 @@ public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
 	private List<PatientField> fields;
 	
 	/**
-	 * Constructor
-	 * @param params, inherited from BackgroundSoapRequest
-	 * @param username
-	 * @param password
-	 * @param sessionId, ServerSessionId obtained by call to the Server
+	 * 
+	 * @param params
+	 * @param sessionId
+	 * @param lang
+	 * @param search
+	 * @param deptId
 	 */
 	
 	public ModuleSearchPatientRequest(SoapRequestParams params, String sessionId, String lang, PatientFieldData[] search, String deptId) {

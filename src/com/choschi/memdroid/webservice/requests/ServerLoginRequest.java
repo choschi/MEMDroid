@@ -2,7 +2,7 @@ package com.choschi.memdroid.webservice.requests;
 
 import android.util.Log;
 
-import com.choschi.memdroid.webservice.Client;
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
@@ -10,12 +10,12 @@ public class ServerLoginRequest extends BackgroundSoapRequest {
 
 
 	/**
-	 * Constructor 
-	 * @param params, inherited from BackgroundSoapRequest
-	 * @param moduleId, id of the module used to login
-	 * @param sessionId, ServerSessionId obtained by call to the Server 
-	 * @param signature, signature obtained by call to the Module
-	 * @param userId, user id obtained by call to the Module
+	 * 
+	 * @param params
+	 * @param moduleId
+	 * @param sessionId
+	 * @param signature
+	 * @param userId
 	 */
 	
 	public ServerLoginRequest(SoapRequestParams params, String moduleId, String sessionId, String signature,String userId) {

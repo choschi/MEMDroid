@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
@@ -15,11 +15,12 @@ public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequestNew {
 	private List<PatientField> fields;
 	
 	/**
-	 * Constructor
-	 * @param params, inherited from BackgroundSoapRequest
-	 * @param username
-	 * @param password
-	 * @param sessionId, ServerSessionId obtained by call to the Server
+	 * 
+	 * @param params
+	 * @param sessionId
+	 * @param lang
+	 * @param mode
+	 * @param deptId
 	 */
 	
 	public ModuleGetPatientFieldsRequest(SoapRequestParams params, String sessionId, String lang, String mode, String deptId) {

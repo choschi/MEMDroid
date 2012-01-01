@@ -1,10 +1,11 @@
 package com.choschi.memdroid.fragment;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
+import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.data.ListOfStudiesAdapter;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.util.ClientListener;
-import com.choschi.memdroid.webservice.Client;
 
 import android.app.ListFragment;
 import android.os.Bundle;
@@ -55,14 +56,14 @@ public class StudyListFragment extends ListFragment implements ClientListener  {
 	        mCurCheckPosition = index;
 	        if (getListAdapter() != null){
 	        	Study study = (Study)getListAdapter().getItem(mCurCheckPosition);
-	        	Client.getInstance().requestDataForStudy(study);
+	        	Client.getInstance().requestListOfForms(study);
 	        	Log.d ("fragment",""+mCurCheckPosition);
 	        }
     	}
     }
     
 	@Override
-	public void notify(int message) {
+	public void notify(ClientMessages message) {
 		switch (message){}
 	}
 	

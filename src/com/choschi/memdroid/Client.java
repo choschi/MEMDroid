@@ -1,11 +1,13 @@
-package com.choschi.memdroid.webservice;
+package com.choschi.memdroid;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.util.Log;
 
+import com.choschi.memdroid.data.Department;
 import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.data.Study;
@@ -39,19 +41,37 @@ import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
 import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
 
 /**
+ * Handles all the requests to the webservices. To prevent double login
+ * and other issues of the same nature, it is implemented as singleton
  * 
- * @author choschi
- * 
- *         Handles all the requests to the webservices. To prevent double login
- *         and other issues of the same nature, it is implemented as singleton
+ * @author Christoph Isch
  * 
  */
 
 public class Client {
 
 	private static Client instance = new Client();
+	
+	
 	private List<ClientListener> listeners = new ArrayList<ClientListener>();
-
+	
+	
+	/*
+	 * messages for the listeners
+	 * @TODO refactor them to an enum
+	 */
+	
+	public enum ClientMessages{
+		LOGIN_SUCCESS,
+		LOGIN_FAILED,
+		SHOW_PROGRESS_DIALOG, 
+		USER_DATA,
+		STUDIES_LIST,
+		STUDY_DETAILS,
+		PATIENT_FIELDS,
+		SHOW_DATE_PICKER,
+	}
+	
 	public static final int LOGIN_SUCCESS = 0;
 	public static final int LOGIN_FAILED = 1;
 	public static final int REQUEST_FAILED = 3;
@@ -61,30 +81,6 @@ public class Client {
 	public static final int STUDY_DETAILS = 21;
 	public static final int PATIENT_FIELDS = 30;
 
-	public static final int LOGIN_DIALOG = 0;
-	public static final int PROGRESS_DIALOG = 1;
-
-	/**
-	 * private constructor, only class methods can create an instance of the
-	 * class
-	 * 
-	 */
-	private Client() {
-	}
-
-	/**
-	 * static method: returns the sole instance of the class
-	 * 
-	 */
-	public static Client getInstance() {
-		return instance;
-	}
-
-	/**
-	 * Tag is used for the Log methods as origin name
-	 */
-
-	private static final String TAG = "Client";
 
 	/**
 	 * variables needed in "session" management
@@ -97,37 +93,52 @@ public class Client {
 	private String signature;
 	private String moduleSessionId;
 	private String moduleId;
-
-	private ModuleUserDataResponse userData;
-	//private ModuleGetPatientFieldsResponse patientFields;
-	private List<PatientField> patientFieldsInsert;
-
-	private Study actualStudy;
-
+	private String language = "de";
+	
 	/**
 	 * data received from server and surely valid for the whole session
 	 */
+	
+	private ModuleUserDataResponse userData;
+
+	private List<PatientField> patientFieldsInsert;
+	private List<PatientField> patientFieldsSearch;
+
+	private Study actualStudy;
 
 	private List<Study> studies;
 
 	private Boolean loggedIn = false;
 	private Boolean loggingIn = false;
 
-	/**
-	 * console, may be used while developing to show on screen info to the
-	 * tablet user
-	 */
-
-	//private TextView console;
 	private List<Form> forms;
 	private boolean downloadingForms = false;
 	private int formCount = 0;
-	private List<PatientField> patientFieldsSearch;
-	/*
-	public void setConsole(TextView target) {
-		console = target;
-	}
+
+	private Department actualDepartment;
+	
+	private PatientFormElement waitingForDate;
+	
+	/**
+	 * private constructor, only class methods can create an instance of the
+	 * class
+	 * 
 	 */
+	
+	private Client() {
+		
+	}
+
+	/**
+	 * static method: returns the sole instance of the class
+	 * 
+	 */
+	
+	public static Client getInstance() {
+		return instance;
+	}
+	
+	
 	/**
 	 * initiates the login process cascade of requests
 	 * 
@@ -138,7 +149,7 @@ public class Client {
 	public void login(String username, String password) {
 		if (!loggedIn) {
 			loggingIn = true;
-			log("trying to login to the servers");
+			logcat("trying to login to the servers");
 			this.username = username;
 			this.password = SHA256.getHash(password);
 			SoapRequestParams params = new ServerRequestParams();
@@ -150,28 +161,26 @@ public class Client {
 			request.execute(new SoapRequestParams[] {});
 			logcat("issued server session id request");
 		} else {
-			log("already logged in");
+			logcat("already logged in");
 		}
 	}
 
 	/**
-	 * first request was successful -> received server session id , now login to
+	 * first request was successful -> received server session id , now login to the
 	 * module
 	 * 
 	 * @param response
 	 */
 
 	public void sessionIdReceived(ServerSessionIdResponse response) {
+		logcat ("session id received");
 		this.sessionId = response.getSessionId();
-		log(response.toString());
 		SoapRequestParams params = new ModuleRequestParams();
 		params.setAction("");
 		params.setMethod("loginToModule");
-		logcat("init module login request");
 		BackgroundSoapRequest request = new ModuleLoginRequest(params,
 				username, password, sessionId);
 		request.execute(new SoapRequestParams[] {});
-		logcat("issued module login request");
 	}
 
 	/**
@@ -183,19 +192,17 @@ public class Client {
 
 	public void moduleLoggedIn(ModuleLoginResponse response) {
 		if (loggingIn) {
+			logcat ("logged in to module");
 			this.userId = response.getUserId();
 			this.moduleSessionId = response.getModuleSessionId();
 			this.signature = response.getSignature();
 			this.moduleId = response.getModuleId();
-			log(response.toString());
 			SoapRequestParams params = new ServerRequestParams();
 			params.setAction(BackgroundSoapRequest.ServerBaseAction
 					+ "loginToServerRequest");
 			params.setMethod("loginToServer");
-			logcat("init server login request");
 			BackgroundSoapRequest request = new ServerLoginRequest(params,moduleId, sessionId, signature, userId);
 			request.execute(new SoapRequestParams[] {});
-			logcat("issued server login request");
 		}
 	}
 
@@ -208,15 +215,14 @@ public class Client {
 
 	public void serverLoggedIn(ServerLoginResponse response) {
 		if (loggingIn) {
+			logcat ("logged in to server");
 			this.loggedIn = response.getState();
-			log(response.toString());
 			loggingIn = false;
 			if (this.loggedIn) {
-				notify(Client.LOGIN_SUCCESS);
-				// although the userData is not necessary to do most stuff with MEMDroid it is necessary to obtain the patientFields, which it will automatically
+				notify(ClientMessages.LOGIN_SUCCESS);
 				requestUserData();
 			} else {
-				notify(Client.LOGIN_FAILED);
+				notify(ClientMessages.LOGIN_FAILED);
 			}
 		}
 	}
@@ -230,10 +236,8 @@ public class Client {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setAction("");
 			params.setMethod("getUserInformation");
-			logcat("init user information request");
 			BackgroundSoapRequest request = new ModuleUserDataRequest(params,moduleSessionId);
 			request.execute(new SoapRequestParams[]{});
-			logcat("issued user information request");
 		}
 	}
 
@@ -247,9 +251,8 @@ public class Client {
 	public void receivedUserData(ModuleUserDataResponse response) {
 		if (loggedIn) {
 			userData = response;
-			log (response.toString());
-			requestPatientFieldsInsert();
-			notify(Client.USER_DATA);
+			logcat ("user data received");
+			notify(ClientMessages.USER_DATA);
 		}
 	}
 
@@ -259,17 +262,14 @@ public class Client {
 
 	public void requestListOfStudies() {
 		if (this.loggedIn) {
-			notify(Client.SHOW_PROGRESS_DIALOG);
+			notify(ClientMessages.SHOW_PROGRESS_DIALOG);
 			if (this.studies != null) {
-				notify(Client.STUDIES_LIST);
+				notify(ClientMessages.STUDIES_LIST);
 			} else {
 				SoapRequestParams params = new ServerRequestParams();
 				params.setAction(BackgroundSoapRequest.ServerBaseAction
 						+ "getListOfStudiesRequest");
 				params.setMethod("getListOfStudies");
-				logcat("init server " + params.getMethod() + " request");
-				logcat(Locale.getDefault().getDisplayLanguage());
-				String language = "de";
 				BackgroundSoapRequest request = new ServerGetListOfStudiesRequest(
 						params, sessionId, language, "multicenter");
 				request.execute(new SoapRequestParams[] {});
@@ -277,30 +277,31 @@ public class Client {
 		}
 	}
 
+	/**
+	 * handles the response for the get list of studies request
+	 * 
+	 * @param response
+	 */
+	
 	public void receivedListOfStudies(ServerGetListOfStudiesResponse response) {
 		this.studies = response.getStudies();
-		Log.d ("client", "notifying listeners");
-		notify(Client.STUDIES_LIST);
+		logcat ("received studies");
+		notify(ClientMessages.STUDIES_LIST);
 	}
 
 	/**
-	 * 
+	 * request the data for a certain study
 	 * @param study
 	 */
 
-	public void requestDataForStudy(Study study) {
+	public void requestListOfForms(Study study) {
 		if (this.loggedIn && !downloadingForms) {
+			notify (ClientMessages.SHOW_PROGRESS_DIALOG);
 			downloadingForms  = true;
-			//Log.d("study loader","study loading is disabled at the moment");
-			//log("study loading disabled for instance");
 			actualStudy = study;
-			notify (SHOW_PROGRESS_DIALOG);
 			SoapRequestParams params = new ServerRequestParams();
 			params.setAction(BackgroundSoapRequest.ServerBaseAction + "GetListOfFormsRequest");
 			params.setMethod("getListOfForms");
-			logcat("init server " + params.getMethod() + " request");
-			logcat(Locale.getDefault().getDisplayLanguage());
-			String language = "de";
 			BackgroundSoapRequest request = new ServerGetListOfFormsRequest(
 					params, sessionId, language,  "multicenter", study.getName());
 			request.execute(new SoapRequestParams[] {});
@@ -308,12 +309,24 @@ public class Client {
 		}
 	}
 
+	/**
+	 * 
+	 * the moment the forms are received, request the form definitions for each form
+	 * 
+	 * @param result
+	 */
+	
 	public void receivedListOfForms(ServerGetListOfFormsResponse result) {
 		forms = result.getForms();
 		formCount = 0;
 		Client.getInstance().requestFormDefinition(forms.get(formCount));
 	}
 
+	/**
+	 * request the form definition of each form one after another
+	 * @param form
+	 */
+	
 	public void requestFormDefinition(Form form) {
 		if (this.loggedIn) {
 			SoapRequestParams params = new ServerRequestParams();
@@ -322,39 +335,44 @@ public class Client {
 			params.setMethod("downloadFormDefinition");
 			logcat("init server " + params.getMethod() + " request");
 			logcat(Locale.getDefault().getDisplayLanguage());
-			String language = "de";
 			BackgroundSoapRequest request = new ServerGetFormDefinitionRequest(
 					params, sessionId, language, form.getStudyName(), form.getVersion());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
 
+	/**
+	 * count if all form definitions are received, the notify the listeners
+	 * @param result
+	 */
+	
 	public void receivedFormDefinition(ServerGetFormDefinitionResponse result) {
+		logcat ("form defintion received");
 		forms.get(formCount).addDefinition(result);
 		formCount++;
 		if (formCount < forms.size()){
 			Client.getInstance().requestFormDefinition(forms.get(formCount));
 		}else{
-			notify(STUDY_DETAILS);
+			logcat ("all form definitions received");
+			notify(ClientMessages.STUDY_DETAILS);
 		}
 	}
 
 
 	/**
-	 * Request all the fields for the patient search
+	 * Request all the fields for the patient insert
+	 * !important! never call requestPatientFieldsInsert after requestPatientFieldsSearch 
 	 */
 
 	public void requestPatientFieldsInsert (){
 		if (loggedIn) {
 			if (patientFieldsInsert != null) {
-				notify(Client.PATIENT_FIELDS);
+				notify(ClientMessages.PATIENT_FIELDS);
 			} else {
 				if (userData != null){
 					SoapRequestParams params = new ModuleRequestParams();
 					params.setMethod("getPatientFields");
-					logcat("init module " + params.getMethod() + " request");
-					String language = "de";
-					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", userData.getDepartmentId());
+					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", actualDepartment.getId());
 					request.execute(new SoapRequestParams[] {});
 				}else{
 					requestUserData();
@@ -363,17 +381,20 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Request all the fields for the patient search
+	 * !important! never call requestPatientFieldsSearch before requestPatientFieldsInsert 
+	 */
+	
 	public void requestPatientFieldsSearch (){
 		if (loggedIn) {
 			if (patientFieldsSearch != null) {
-				notify(Client.PATIENT_FIELDS);
+				notify(ClientMessages.PATIENT_FIELDS);
 			} else {
 				if (userData != null){
 					SoapRequestParams params = new ModuleRequestParams();
 					params.setMethod("getPatientFields");
-					logcat("init module " + params.getMethod() + " request");
-					String language = "de";
-					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "search", userData.getDepartmentId());
+					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "search", actualDepartment.getId());
 					request.execute(new SoapRequestParams[] {});
 				}else{
 					requestUserData();
@@ -381,6 +402,13 @@ public class Client {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * received a bunch of patient fields
+	 * 
+	 * @param fields
+	 */
 	
 	public void receivedPatientFields (List<PatientField> fields){
 		if (patientFieldsInsert == null){
@@ -388,38 +416,56 @@ public class Client {
 			requestPatientFieldsSearch();
 		}else{
 			patientFieldsSearch = fields;
-			notify(Client.PATIENT_FIELDS);
+			notify(ClientMessages.PATIENT_FIELDS);
 		}
 	}
 
+	/**
+	 * 
+	 * save the patient to the server
+	 * 
+	 * @param data
+	 */
+	
 	public void savePatient(PatientFieldData[] data){
 		if (loggedIn) {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("createNewPatient");
-			logcat("init module " + params.getMethod() + " request");
-			String language = "de";
-			BackgroundSoapRequestNew request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, userData.getDepartmentId());
+			BackgroundSoapRequestNew request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, actualDepartment.getId());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
 	
+	/**
+	 * 
+	 * the patient has been saved to the serve
+	 * 
+	 * @param response
+	 */
+	
 	public void createdPatient(ModuleCreateNewPatientResponse response){
-		SoapRequestParams params = new ModuleRequestParams();
-		params.setMethod("getPatientFields");
-		logcat("init module " + params.getMethod() + " request");
-		String language = "de";
-		//BackgroundSoapRequestNew request = new ModuleSearchPatientRequest(params, moduleSessionId, language, ,userData.getDepartmentId());
-		//request.execute(new SoapRequestParams[] {});
+		
 	}
+	
+	/**
+	 * 
+	 * initiate a patient search on the server
+	 * 
+	 * @param search
+	 */
 	
 	public void searchPatient(PatientFieldData[] search){
 		SoapRequestParams params = new ModuleRequestParams();
 		params.setMethod("searchPatient");
 		logcat("init module " + params.getMethod() + " request");
 		String language = "de";
-		BackgroundSoapRequestNew request = new ModuleSearchPatientRequest(params, moduleSessionId, language, search, userData.getDepartmentId());
+		BackgroundSoapRequestNew request = new ModuleSearchPatientRequest(params, moduleSessionId, language, search, actualDepartment.getId());
 		request.execute(new SoapRequestParams[] {});
 	}
+	
+	/**
+	 * received a result for the patient search
+	 */
 	
 	public void receivedSearchedPatients(){
 		Log.d ("client","received patients");
@@ -427,17 +473,18 @@ public class Client {
 	
 	/**
 	 * 
+	 * @return the user data
 	 */
-	
-	
+		
 	public ModuleUserDataResponse getUserData(){
 		return userData;
 	}
 	
 	/**
 	 * 
+	 * @return a string representing the user data
 	 */
-
+	@Deprecated
 	public String getUserText(){
 		return userData.getForDisplay();
 	}
@@ -454,8 +501,12 @@ public class Client {
 		}
 	}
 
-
-	private void notify (int event){
+	/**
+	 * notify the listeners
+	 * @param event
+	 */
+	
+	private void notify (ClientMessages event){
 		for (ClientListener listener:listeners){
 			listener.notify(event);
 		}
@@ -469,73 +520,118 @@ public class Client {
 	 * @param fault
 	 */
 
+	//TODO maybe deprecated if the new Background Request Class is used all over the place
+	
 	public void handleFault(SoapFaultResponse fault) {
-		log("a soap fault occured");
 		logcat("SOAPfault: " + fault.toString());
 		if (loggingIn) {
 			loggingIn = false;
 			for (ClientListener listener : listeners) {
-				listener.notify(Client.LOGIN_FAILED);
+				listener.notify(ClientMessages.LOGIN_FAILED);
 			}
 		}
 	}
 
-
+	/**
+	 * 
+	 * @return the fields for the patient insert
+	 */
+	
 	public List<PatientField> getPatientFieldsInsert() {
 		return patientFieldsInsert;
 	}
 	
+	/**
+	 * 
+	 * @return the fields for the patient search
+	 */
+	
 	public List<PatientField> getPatientFieldsSearch() {
 		return patientFieldsSearch;
 	}
+	
+	/**
+	 * 
+	 * @return the list of all the studies for the actual user
+	 */
 
 	public List<Study> getListOfStudies() {
 		return this.studies;
 	}
 
 	/**
+	 * 
 	 * @return the actualStudy
 	 */
+	
 	public Study getActualStudy() {
 		return actualStudy;
 	}
 
 	/**
-	 * @param actualStudy
-	 *            the actualStudy to set
+	 * @param actualStudy to set
 	 */
 	public void setActualStudy(Study actualStudy) {
 		this.actualStudy = actualStudy;
 	}
+	
+	/**
+	 * 
+	 * @return the actual Department
+	 */
+	
+	public Department getDepartment(){
+		return actualDepartment;
+	}
+	
+	/**
+	 * 
+	 * @param department to set
+	 */
+	
+	public void setActualDepartment (Department department){
+		actualDepartment = department;
+	}
+	
+	
+	public void showDatePicker (PatientFormElement caller){
+		waitingForDate = caller;
+		notify(ClientMessages.SHOW_DATE_PICKER);
+	}
+	
 
+	public OnDateSetListener getDateWaiter() {
+		return waitingForDate;
+	}
+	
+	/**
+	 * 
+	 * @return true if still logged in
+	 */
+	
 	public Boolean isLoggedIn() {
 		return this.loggedIn;
 	}
 
+	/**
+	 * log the user out
+	 */
+	
 	public void logOut() {
 		// TODO really implement here the logout functionality
 		this.loggedIn = false;
 	}
 
 	/**
-	 * Appends a message text to the console view
-	 * 
-	 * @param text
-	 */
-
-	public void log(String text) {
-		// console.setText(console.getText() + "\n" + text);
-	}
-
-	/**
 	 * logs a message to the log cat debug tool
-	 * 
+	 *
 	 * @param text
 	 */
 
 	private void logcat(String text) {
-		Log.d(TAG, text);
+		Log.i("client", text);
 	}
+
 
 
 }

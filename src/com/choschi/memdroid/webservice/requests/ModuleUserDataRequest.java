@@ -1,17 +1,15 @@
 package com.choschi.memdroid.webservice.requests;
 
-import com.choschi.memdroid.webservice.Client;
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ModuleUserDataRequest extends BackgroundSoapRequest {
 
 	/**
-	 * Constructor
-	 * @param params, inherited from BackgroundSoapRequest
-	 * @param username
-	 * @param password
-	 * @param sessionId, ServerSessionId obtained by call to the Server
+	 * 
+	 * @param params
+	 * @param userId
 	 */
 	
 	public ModuleUserDataRequest(SoapRequestParams params, String userId) {

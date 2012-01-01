@@ -2,19 +2,27 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.serialization.SoapObject;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
+
+/**
+ * 
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class ModuleCreateNewPatientRequest extends BackgroundSoapRequestNew {
 
 	/**
-	 * Constructor
-	 * @param params, inherited from BackgroundSoapRequest
-	 * @param username
-	 * @param password
-	 * @param sessionId, ServerSessionId obtained by call to the Server
+	 *  
+	 * @param params
+	 * @param moduleSessionId
+	 * @param language
+	 * @param data
+	 * @param departmentId
 	 */
 	
 	public ModuleCreateNewPatientRequest(SoapRequestParams params, String moduleSessionId, String language, PatientFieldData[] data, String departmentId) {

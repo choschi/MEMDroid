@@ -1,6 +1,6 @@
 package com.choschi.memdroid.webservice.requests;
 
-import com.choschi.memdroid.webservice.Client;
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 

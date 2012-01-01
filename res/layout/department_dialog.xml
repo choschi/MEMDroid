@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/departmentDialog"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp">
+    <TextView
+    	android:id="@+id/departmentDialogText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:background="#fff"
+        android:text="@string/selectDepartment"/>
+    <Spinner 
+    	android:layout_width="300dp"
+    	android:layout_height="wrap_content"
+    	android:id="@+id/departmentDialogSpinner"
+    />
+    <Button
+    	android:id="@+id/departmentDialogDismissButton"
+    	android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:background="#fff"
+        android:text="@string/select"/>
+</LinearLayout>

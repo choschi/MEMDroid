@@ -2,7 +2,7 @@ package com.choschi.memdroid.webservice.parameters;
 
 /**
  * wrapper for the soap request parameters 
- * @author choschi
+ * @author Christoph Isch
  *
  */
 
@@ -13,40 +13,57 @@ public class SoapRequestParams {
 	protected String soapNamespace;
 	protected String soapUrl;
 	
-	
 	/**
-	 * getter and setters
+	 * 
+	 * @param action
 	 */
-	
+		
 	public void setAction(String action){
 		this.soapAction = action;
 	}
+	
+	/**
+	 * 
+	 * @return soap action 
+	 */
 	
 	public String getAction(){
 		return soapAction;
 	}
 	
+	/**
+	 * 
+	 * @param method
+	 */
+	
 	public void setMethod (String method){
 		this.soapMethod = method;
 	}
-
+	
+	/**
+	 * 
+	 * @return soap method
+	 */
+	
 	public String getMethod() {
 		return soapMethod;
 	}
-
+	
+	/**
+	 * 
+	 * @return the namespace
+	 */
+	
 	public String getNamespace() {
 		return soapNamespace;
 	}
-	@Deprecated
-	public void setNamespace(String soapNamespace) {
-		this.soapNamespace = soapNamespace;
-	}
 
+	/**
+	 * 
+	 * @return url as string
+	 */
+	
 	public String getUrl() {
 		return soapUrl;
-	}
-	@Deprecated
-	public void setUrl(String soapUrl) {
-		this.soapUrl = soapUrl;
 	}
 }

@@ -8,17 +8,30 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.interfaces.Serializable;
 
+/**
+ * 
+ * @author Christoph Isch
+ * 
+ * is the data object for the patient field which can be sent to the web service
+ * 
+ */
+
 public class PatientFieldData implements KvmSerializable,Serializable {
 
 	//public static Class PATIENT_FIELD_DATA_CLASS = PatientFieldData.class;
 	private String fieldId;
 	private String value;
 	
+	/**
+	 * init the object with the init values
+	 * @param id
+	 * @param val
+	 */
+	
 	public PatientFieldData (String id, String val){
 		fieldId = id;
 		value = val;
 	}
-	
 	
 	@Override
 	public Object getProperty(int arg0) {
@@ -40,7 +53,7 @@ public class PatientFieldData implements KvmSerializable,Serializable {
 	}
 
 	@Override
-	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
+	public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
 		switch (arg0){
 		case 0:
 			arg2.name = "fieldId";

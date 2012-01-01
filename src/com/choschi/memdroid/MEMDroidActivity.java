@@ -1,8 +1,11 @@
 package com.choschi.memdroid;
 
+import java.util.Calendar;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,51 +19,85 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import com.choschi.memdroid.Client.ClientMessages;
+import com.choschi.memdroid.data.Department;
 import com.choschi.memdroid.fragment.PatientFragment;
 import com.choschi.memdroid.fragment.StudyFragment;
 import com.choschi.memdroid.fragment.TabListener;
 import com.choschi.memdroid.util.ClientListener;
-import com.choschi.memdroid.webservice.Client;
+import com.choschi.memdroid.util.FixedLists;
+
+/**
+ * 
+ *  The activity is the main class of every android Application
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class MEMDroidActivity extends Activity implements OnClickListener,ClientListener, OnCancelListener {
-    /** Called when the activity is first created. */
     
-	private Button loginButton;
+	public static final int LOGIN_DIALOG = 0;
+	public static final int PROGRESS_DIALOG = 1;
+	public static final int DEPARTMENT_DIALOG = 2;
+	public static final int DATE_DIALOG = 3;
+	
+	/** Called when the activity is first created. */
+    
 	private Dialog loginDialog;
 	private ProgressDialog progressDialog;
-	//private Fragment studiesFragment;
+	private Dialog departmentDialog;
+	private DatePickerDialog dateDialog;
+	
+	/**
+	 * setting the main view layout from the resources directory
+	 */
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        // initialise the fixed lists
+        FixedLists.getInstance().getCountries(getApplicationContext());
+        FixedLists.getInstance().getLanguages(getApplicationContext());
+        FixedLists.getInstance().getGenders(getApplicationContext());
     }
 	
 	@Override
-	
 	public void onResume (){
 		super.onResume();
 	}
 	
+	/**
+	 * handling the clicks on the different options on the right side of the action bar
+	 */
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
 	    switch (item.getItemId()) {
+	    // login is pressed, show the login dialog
 	    case R.id.mainMenuLogin:
 	    	this.showLoginDialog();
-	    	return true;
+	      	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
 	}
 	
+	/**
+	 * show the login Dialog if not logged in or log out
+	 */
 	
 	public void showLoginDialog (){
 		if (!Client.getInstance().isLoggedIn()){
-			showDialog(Client.LOGIN_DIALOG);
+			showDialog(LOGIN_DIALOG);
+		}else{
+			Client.getInstance().logOut();
 		}
 	}
 	
@@ -71,69 +108,98 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	    return true;
 	}
 	
+	/**
+	 * create the different dialogs on the activity level
+	 */
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id){
-			case Client.LOGIN_DIALOG:
-				//Context mContext = this.getApplicationContext();
-				//Dialog dialog = new Dialog(mContext);
+			case LOGIN_DIALOG:
 				loginDialog = new Dialog(this);
 				loginDialog.setContentView(R.layout.login_box);
-				loginDialog.setTitle("Login please");
-				//loginDialog.setCancelable(false);
-				loginButton = (Button) loginDialog.findViewById(R.id.loginButton);
+				loginDialog.setTitle(R.string.loginDialogTitle);
+				Button loginButton = (Button) loginDialog.findViewById(R.id.loginButton);
 				loginButton.setOnClickListener(this);
 				loginDialog.setOnCancelListener(this);
 				return loginDialog;
-			case Client.PROGRESS_DIALOG:
+			case PROGRESS_DIALOG:
 				progressDialog = new ProgressDialog(this);
 				progressDialog.setMessage("Loading...");
 				progressDialog.setCancelable(false);
 				return progressDialog;
+			case DEPARTMENT_DIALOG:
+				departmentDialog = new Dialog(this);
+				departmentDialog.setContentView(R.layout.department_dialog);
+				departmentDialog.setTitle(R.string.departmentDialogTitle);
+				Spinner departmentSpinner = (Spinner)departmentDialog.findViewById(R.id.departmentDialogSpinner);
+				ArrayAdapter <Department> departmentAdapter = new ArrayAdapter<Department>(departmentDialog.getContext(),android.R.layout.simple_spinner_item,Client.getInstance().getUserData().getDepartments());
+				departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				departmentSpinner.setAdapter(departmentAdapter);
+				Button dismissButton = (Button) departmentDialog.findViewById(R.id.departmentDialogDismissButton);
+				dismissButton.setOnClickListener(this);
+				departmentDialog.setCancelable (false);
+				return departmentDialog;
+			case DATE_DIALOG:
+				Calendar c = Calendar.getInstance();
+				dateDialog = new DatePickerDialog(this,Client.getInstance().getDateWaiter(),c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH));
+				return dateDialog;
 		}
 		return null;
 	}
 	
+	/**
+	 * handle the click on the login button in the login dialog
+	 */
+	
 	public void onClick(View v){
-		Log.d ("onClick",""+v.getId());
 		switch (v.getId()){
 			case R.id.loginButton:
 				EditText usernameText = (EditText)loginDialog.findViewById(R.id.username);
 				EditText passwordText = (EditText)loginDialog.findViewById(R.id.password);
-				// TODO find out if this line of code hides the keyboard forever!
 				((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(passwordText.getWindowToken(), 0);
 				String username = usernameText.getText().toString();
 				String password = passwordText.getText().toString();
-				Log.d ("username:passwort", username+":"+password);
+				Log.i ("username:passwort", username+":"+password);
 				loginDialog.dismiss();
-				showDialog(Client.PROGRESS_DIALOG);
+				showDialog(PROGRESS_DIALOG);
 				Client.getInstance().registerClientListener(this);
 				Client.getInstance().login(username,password);
+			break;
+			case R.id.departmentDialogDismissButton:
+				departmentDialog.dismiss();
+				Spinner departmentSpinner = (Spinner)departmentDialog.findViewById(R.id.departmentDialogSpinner);
+				Department department = (Department)departmentSpinner.getSelectedItem();
+				Client.getInstance().setActualDepartment(department);
+				Client.getInstance().requestPatientFieldsInsert();
+				showDialog(PROGRESS_DIALOG);
 			break;
 		}
 	}
 	
+	/**
+	 * implementation of the listener method notify
+	 */
+	
 	@Override 
-	public void notify (int message){
+	public void notify (ClientMessages message){
 		switch (message){
-			case Client.LOGIN_SUCCESS:
-				Client.getInstance().getUserData();
+			case USER_DATA:
+				showDialog(DEPARTMENT_DIALOG);
 			break;
-			case Client.LOGIN_FAILED:
-				showDialog(Client.LOGIN_DIALOG);
+			case LOGIN_FAILED:
+				showDialog(LOGIN_DIALOG);
 			break;
-			case Client.USER_DATA:
-				showUserData();
-			break;
-			case Client.STUDIES_LIST:
+			case STUDIES_LIST:
 				progressDialog.dismiss();
 			break;
-			case Client.STUDY_DETAILS:
+			case STUDY_DETAILS:
 				progressDialog.dismiss();
 			break;
-			case Client.SHOW_PROGRESS_DIALOG:
-				showDialog(Client.PROGRESS_DIALOG);
-			case Client.PATIENT_FIELDS:
+			case SHOW_PROGRESS_DIALOG:
+				showDialog(PROGRESS_DIALOG);
+			case PATIENT_FIELDS:
+				// all the necessary data is loaded, add the views to the action bar
 				progressDialog.dismiss();
 				ActionBar actionBar = getActionBar();
 			    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -151,26 +217,11 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			                    this, "studies", StudyFragment.class));
 			    actionBar.addTab(studies);
 				break;
-			default:
 			
-				
-			break;
+			case SHOW_DATE_PICKER:
+				showDialog(DATE_DIALOG);
+				break;
 		}
-	}
-	
-	private void showUserData(){
-		/*
-		Log.d("MEMDroid", "showUserData");
-		TextView dataText = (TextView)findViewById(R.id.mainUserData);
-		dataText.setText(Client.getInstance().getUserText());
-		dataText.setVisibility(View.VISIBLE);
-		Button listButton = (Button) findViewById(R.id.mainListButton);
-		listButton.setVisibility(View.VISIBLE);
-		listButton.setOnClickListener(this);
-		Button searchButton = (Button) findViewById(R.id.mainSearchPatientButton);
-		searchButton.setVisibility(View.VISIBLE);
-		searchButton.setOnClickListener(this);
-		*/
 	}
 
 	@Override

@@ -1,17 +1,31 @@
 package com.choschi.memdroid.ui;
 
+import java.util.List;
+
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.choschi.memdroid.R;
 import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.interfaces.SpinnerItem;
+import com.choschi.memdroid.util.FixedLists;
+
+
+/**
+ * 
+ * @author Christoph Isch
+ *
+ * Creates the PatientFormElements all sorts of PatientFields
+ */
 
 public class PatientFieldFactory {
 	
+	// outer type
+		
 	public enum FieldType{
 		UNDEFINED ("undefined"),
 		MULTIPLECHOICE ("multiplechoice"),
@@ -31,6 +45,8 @@ public class PatientFieldFactory {
 			return type;
 		}
 	}
+	
+	// inner type
 	
 	public enum FixedFieldType{
 		UNDEFINED ("undefined"),
@@ -58,6 +74,14 @@ public class PatientFieldFactory {
 		}
 	}
 	
+	/**
+	 * 
+	 * factory method for the PatientFormElements
+	 * 
+	 * @param field
+	 * @param context
+	 * @return a patient form ui element
+	 */
 	
 	public static PatientFormElement factory (PatientField field, Context context){
 		FieldType type = FieldType.UNDEFINED;
@@ -84,34 +108,20 @@ public class PatientFieldFactory {
 					switch (fixedType){
 						case COUNTRY:
 						case COUNTRY2:
-						    form.fillRight(createNewSpinner(context,R.array.countries,field.getFieldId()),type);
+							form.fillRight(createSpinnerForAdapter(context,field.getFieldId(),FixedLists.getInstance().getCountries(null)), type);
 						break;
 						case DEPARTMENT:
-							
-							// ModuleUserDataResponse data = Client.getInstance().getUserData();
-							/*
-							PatientSpinner departmentSpinner = new PatientSpinner(context);
-							departmentSpinner.setId(field.getFieldId());
-							//TODO put list of departments here
-							ArrayAdapter<CharSequence> departmentAdapter = ArrayAdapter.createFromResource(
-						            context, , android.R.layout.simple_spinner_item);
-						    departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-						    departmentSpinner.setAdapter(departmentAdapter);
-						    
-						    */
-							// TextView department = new TextView(context);
-							// department.setText(data.getDepartmentId());
-							// form.fillRight(department,type);
+							// Department can not be chosen anymore at this point 							
 							return null;
-						//break;
 						case LANGUAGE:
-							form.fillRight(createNewSpinner(context,R.array.languages,field.getFieldId()),type);
+							form.fillRight(createSpinnerForAdapter(context,field.getFieldId(),FixedLists.getInstance().getLanguages(null)), type);
 						break;
 						case GENDER:
-							form.fillRight(createNewSpinner(context,R.array.genders,field.getFieldId()),type);
+							form.fillRight(createSpinnerForAdapter(context,field.getFieldId(),FixedLists.getInstance().getGenders(null)), type);
 						break;
 					}
 				break;
+				case DATE:
 				case ALPHANUM:
 				case NUMBER:
 				case TEXT:
@@ -119,26 +129,30 @@ public class PatientFieldFactory {
 					inputView.setWidth(200);
 					form.fillRight(inputView,type);
 				break;
-				case DATE:
-					return null;
-					/*
-					DatePicker picker = new DatePicker(context);
-					picker.setCalendarViewShown(false);
-					form.fillRight(picker,type);
-					*/
-				//break;
 			}
 		}
 		return form;
 	}
 	
-	private static Spinner createNewSpinner(Context context, int array,int id){
-		PatientSpinner spinner = new PatientSpinner(context);
+	/**
+	 * 
+	 * creates spinners for multiple choice fields
+	 * 
+	 * @param context
+	 * @param id
+	 * @param data
+	 * @return a spinner for the related data
+	 */
+	
+	private static View createSpinnerForAdapter (Context context, int id, List<SpinnerItem> data){
+		Spinner spinner = new Spinner(context);
 		spinner.setId(id);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-	            context, array, android.R.layout.simple_spinner_item);
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    spinner.setAdapter(adapter);
+		ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<SpinnerItem>(context,
+		          android.R.layout.simple_spinner_item, data);
+		spinner.setAdapter(adapter);
 	    return spinner;
 	}
+	
+
+
 }

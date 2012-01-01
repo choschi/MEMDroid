@@ -4,6 +4,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import android.util.Log;
+
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsResponse;
 import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
@@ -15,15 +17,12 @@ import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
 import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
 
-import android.util.Log;
-
 /**
  * Base class and factory for the webservice response to class renderers 
- * @author choschi
+ * @author Christoph Isch
  * 
  */
-
-
+//TODO may be obsolete if the new Background Soap Request is implemented all over
 public class ResultFactory {
 	
 	/**
@@ -53,7 +52,7 @@ public class ResultFactory {
 	/**
 	 * factory method for the renderers
 	 * @param soapResponse
-	 * @return
+	 * @return Result
 	 */
 	
 	public static Result factory (Object soapResponse){

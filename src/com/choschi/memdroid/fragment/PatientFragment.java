@@ -11,13 +11,21 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
+import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.util.ClientListener;
-import com.choschi.memdroid.webservice.Client;
+
+/**
+ * 
+ * @author Christoph Isch
+ * 
+ * Master Fragment for the patient views
+ * 
+ */
+
 
 public class PatientFragment extends Fragment implements ClientListener,OnClickListener  {
-	
-	int mCurCheckPosition = 0;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -32,7 +40,7 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 
 		if (savedInstanceState != null) {
 			// Restore last state for checked position.
-			mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
+			
 		}
 	}
 
@@ -45,12 +53,12 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt("curChoice", mCurCheckPosition);
+		//outState.putInt("curChoice", mCurCheckPosition);
 	}
 
 
 	@Override
-	public void notify(int message) {
+	public void notify(ClientMessages message) {
 		switch (message){
 		}
 	}
@@ -66,11 +74,9 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 					newView.setVisibility(1);
 					Fragment newFragment = new PatientNewFragment();
 					FragmentTransaction newTransaction = getFragmentManager().beginTransaction();
-					// Replace whatever is in the fragment_container view with this fragment,
-					// and add the transaction to the back stack
+
 					newTransaction.replace(R.id.patientDetailOutlet, newFragment);
-					//transaction.addToBackStack(null);
-					// Commit the transaction
+
 					newTransaction.commit();
 					Log.d("patientFragment","newPatient pressed");
 				break;
@@ -79,11 +85,9 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 					searchView.setVisibility(1);
 					Fragment searchFragment = new PatientSearchFragment();
 					FragmentTransaction searchTransaction = getFragmentManager().beginTransaction();
-					// Replace whatever is in the fragment_container view with this fragment,
-					// and add the transaction to the back stack
+
 					searchTransaction.replace(R.id.patientDetailOutlet, searchFragment);
-					//transaction.addToBackStack(null);
-					// Commit the transaction
+
 					searchTransaction.commit();
 					Log.d("patientFragment","searchPatient pressed");
 				break;

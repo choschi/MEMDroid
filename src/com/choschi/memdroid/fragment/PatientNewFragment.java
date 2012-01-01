@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
+import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.ui.PatientFieldFactory;
 import com.choschi.memdroid.ui.PatientFormElement;
 import com.choschi.memdroid.util.ClientListener;
-import com.choschi.memdroid.webservice.Client;
 
 public class PatientNewFragment extends Fragment implements ClientListener,OnClickListener  {
 		
@@ -43,16 +44,13 @@ public class PatientNewFragment extends Fragment implements ClientListener,OnCli
     	List<PatientField> fields = Client.getInstance().getPatientFieldsInsert();
     	formChildren = new ArrayList<PatientFormElement>();
     	for (PatientField field : fields){
-    		//TODO implement a better way to select dates
-    		if (field.getRequired()){
-	    		PatientFormElement child = PatientFieldFactory.factory(field,getActivity().getBaseContext());
-	    		if (child != null){
-	    			if (formChildren.size() > 0){
-	    				formChildren.get(formChildren.size()-1).setNextId(child.getViewId());
-	    			}
-	    			formChildren.add(child);
-	    			layout.addView(child, layout.getChildCount());
-	    		}
+    		PatientFormElement child = PatientFieldFactory.factory(field,getActivity().getBaseContext());
+    		if (child != null){
+    			if (formChildren.size() > 0){
+    				formChildren.get(formChildren.size()-1).setNextId(child.getViewId());
+    			}
+    			formChildren.add(child);
+    			layout.addView(child, layout.getChildCount());
     		}
     	}
     	return view;
@@ -66,7 +64,7 @@ public class PatientNewFragment extends Fragment implements ClientListener,OnCli
 
 
 	@Override
-	public void notify(int message) {
+	public void notify(ClientMessages message) {
 		switch (message){
 		}
 	}
@@ -74,14 +72,22 @@ public class PatientNewFragment extends Fragment implements ClientListener,OnCli
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
+			
+			
+			
 			case R.id.patientNewSubmitButton:
+				
+				// First of all extract the data from the PatientFormElements
+				
 				PatientFieldData[] data = new PatientFieldData[formChildren.size()];
 				int counter = 0;
 				for (PatientFormElement item : formChildren){
 					data[counter] = item.getPatientFieldData();
 					counter++;
 				}
-					
+				
+				// Send the new patient data to the server
+				
 				Client.getInstance().savePatient(data);
 			break;
 		}

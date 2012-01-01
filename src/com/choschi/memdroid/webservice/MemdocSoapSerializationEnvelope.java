@@ -20,24 +20,9 @@ public class MemdocSoapSerializationEnvelope extends SoapSerializationEnvelope {
 	}
 	
 	/**
-	 * allows to set an empty body tag in envelope
+	 * any empty header object in a call to the server results in a http 500 error, thus this modification to the original envelope was necessary
 	 */
-	/*
-	@Override
-	public void writeBody(XmlSerializer writer) throws IOException{
-		if (bodyOut != null){
-			super.writeBody(writer);
-			Log.d ("MemdocSoapErializationEnvelope","body is not empty");
-		}else{
-			Log.d ("MemdocSoapErializationEnvelope","body is empty");			
-		}
-	}
-	*/
-	/**
-	 * try to suppress the header tag as I think this might be a source for error
-	 */
-	
-	
+
 	@Override
 	public void write(XmlSerializer writer) throws IOException {
 		writer.setPrefix("i", xsi);

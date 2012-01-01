@@ -1,10 +1,14 @@
 package com.choschi.memdroid.webservice.requests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import android.util.Log;
 
+import com.choschi.memdroid.data.Department;
 import com.choschi.memdroid.webservice.interfaces.Result;
 
 /**
@@ -15,11 +19,7 @@ import com.choschi.memdroid.webservice.interfaces.Result;
 
 public class ModuleUserDataResponse implements Result{
 	
-	private String clinicId;
-	private String clinicName;
-	private String countryId;
-	private String departmentId;
-	private String departmentName;
+	private List<Department> departments;
 	
 	/**
 	 * render the SoapObject in a more meaningful entity
@@ -28,71 +28,23 @@ public class ModuleUserDataResponse implements Result{
 	
 	public ModuleUserDataResponse(SoapObject response){
 		Log.d ("response",response.toString());
-		SoapObject item = (SoapObject) response.getProperty("item");
-		clinicId = (((SoapPrimitive)item.getProperty("clinicId")).toString());
-		clinicName = (((SoapPrimitive)item.getProperty("clinicName")).toString()); 
-		countryId = (((SoapPrimitive)item.getProperty("countryId")).toString());
-		departmentId = (((SoapPrimitive)item.getProperty("departmentId")).toString());
-		departmentName = (((SoapPrimitive)item.getProperty("departmentName")).toString());
+		departments = new ArrayList<Department>();
+		for (int i=0; i<response.getPropertyCount();i++){
+			departments.add(new Department((SoapObject)response.getProperty(i)));
+		}
 	}
 
-	/**
-	 * @return the clinicId
-	 */
-	public String getClinicId() {
-		return clinicId;
-	}
-
-
-
-	/**
-	 * @return the clinicName
-	 */
-	public String getClinicName() {
-		return clinicName;
-	}
-
-
-
-	/**
-	 * @return the countryId
-	 */
-	public String getCountryId() {
-		return countryId;
-	}
-
-
-
-	/**
-	 * @return the departmentId
-	 */
-	public String getDepartmentId() {
-		return departmentId;
-	}
-
-
-	/**
-	 * @return the departmentName
-	 */
-	public String getDepartmentName() {
-		return departmentName;
-	}
 	
-	/**
-	 * convenience override for the log method
-	 */
-	
-	@Override
-	public String toString(){
-		return "Clinic: "+clinicName;
+	public List<Department> getDepartments (){
+		return departments;
 	}
 	
 	/**
 	 * 
 	 * @return String with the user information
 	 */
-	
+	@Deprecated
 	public String getForDisplay(){
-		return clinicName+"("+countryId+" - "+clinicId+")\n"+departmentName+"("+departmentId+")";
+		return "";
 	}
 }

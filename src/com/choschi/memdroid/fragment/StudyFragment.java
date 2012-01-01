@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
+import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.util.ClientListener;
-import com.choschi.memdroid.webservice.Client;
 public class StudyFragment extends Fragment implements ClientListener {
 
 	int mCurCheckPosition = 0;
@@ -40,9 +41,9 @@ public class StudyFragment extends Fragment implements ClientListener {
 
 
 	@Override
-	public void notify(int message) {
+	public void notify(ClientMessages message) {
 			switch (message){
-			case Client.STUDIES_LIST:
+			case STUDIES_LIST:
 				Log.d ("fragment", "the listener for STUDIES_LIST has been called!");
 				if (getActivity() != null){
 					View listView = getActivity().findViewById(R.id.studiesListOutlet);
@@ -57,7 +58,7 @@ public class StudyFragment extends Fragment implements ClientListener {
 					listTransaction.commit();
 				}
 			break;
-			case Client.STUDY_DETAILS:
+			case STUDY_DETAILS:
 				Log.d ("fragment", "the listener for STUDIES_LIST has been called!");
 				if (getActivity() != null){
 					View listView = getActivity().findViewById(R.id.studiesListOutlet);

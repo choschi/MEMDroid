@@ -10,8 +10,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.webservice.Client;
 import com.choschi.memdroid.webservice.MemdocSoapSerializationEnvelope;
 import com.choschi.memdroid.webservice.ResultFactory;
 import com.choschi.memdroid.webservice.interfaces.Result;
@@ -41,7 +41,6 @@ public class BackgroundSoapRequestNew extends AsyncTask<SoapRequestParams, Void,
 	
 	/**
 	 * Constructor, does the initialisation of the soap envelope 
-	 * @param client, reference to the calling instance
 	 * @param params
 	 */
 	

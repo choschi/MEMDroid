@@ -25,7 +25,7 @@ public class ServerSessionIdResponse implements Result{
 	
 	/**
 	 * get the Server session id
-	 * @return
+	 * @return String
 	 */
 	
 	public String getSessionId(){

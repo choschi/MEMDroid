@@ -7,7 +7,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.choschi.memdroid.webservice.Client;
+import com.choschi.memdroid.Client;
 import com.choschi.memdroid.webservice.MemdocSoapSerializationEnvelope;
 import com.choschi.memdroid.webservice.ResultFactory;
 import com.choschi.memdroid.webservice.interfaces.Result;
@@ -37,7 +37,6 @@ public class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Re
 	
 	/**
 	 * Constructor, does the initialisation of the soap envelope 
-	 * @param client, reference to the calling instance
 	 * @param params
 	 */
 	

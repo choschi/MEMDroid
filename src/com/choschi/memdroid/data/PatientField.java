@@ -1,14 +1,21 @@
 package com.choschi.memdroid.data;
 
 import java.util.Hashtable;
-import java.util.List;
 
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 
 import com.choschi.memdroid.webservice.interfaces.Result;
+
+
+/**
+ * 
+ * @author Christoph Isch
+ *
+ * Represents a patient field returned by the getPatientFields requests to the module
+ *
+ */
 
 public class PatientField extends SoapObjectParser implements KvmSerializable,Result {
 	
@@ -132,7 +139,7 @@ public class PatientField extends SoapObjectParser implements KvmSerializable,Re
 	}
 
 	@Override
-	public void getPropertyInfo(int arg0, Hashtable arg1, PropertyInfo arg2) {
+	public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
 		switch (arg0) {
 		case 0:
 			arg2.name = "additionalCharacters";

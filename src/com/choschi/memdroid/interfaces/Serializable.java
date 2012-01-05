@@ -1,4 +1,4 @@
-package com.choschi.memdroid.data.interfaces;
+package com.choschi.memdroid.interfaces;
 
 import org.ksoap2.serialization.SoapObject;
 

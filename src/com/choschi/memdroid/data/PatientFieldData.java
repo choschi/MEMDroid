@@ -1,12 +1,8 @@
 package com.choschi.memdroid.data;
 
-import java.util.Hashtable;
-
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.interfaces.Serializable;
+import com.choschi.memdroid.interfaces.Serializable;
 
 /**
  * 
@@ -16,7 +12,7 @@ import com.choschi.memdroid.data.interfaces.Serializable;
  * 
  */
 
-public class PatientFieldData implements KvmSerializable,Serializable {
+public class PatientFieldData extends FormSoapObjectParser implements Serializable {
 
 	//public static Class PATIENT_FIELD_DATA_CLASS = PatientFieldData.class;
 	private String fieldId;
@@ -29,60 +25,28 @@ public class PatientFieldData implements KvmSerializable,Serializable {
 	 */
 	
 	public PatientFieldData (String id, String val){
+		super(null);
 		fieldId = id;
 		value = val;
 	}
 	
 	public PatientFieldData (SoapObject input){
-		for (int i=0;i<input.getPropertyCount();i++){
-			setProperty(i, input.getProperty(i));
-		}
+		super (input);
 	}
 	
 	@Override
-	public Object getProperty(int arg0) {
-		Object out = null;
-		switch (arg0){
-		case 0:
-			out = fieldId;
+	protected void saveProperty(String property, Name name) {
+		switch (name){
+		case PATIENT_FIELD_FIELD_ID:
+			fieldId = property;
 			break;
-		case 1:
-			out = value;
-			break;
-		}
-		return out;
-	}
-
-	@Override
-	public int getPropertyCount() {
-		return 2;
-	}
-
-	@Override
-	public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
-		switch (arg0){
-		case 0:
-			arg2.name = "fieldId";
-			arg2.type = PropertyInfo.STRING_CLASS;
-			break;
-		case 1:
-			arg2.name = "value";
-			arg2.type = PropertyInfo.STRING_CLASS;
+		case VALUE:
+			value = property;
 			break;
 		}
 	}
-
 	@Override
-	public void setProperty(int arg0, Object arg1) {
-		switch (arg0){
-		case 0:
-			fieldId = arg1.toString();
-			break;
-		case 1:
-			value = arg1.toString();
-			break;
-		}
-	}
+	protected void saveObject(SoapObject object,Name name){}
 	
 	@Override
 	public SoapObject toSoapObject(String namespace){

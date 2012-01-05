@@ -1,6 +1,6 @@
 package com.choschi.memdroid.webservice.parameters;
 
-import com.choschi.memdroid.webservice.requests.BackgroundSoapRequest;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 
 
 /**

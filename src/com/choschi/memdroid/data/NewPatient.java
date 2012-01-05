@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
-
 public class NewPatient extends Patient{
 	
 	

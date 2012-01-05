@@ -2,8 +2,6 @@ package com.choschi.memdroid.data;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
-
 public class PatientPermission extends FormSoapObjectParser {
 	
 	private String groupId;
@@ -37,6 +35,34 @@ public class PatientPermission extends FormSoapObjectParser {
 	
 	public String getCharacter(){
 		return permission;
+	}
+
+	/**
+	 * @return the groupId
+	 */
+	public String getGroupId() {
+		return groupId;
+	}
+
+	/**
+	 * @param groupId the groupId to set
+	 */
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	/**
+	 * @return the patientPermissionId
+	 */
+	public String getPatientPermissionId() {
+		return patientPermissionId;
+	}
+
+	/**
+	 * @param patientPermissionId the patientPermissionId to set
+	 */
+	public void setPatientPermissionId(String patientPermissionId) {
+		this.patientPermissionId = patientPermissionId;
 	}
 
 }

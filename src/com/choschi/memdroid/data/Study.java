@@ -19,16 +19,6 @@ public class Study extends SoapObjectParser {
 	
 	private List<Form> forms;
 	
-	@Deprecated
-	public Study (String data){
-		String[] values = this.parseData(data);
-		for (int i=0;i<values.length;i++){
-			if (values[i].length()>1){
-				setValue(i,dataToValue(values[i]));
-			}
-		}
-	}
-	
 	public Study (SoapObject input){
 		forms = new ArrayList<Form>();
 		id = ((SoapPrimitive)input.getProperty(0)).toString();
@@ -38,50 +28,9 @@ public class Study extends SoapObjectParser {
 		endDate = ((SoapPrimitive)input.getProperty(4)).toString();
 	}
 	
-	
-	@Deprecated
-	protected String[] parseData(String originalData){
-		String rawData = originalData.substring(8, originalData.length()-1);
-		return rawData.split(";");
-	}
-	@Deprecated
-	protected String dataToValue (String data){
-		data = data.trim();
-		return data.substring(5,data.length());
-	}
-	@Deprecated
-	protected void setValue(int index,String value){
-		switch (index){
-			case 0:
-				this.setId(value);
-			break;
-			case 1:
-				this.setName(value);
-			break;
-			case 2:
-				this.setType(value);
-			break;
-			case 3:
-				this.setStartDate(value);
-			break;
-			case 4:
-				this.setEndDate(value);
-			break;
-		}
-	}
-
-
 	public String getId() {
 		return id;
 	}
-
-	
-	@Deprecated
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-
 	
 	public String getName() {
 		return name;

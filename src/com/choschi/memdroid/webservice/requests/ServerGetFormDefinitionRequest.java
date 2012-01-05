@@ -1,10 +1,15 @@
 package com.choschi.memdroid.webservice.requests;
 
+import org.ksoap2.serialization.SoapObject;
+
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.data.FormDefinition;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ServerGetFormDefinitionRequest extends BackgroundSoapRequest {
+	
+	private FormDefinition definition;
 	
 	public ServerGetFormDefinitionRequest(SoapRequestParams params,String sessionId, String language, String formName, String version) {
 		super(params);
@@ -13,18 +18,19 @@ public class ServerGetFormDefinitionRequest extends BackgroundSoapRequest {
 		request.addProperty ("serverSessionId",sessionId);
 		request.addProperty ("version", version);
 	}
-	
-	/**
-	 * go back to the UI thread and tell it what to do
-	 */
+
+	@Override
+	protected void parseResponse(SoapObject response) {
+		definition = new FormDefinition(response);
+	}
 	
 	@Override
-	protected void onPostExecute(Result result){
+	protected void onPostExecute(Object result){
 		try{
-			Client.getInstance().receivedFormDefinition ((ServerGetFormDefinitionResponse)result);
+			Client.getInstance().receivedFormDefinition (definition);
 			return;
 		}catch (Exception ex){
-			super.onPostExecute(result);
+			super.onPostExecute(ex);
 		}
 	}
 

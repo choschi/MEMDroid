@@ -1,8 +1,6 @@
-package com.choschi.memdroid.util;
+package com.choschi.memdroid.interfaces;
 
 import com.choschi.memdroid.Client.ClientMessages;
-
-//TODO move this to another more meaningful package
 
 public interface ClientListener {
 	void notify (ClientMessages message);

@@ -1,12 +1,6 @@
 package com.choschi.memdroid.data;
 
-import java.util.Hashtable;
-
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
-
-import com.choschi.memdroid.webservice.interfaces.Result;
 
 
 /**
@@ -17,7 +11,7 @@ import com.choschi.memdroid.webservice.interfaces.Result;
  *
  */
 
-public class PatientField extends SoapObjectParser implements KvmSerializable,Result {
+public class PatientField extends FormSoapObjectParser{
 	
 	private String additionalCharacters;
 	private boolean allowValidationDeactivation;
@@ -37,234 +31,64 @@ public class PatientField extends SoapObjectParser implements KvmSerializable,Re
 	private boolean useUnspecifiedGender;
 	private String validationRegularExpression;
 	
-	public PatientField (SoapObject input){
-		additionalCharacters = input.getProperty("additionalCharacters").toString();
-		allowValidationDeactivation = parseBoolean(input.getProperty("allowValidationDeactivation").toString());
-		columnspan = parseInteger(input.getProperty("columnspan").toString());
-		fieldId = parseInteger(input.getProperty("fieldId").toString());
-		fieldPosition = parseInteger(input.getProperty("fieldPosition").toString());
-		fieldType = input.getProperty("fieldType").toString();
-		fixedFieldType = input.getProperty("fixedFieldType").toString();
-		groupNumber = parseInteger(input.getProperty("fieldId").toString());
-		label = input.getProperty("label").toString();
-		lengthMax = parseInteger(input.getProperty("lengthMax").toString());
-		lengthMin = parseInteger(input.getProperty("lengthMin").toString());
-		patientlist = parseBoolean(input.getProperty("patientlist").toString());
-		readOnly = parseBoolean(input.getProperty("readOnly").toString());
-		required = parseBoolean(input.getProperty("required").toString());
-		useTime = parseBoolean(input.getProperty("useTime").toString());
-		useUnspecifiedGender = parseBoolean(input.getProperty("useUnspecifiedGender").toString());
-		validationRegularExpression = input.getProperty("validationRegularExpression").toString();
-	}
-	
-	@Override
-	public Object getProperty(int arg0) {
-		Object out = null;
-		switch (arg0) {
-		case 0: {
-			out = additionalCharacters;
-			break;
-		}
-		case 1: {
-			out = allowValidationDeactivation;
-			break;
-		}
-		case 2: {
-			out = columnspan;
-			break;
-		}
-		case 3: {
-			out = fieldId;
-			break;
-		}
-		case 4: {
-			out = fieldPosition;
-			break;
-		}
-		case 5: {
-			out = fieldType;
-			break;
-		}
-		case 6: {
-			out = fixedFieldType;
-			break;
-		}
-		case 7: {
-			out = groupNumber;
-			break;
-		}
-		case 8: {
-			out = label;
-			break;
-		}
-		case 9: {
-			out = lengthMax;
-			break;
-		}
-		case 10: {
-			out = lengthMin;
-			break;
-		}
-		case 11: {
-			out = patientlist;
-			break;
-		}
-		case 12: {
-			out = readOnly;
-			break;
-		}
-		case 13: {
-			out = required;
-			break;
-		}
-		case 14: {
-			out = useTime;
-			break;
-		}
-		case 15: {
-			out = useUnspecifiedGender;
-			break;
-		}
-		case 16: {
-			out = validationRegularExpression;
-			break;
-		}
-		}
-		return out;
+	public PatientField (SoapObject response){
+		super(response);
 	}
 
-	@Override
-	public int getPropertyCount() {
-		return 17;
-	}
 
 	@Override
-	public void getPropertyInfo(int arg0, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
-		switch (arg0) {
-		case 0:
-			arg2.name = "additionalCharacters";
-			arg2.type = PropertyInfo.STRING_CLASS;
+	public void saveProperty(String property,Name name) {
+		switch (name){
+		case PATIENT_FIELD_ADDITIONAL_CHARACTERS:
+			additionalCharacters = property;
 			break;
-		case 1:
-			arg2.name = "allowValidationDeactivation";
-			arg2.type = PropertyInfo.BOOLEAN_CLASS;
+		case PATIENT_FIELD_ALLOW_VALIDATION_DEACTIVATION:
+			allowValidationDeactivation = parseBoolean(property);
 			break;
-		case 2:
-			arg2.name = "columnspan";
-			arg2.type = PropertyInfo.INTEGER_CLASS;
+		case PATIENT_FIELD_COLUMNSPAN:
+			columnspan = parseInteger(property);
 			break;
-		case 3:
-			arg2.name = "fieldId";
-			arg2.type = PropertyInfo.INTEGER_CLASS;
+		case PATIENT_FIELD_FIELD_ID:
+			fieldId = parseInteger(property);
 			break;
-		case 4:
-			arg2.name = "fieldPosition";
-			arg2.type = PropertyInfo.INTEGER_CLASS;
+		case PATIENT_FIELD_FIELDPOSITION:
+			fieldPosition = parseInteger(property);
 			break;
-		case 5:
-			arg2.name = "fieldType";
-			arg2.type = PropertyInfo.STRING_CLASS;
+		case PATIENT_FIELD_FIELD_TYPE:
+			fieldType = property;
 			break;
-		case 6:
-			arg2.name = "fixedFieldType";
-			arg2.type = PropertyInfo.STRING_CLASS;
+		case PATIENT_FIELD_FIXED_FIELD_TYPE:
+			fixedFieldType = property;
 			break;
-		case 7:
-			arg2.name = "groupNumber";
-			arg2.type = PropertyInfo.INTEGER_CLASS;
+		case PATIENT_FIELD_GROUP_NUMBER:
+			groupNumber = parseInteger(property);
 			break;
-		case 8:
-			arg2.name = "label";
-			arg2.type = PropertyInfo.STRING_CLASS;
+		case PATIENT_FIELD_LABEL:
+			label = property;
 			break;
-		case 9:
-			arg2.name = "lengthMax";
-			arg2.type = PropertyInfo.INTEGER_CLASS;
+		case PATIENT_FIELD_LENGTH_MAX:
+			lengthMax = parseInteger(property);
 			break;
-		case 10:
-			arg2.name = "lengthMin";
-			arg2.type = PropertyInfo.INTEGER_CLASS;
+		case PATIENT_FIELD_LENGTH_MIN:
+			lengthMin = parseInteger(property);
 			break;
-		case 11:
-			arg2.name = "patientlist";
-			arg2.type = PropertyInfo.BOOLEAN_CLASS;
+		case PATIENT_FIELD_PATIENT_LIST:
+			patientlist = parseBoolean(property);
 			break;
-		case 12:
-			arg2.name = "readOnly";
-			arg2.type = PropertyInfo.BOOLEAN_CLASS;
+		case PATIENT_FIELD_READ_ONLY:
+			readOnly = parseBoolean(property);
 			break;
-		case 13:
-			arg2.name = "required";
-			arg2.type = PropertyInfo.BOOLEAN_CLASS;
+		case PATIENT_FIELD_REQUIRED:
+			required = parseBoolean(property);
 			break;
-		case 14:
-			arg2.name = "useTime";
-			arg2.type = PropertyInfo.BOOLEAN_CLASS;
+		case PATIENT_FIELD_USE_TIME:
+			useTime = parseBoolean(property);
 			break;
-		case 15:
-			arg2.name = "useUnspecifiedGender";
-			arg2.type = PropertyInfo.BOOLEAN_CLASS;
+		case PATIENT_FIELD_USE_UNSPECIFIED_GENDER:
+			useUnspecifiedGender = parseBoolean(property);
 			break;
-		case 16:
-			arg2.name = "validationRegularExpression";
-			arg2.type = PropertyInfo.STRING_CLASS;
-			break;
-		}
-	}
-
-	@Override
-	public void setProperty(int arg0, Object arg1) {
-		switch (arg0){
-		case 0:
-			additionalCharacters = arg1.toString();
-			break;
-		case 1:
-			allowValidationDeactivation = parseBoolean(arg1.toString());
-			break;
-		case 2:
-			columnspan = parseInteger(arg1.toString());
-			break;
-		case 3:
-			fieldId = parseInteger(arg1.toString());
-			break;
-		case 4:
-			fieldPosition = parseInteger(arg1.toString());
-			break;
-		case 5:
-			fieldType = arg1.toString();
-			break;
-		case 6:
-			fixedFieldType = arg1.toString();
-			break;
-		case 7:
-			groupNumber = parseInteger(arg1.toString());
-			break;
-		case 8:
-			label = arg1.toString();
-			break;
-		case 9:
-			lengthMax = parseInteger(arg1.toString());
-			break;
-		case 10:
-			lengthMin = parseInteger(arg1.toString());
-			break;
-		case 11:
-			patientlist = parseBoolean(arg1.toString());
-			break;
-		case 12:
-			readOnly = parseBoolean(arg1.toString());
-			break;
-		case 13:
-			required = parseBoolean(arg1.toString());
-			break;
-		case 14:
-			useTime = parseBoolean(arg1.toString());
-			break;
-		case 15:
-			useUnspecifiedGender = parseBoolean(arg1.toString());
-			break;
-		case 16: 
-			validationRegularExpression = arg1.toString();
+		case PATIENT_FIELD_VALIDATION_REGULAR_EXPRESSION: 
+			validationRegularExpression = property;
 			break;
 		}
 	}
@@ -399,6 +223,123 @@ public class PatientField extends SoapObjectParser implements KvmSerializable,Re
 	 */
 	public void setAdditionalCharacters(String additionalCharacters) {
 		this.additionalCharacters = additionalCharacters;
+	}
+
+	@Override
+	protected void saveObject(SoapObject property, Name name) {
+	}
+
+
+	/**
+	 * @return the lengthMax
+	 */
+	public int getLengthMax() {
+		return lengthMax;
+	}
+
+
+	/**
+	 * @param lengthMax the lengthMax to set
+	 */
+	public void setLengthMax(int lengthMax) {
+		this.lengthMax = lengthMax;
+	}
+
+
+	/**
+	 * @return the lengthMin
+	 */
+	public int getLengthMin() {
+		return lengthMin;
+	}
+
+
+	/**
+	 * @param lengthMin the lengthMin to set
+	 */
+	public void setLengthMin(int lengthMin) {
+		this.lengthMin = lengthMin;
+	}
+
+
+	/**
+	 * @return the patientlist
+	 */
+	public boolean isPatientlist() {
+		return patientlist;
+	}
+
+
+	/**
+	 * @param patientlist the patientlist to set
+	 */
+	public void setPatientlist(boolean patientlist) {
+		this.patientlist = patientlist;
+	}
+
+
+	/**
+	 * @return the readOnly
+	 */
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+
+	/**
+	 * @param readOnly the readOnly to set
+	 */
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+
+
+	/**
+	 * @return the useTime
+	 */
+	public boolean isUseTime() {
+		return useTime;
+	}
+
+
+	/**
+	 * @param useTime the useTime to set
+	 */
+	public void setUseTime(boolean useTime) {
+		this.useTime = useTime;
+	}
+
+
+	/**
+	 * @return the useUnspecifiedGender
+	 */
+	public boolean isUseUnspecifiedGender() {
+		return useUnspecifiedGender;
+	}
+
+
+	/**
+	 * @param useUnspecifiedGender the useUnspecifiedGender to set
+	 */
+	public void setUseUnspecifiedGender(boolean useUnspecifiedGender) {
+		this.useUnspecifiedGender = useUnspecifiedGender;
+	}
+
+
+	/**
+	 * @return the validationRegularExpression
+	 */
+	public String getValidationRegularExpression() {
+		return validationRegularExpression;
+	}
+
+
+	/**
+	 * @param validationRegularExpression the validationRegularExpression to set
+	 */
+	public void setValidationRegularExpression(
+			String validationRegularExpression) {
+		this.validationRegularExpression = validationRegularExpression;
 	}
 	
 }

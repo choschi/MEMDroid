@@ -1,4 +1,4 @@
-package com.choschi.memdroid.fragment;
+package com.choschi.memdroid.ui.fragment;
 
 
 import android.app.Fragment;
@@ -14,7 +14,7 @@ import android.widget.Button;
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.Client.ClientMessages;
-import com.choschi.memdroid.util.ClientListener;
+import com.choschi.memdroid.interfaces.ClientListener;
 
 /**
  * 

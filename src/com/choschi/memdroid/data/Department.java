@@ -1,9 +1,8 @@
 package com.choschi.memdroid.data;
 
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 
-import com.choschi.memdroid.data.interfaces.AdapterItem;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
 /**
  * 
@@ -13,7 +12,7 @@ import com.choschi.memdroid.data.interfaces.AdapterItem;
  * 
  */
 
-public class Department extends SoapObjectParser implements AdapterItem {
+public class Department extends FormSoapObjectParser implements AdapterItem {
 
 	private String clinicId;
 	private String clinicName;
@@ -28,11 +27,34 @@ public class Department extends SoapObjectParser implements AdapterItem {
 	
 	
 	public Department (SoapObject response){
-		clinicId = (((SoapPrimitive)response.getProperty("clinicId")).toString());
-		clinicName = (((SoapPrimitive)response.getProperty("clinicName")).toString()); 
-		countryId = (((SoapPrimitive)response.getProperty("countryId")).toString());
-		departmentId = (((SoapPrimitive)response.getProperty("departmentId")).toString());
-		departmentName = (((SoapPrimitive)response.getProperty("departmentName")).toString());
+		super(response);
+	}
+	
+
+	@Override
+	protected void saveProperty(String property, Name name) {
+		switch (name){
+		case DEPARTMENT_CLINIC_ID:
+			clinicId = property;
+			break;
+		case DEPARTMENT_CLINIC_NAME:
+			clinicName = property;
+			break;
+		case DEPARTMENT_COUNTRY_ID:
+			countryId = property;
+			break;
+		case DEPARTMENT_ID:
+			departmentId = property;
+			break;
+		case DEPARTMENT_NAME:
+			departmentName = property;
+			break;
+		}
+	}
+
+
+	@Override
+	protected void saveObject(SoapObject property, Name name) {
 	}
 	
 

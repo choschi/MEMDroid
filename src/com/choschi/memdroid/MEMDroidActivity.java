@@ -26,15 +26,15 @@ import android.widget.Spinner;
 
 import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.data.Department;
-import com.choschi.memdroid.fragment.PatientFragment;
-import com.choschi.memdroid.fragment.StudyFragment;
-import com.choschi.memdroid.fragment.TabListener;
-import com.choschi.memdroid.util.ClientListener;
+import com.choschi.memdroid.interfaces.ClientListener;
+import com.choschi.memdroid.ui.fragment.PatientFragment;
+import com.choschi.memdroid.ui.fragment.StudyFragment;
+import com.choschi.memdroid.ui.fragment.TabListener;
 import com.choschi.memdroid.util.FixedLists;
 
 /**
  * 
- *  The activity is the main class of every android Application
+ * The activity is the main class of every android Application
  * 
  * @author Christoph Isch
  *
@@ -45,10 +45,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	public static final int LOGIN_DIALOG = 0;
 	public static final int PROGRESS_DIALOG = 1;
 	public static final int DEPARTMENT_DIALOG = 2;
-	public static final int DATE_DIALOG = 3;
-	
-	/** Called when the activity is first created. */
-    
+	public static final int DATE_DIALOG = 3;    
 	private Dialog loginDialog;
 	private ProgressDialog progressDialog;
 	private Dialog departmentDialog;
@@ -66,6 +63,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
         FixedLists.getInstance().getCountries(getApplicationContext());
         FixedLists.getInstance().getLanguages(getApplicationContext());
         FixedLists.getInstance().getGenders(getApplicationContext());
+        Client.getInstance().setLanguage(getApplicationContext().getString(R.string.languageISO));
     }
 	
 	@Override
@@ -117,7 +115,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 		switch (id){
 			case LOGIN_DIALOG:
 				loginDialog = new Dialog(this);
-				loginDialog.setContentView(R.layout.login_box);
+				loginDialog.setContentView(R.layout.login_dialog);
 				loginDialog.setTitle(R.string.loginDialogTitle);
 				Button loginButton = (Button) loginDialog.findViewById(R.id.loginButton);
 				loginButton.setOnClickListener(this);
@@ -133,7 +131,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				departmentDialog.setContentView(R.layout.department_dialog);
 				departmentDialog.setTitle(R.string.departmentDialogTitle);
 				Spinner departmentSpinner = (Spinner)departmentDialog.findViewById(R.id.departmentDialogSpinner);
-				ArrayAdapter <Department> departmentAdapter = new ArrayAdapter<Department>(departmentDialog.getContext(),android.R.layout.simple_spinner_item,Client.getInstance().getUserData().getDepartments());
+				ArrayAdapter <Department> departmentAdapter = new ArrayAdapter<Department>(departmentDialog.getContext(),android.R.layout.simple_spinner_item,Client.getInstance().getDepartments());
 				departmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				departmentSpinner.setAdapter(departmentAdapter);
 				Button dismissButton = (Button) departmentDialog.findViewById(R.id.departmentDialogDismissButton);

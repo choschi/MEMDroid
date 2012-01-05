@@ -1,6 +1,6 @@
 package com.choschi.memdroid.util;
 
-import com.choschi.memdroid.data.interfaces.AdapterItem;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
 public class SimpleSpinnerItem implements AdapterItem {
 

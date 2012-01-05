@@ -4,7 +4,6 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
 public class FormQuestionLabel extends FormSoapObjectParser {
 
@@ -55,5 +54,33 @@ public class FormQuestionLabel extends FormSoapObjectParser {
 	
 	public String getLabel(){
 		return name.getName();
+	}
+
+	/**
+	 * @return the value
+	 */
+	public int getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(int value) {
+		this.value = value;
+	}
+
+	/**
+	 * @return the valueRange
+	 */
+	public int getValueRange() {
+		return valueRange;
+	}
+
+	/**
+	 * @param valueRange the valueRange to set
+	 */
+	public void setValueRange(int valueRange) {
+		this.valueRange = valueRange;
 	}
 }

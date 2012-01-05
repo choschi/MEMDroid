@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="languageISO">de</string>
+    <string name="app_name">MEMDroid</string>
+    <string name="loginButton">Einloggen</string>
+    <string name="logoutButton">Ausloggen</string>
+    <string name="username">isch</string>
+	<string name="password">u7jER76j</string>
+    <!--
+    <string name="password">webService1</string>
+    <string name="username">webservice</string>
+    -->
+    <string name="mainListButtonCaption">Liste der Studien</string>
+    <string name="mainSearchPatientButtonCaption">Patienten suchen</string>
+    <string name="menuPatient">Patienten</string>
+    <string name="menuStudies">Studien</string>
+    <string name="patientNewButtonCaption">Neuer Patient</string>
+    <string name="patientSearchButtonCaption">Patienten suchen</string>
+    <string name="patientNewSubmitButtonCaption">Patient speichern</string>
+    <string name="selectDepartment">Bitte wählen Sie ihre Abteilung</string>
+    <string name="departmentDialogTitle">Abteilung auswählen</string>
+    <string name="loginDialogTitle">Bitte einloggen</string>
+    <string name="select">Auswahl bestätigen</string>
+</resources>

@@ -6,7 +6,6 @@ import java.util.List;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
 public class FormQuestion extends FormSoapObjectParser {
 
@@ -87,6 +86,118 @@ public class FormQuestion extends FormSoapObjectParser {
 	
 	public int getQuestionId (){
 		return questionId;
+	}
+
+	/**
+	 * @return the dataType
+	 */
+	public String getDataType() {
+		return dataType;
+	}
+
+	/**
+	 * @param dataType the dataType to set
+	 */
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
+
+	/**
+	 * @return the defaultName
+	 */
+	public String getDefaultName() {
+		return defaultName;
+	}
+
+	/**
+	 * @param defaultName the defaultName to set
+	 */
+	public void setDefaultName(String defaultName) {
+		this.defaultName = defaultName;
+	}
+
+	/**
+	 * @return the maxanswer
+	 */
+	public String getMaxanswer() {
+		return maxanswer;
+	}
+
+	/**
+	 * @param maxanswer the maxanswer to set
+	 */
+	public void setMaxanswer(String maxanswer) {
+		this.maxanswer = maxanswer;
+	}
+
+	/**
+	 * @return the minanswer
+	 */
+	public String getMinanswer() {
+		return minanswer;
+	}
+
+	/**
+	 * @param minanswer the minanswer to set
+	 */
+	public void setMinanswer(String minanswer) {
+		this.minanswer = minanswer;
+	}
+
+	/**
+	 * @return the presentationType
+	 */
+	public String getPresentationType() {
+		return presentationType;
+	}
+
+	/**
+	 * @param presentationType the presentationType to set
+	 */
+	public void setPresentationType(String presentationType) {
+		this.presentationType = presentationType;
+	}
+
+	/**
+	 * @return the score
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	/**
+	 * @return the textQuestionNo
+	 */
+	public int getTextQuestionNo() {
+		return textQuestionNo;
+	}
+
+	/**
+	 * @param textQuestionNo the textQuestionNo to set
+	 */
+	public void setTextQuestionNo(int textQuestionNo) {
+		this.textQuestionNo = textQuestionNo;
+	}
+
+	/**
+	 * @return the unit
+	 */
+	public String getUnit() {
+		return unit;
+	}
+
+	/**
+	 * @param unit the unit to set
+	 */
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 }

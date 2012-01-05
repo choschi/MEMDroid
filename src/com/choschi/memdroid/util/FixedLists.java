@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.choschi.memdroid.R;
-import com.choschi.memdroid.data.interfaces.AdapterItem;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
 /**
  * 

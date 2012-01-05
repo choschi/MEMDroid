@@ -1,30 +1,43 @@
 package com.choschi.memdroid.webservice.requests;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.ksoap2.serialization.SoapObject;
+
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.data.Study;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ServerGetListOfStudiesRequest extends BackgroundSoapRequest {
+	
+	List<Study> studies;
 	
 	public ServerGetListOfStudiesRequest(SoapRequestParams params,String sessionId, String language, String studyType) {
 		super(params);
 		request.addProperty ("language",language);
 		request.addProperty ("serverSessionId",sessionId);
-		request.addProperty ("studyTypeId",studyType);
 	}
 	
-	/**
-	 * go back to the UI thread and tell it what to do
-	 */
+
+	@Override
+	protected void parseResponse(SoapObject response) {
+		studies = new ArrayList<Study>();
+		for (int i=0;i<response.getPropertyCount();i++){
+			studies.add(new Study ((SoapObject)response.getProperty(i)));
+		}		
+	}
 	
 	@Override
-	protected void onPostExecute(Result result){
+	protected void onPostExecute(Object result){
 		try{
-			Client.getInstance().receivedListOfStudies ((ServerGetListOfStudiesResponse)result);
+			Client.getInstance().receivedListOfStudies (studies);
 			return;
 		}catch (Exception ex){
-			super.onPostExecute(result);
+			super.onPostExecute(ex);
 		}
 	}
+
 
 }

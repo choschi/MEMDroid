@@ -1,13 +1,16 @@
 package com.choschi.memdroid.webservice.requests;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.util.Log;
 
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ServerLoginRequest extends BackgroundSoapRequest {
 
+	private Boolean state;
 
 	/**
 	 * 
@@ -28,17 +31,25 @@ public class ServerLoginRequest extends BackgroundSoapRequest {
 		envelope.headerOut = null;
 	}
 	
-	/**
-	 * go back to the UI thread and tell it what to do
-	 */
-	
+
 	@Override
-	protected void onPostExecute(Result result){
-		try{
-			Client.getInstance().serverLoggedIn ((ServerLoginResponse)result);
-			return;
-		}catch (Exception ex){
-			super.onPostExecute(result);
+	protected void parseResponse(SoapObject response) {
+		String rawState = response.getProperty("response").toString();
+		if (rawState.compareTo("true")== 0){
+			state = true;
+		}else{
+			state = false;
 		}
 	}
+	
+	@Override
+	protected void onPostExecute(Object result){
+		try{
+			Client.getInstance().serverLoggedIn (state);
+			return;
+		}catch (Exception ex){
+			super.onPostExecute(ex);
+		}
+	}
+
 }

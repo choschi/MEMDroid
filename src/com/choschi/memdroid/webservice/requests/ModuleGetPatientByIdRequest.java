@@ -1,8 +1,5 @@
 package com.choschi.memdroid.webservice.requests;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.ksoap2.serialization.SoapObject;
 
 import android.util.Log;
@@ -10,10 +7,10 @@ import android.util.Log;
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.Patient;
 import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ModuleGetPatientByIdRequest extends BackgroundSoapRequestNew {
+public class ModuleGetPatientByIdRequest extends BackgroundSoapRequest {
 
 	private Patient patient;
 	
@@ -35,10 +32,9 @@ public class ModuleGetPatientByIdRequest extends BackgroundSoapRequestNew {
 	
 	
 	@Override
-	protected Result parseResponse (SoapObject response){
+	protected void parseResponse (SoapObject response){
 		Log.d ("patient received",response.toString());
 		patient = new Patient (response);
-		return null;
 	}
 
 
@@ -47,12 +43,12 @@ public class ModuleGetPatientByIdRequest extends BackgroundSoapRequestNew {
 	 */
 	
 	@Override
-	protected void onPostExecute(Result result){
+	protected void onPostExecute(Object result){
 		try{
 			Client.getInstance().receivedSearchedPatient (patient);
 			return;
 		}catch (Exception ex){
-			super.onPostExecute(result);
+			super.onPostExecute(ex);
 		}
 	}
 	

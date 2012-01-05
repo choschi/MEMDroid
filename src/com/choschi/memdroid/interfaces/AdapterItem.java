@@ -1,4 +1,4 @@
-package com.choschi.memdroid.data.interfaces;
+package com.choschi.memdroid.interfaces;
 
 /**
  * 

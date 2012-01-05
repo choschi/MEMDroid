@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.data.interfaces.AdapterItem;
+import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.util.FixedLists;
 
 

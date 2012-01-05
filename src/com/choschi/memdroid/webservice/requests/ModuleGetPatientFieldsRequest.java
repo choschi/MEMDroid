@@ -7,10 +7,10 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequestNew {
+public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequest {
 
 	private List<PatientField> fields;
 	
@@ -33,12 +33,11 @@ public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequestNew {
 	
 	
 	@Override
-	protected Result parseResponse (SoapObject response){
+	protected void parseResponse (SoapObject response){
 		fields = new ArrayList<PatientField>();
 		for (int i=0;i<response.getPropertyCount();i++){
 			fields.add(new PatientField((SoapObject) response.getProperty(i)));
 		}
-		return null;
 	}
 
 
@@ -47,12 +46,12 @@ public class ModuleGetPatientFieldsRequest extends BackgroundSoapRequestNew {
 	 */
 	
 	@Override
-	protected void onPostExecute(Result result){
+	protected void onPostExecute(Object result){
 		try{
 			Client.getInstance().receivedPatientFields (fields);
 			return;
 		}catch (Exception ex){
-			super.onPostExecute(result);
+			super.onPostExecute(ex);
 		}
 	}
 }

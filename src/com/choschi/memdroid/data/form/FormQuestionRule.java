@@ -4,7 +4,6 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.data.rule.RuleText;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
 public abstract class FormQuestionRule extends FormSoapObjectParser {
 

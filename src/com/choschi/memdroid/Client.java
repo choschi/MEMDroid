@@ -8,39 +8,32 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.util.Log;
 
 import com.choschi.memdroid.data.Department;
+import com.choschi.memdroid.data.FormDefinition;
+import com.choschi.memdroid.data.ModuleLoginData;
 import com.choschi.memdroid.data.NewPatient;
 import com.choschi.memdroid.data.Patient;
 import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.data.form.Form;
-import com.choschi.memdroid.util.ClientListener;
+import com.choschi.memdroid.interfaces.ClientListener;
 import com.choschi.memdroid.util.SHA256;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.ModuleRequestParams;
 import com.choschi.memdroid.webservice.parameters.ServerRequestParams;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
-import com.choschi.memdroid.webservice.requests.BackgroundSoapRequest;
-import com.choschi.memdroid.webservice.requests.BackgroundSoapRequestNew;
 import com.choschi.memdroid.webservice.requests.ModuleCreateNewPatientRequest;
 import com.choschi.memdroid.webservice.requests.ModuleGetPatientByIdRequest;
 import com.choschi.memdroid.webservice.requests.ModuleGetPatientFieldsRequest;
 import com.choschi.memdroid.webservice.requests.ModuleLoginRequest;
-import com.choschi.memdroid.webservice.requests.ModuleLoginResponse;
 import com.choschi.memdroid.webservice.requests.ModuleSearchPatientRequest;
 import com.choschi.memdroid.webservice.requests.ModuleUserDataRequest;
-import com.choschi.memdroid.webservice.requests.ModuleUserDataResponse;
 import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionRequest;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse;
 import com.choschi.memdroid.webservice.requests.ServerGetListOfFormsRequest;
-import com.choschi.memdroid.webservice.requests.ServerGetListOfFormsResponse;
 import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesRequest;
-import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesResponse;
 import com.choschi.memdroid.webservice.requests.ServerInsertPatientRequest;
 import com.choschi.memdroid.webservice.requests.ServerLoginRequest;
-import com.choschi.memdroid.webservice.requests.ServerLoginResponse;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdRequest;
-import com.choschi.memdroid.webservice.requests.ServerSessionIdResponse;
-import com.choschi.memdroid.webservice.requests.SoapFaultResponse;
 
 /**
  * Handles all the requests to the webservices. To prevent double login
@@ -96,13 +89,11 @@ public class Client {
 	private String signature;
 	private String moduleSessionId;
 	private String moduleId;
-	private String language = "de";
+	private String language = "en";
 	
 	/**
 	 * data received from server and surely valid for the whole session
 	 */
-	
-	private ModuleUserDataResponse userData;
 
 	private List<PatientField> patientFieldsInsert;
 	private List<PatientField> patientFieldsSearch;
@@ -125,6 +116,8 @@ public class Client {
 	private int patientsToGo;
 	
 	private List<Patient> patients;
+
+	private List<Department> departments;
 	
 	/**
 	 * private constructor, only class methods can create an instance of the
@@ -143,6 +136,11 @@ public class Client {
 	
 	public static Client getInstance() {
 		return instance;
+	}
+	
+	public void setLanguage(String lang){
+		language = lang;
+		logcat ("the language is: "+language);
 	}
 	
 	
@@ -179,9 +177,9 @@ public class Client {
 	 * @param response
 	 */
 
-	public void sessionIdReceived(ServerSessionIdResponse response) {
+	public void sessionIdReceived(String response) {
 		logcat ("session id received");
-		this.sessionId = response.getSessionId();
+		sessionId = response;
 		SoapRequestParams params = new ModuleRequestParams();
 		params.setAction("");
 		params.setMethod("loginToModule");
@@ -197,13 +195,13 @@ public class Client {
 	 * @param response
 	 */
 
-	public void moduleLoggedIn(ModuleLoginResponse response) {
+	public void moduleLoggedIn(ModuleLoginData response) {
 		if (loggingIn) {
 			logcat ("logged in to module");
-			this.userId = response.getUserId();
-			this.moduleSessionId = response.getModuleSessionId();
-			this.signature = response.getSignature();
-			this.moduleId = response.getModuleId();
+			userId = response.getUserId();
+			moduleSessionId = response.getModuleSessionId();
+			signature = response.getSignature();
+			moduleId = response.getModuleId();
 			SoapRequestParams params = new ServerRequestParams();
 			params.setAction(BackgroundSoapRequest.ServerBaseAction
 					+ "loginToServerRequest");
@@ -220,12 +218,12 @@ public class Client {
 	 * @param response
 	 */
 
-	public void serverLoggedIn(ServerLoginResponse response) {
+	public void serverLoggedIn(Boolean response) {
 		if (loggingIn) {
 			logcat ("logged in to server");
-			this.loggedIn = response.getState();
+			loggedIn = response;
 			loggingIn = false;
-			if (this.loggedIn) {
+			if (loggedIn) {
 				notify(ClientMessages.LOGIN_SUCCESS);
 				requestUserData();
 			} else {
@@ -239,7 +237,7 @@ public class Client {
 	 */
 
 	public void requestUserData() {
-		if (this.loggedIn) {
+		if (loggedIn) {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setAction("");
 			params.setMethod("getUserInformation");
@@ -255,9 +253,9 @@ public class Client {
 	 * @param response
 	 */
 
-	public void receivedUserData(ModuleUserDataResponse response) {
+	public void receivedUserData(List<Department> departments) {
 		if (loggedIn) {
-			userData = response;
+			this.departments = departments;
 			logcat ("user data received");
 			notify(ClientMessages.USER_DATA);
 		}
@@ -268,9 +266,9 @@ public class Client {
 	 */
 
 	public void requestListOfStudies() {
-		if (this.loggedIn) {
+		if (loggedIn) {
 			notify(ClientMessages.SHOW_PROGRESS_DIALOG);
-			if (this.studies != null) {
+			if (studies != null) {
 				//notify(ClientMessages.STUDIES_LIST);
 			} else {
 				SoapRequestParams params = new ServerRequestParams();
@@ -290,8 +288,8 @@ public class Client {
 	 * @param response
 	 */
 	
-	public void receivedListOfStudies(ServerGetListOfStudiesResponse response) {
-		this.studies = response.getStudies();
+	public void receivedListOfStudies(List<Study> response) {
+		studies = response;
 		logcat ("received studies");
 		notify(ClientMessages.STUDIES_LIST);
 	}
@@ -302,7 +300,7 @@ public class Client {
 	 */
 
 	public void requestListOfForms(Study study) {
-		if (this.loggedIn && !downloadingForms) {
+		if (loggedIn && !downloadingForms) {
 			notify (ClientMessages.SHOW_PROGRESS_DIALOG);
 			logcat ("requesting list of forms");
 			downloadingForms  = true;
@@ -324,9 +322,9 @@ public class Client {
 	 * @param result
 	 */
 	
-	public void receivedListOfForms(ServerGetListOfFormsResponse result) {
+	public void receivedListOfForms(List<Form> result) {
 		logcat ("received a list of forms");
-		forms = result.getForms();
+		forms = result;
 		formCount = 0;
 		Client.getInstance().requestFormDefinition(forms.get(formCount));
 	}
@@ -337,7 +335,7 @@ public class Client {
 	 */
 	
 	public void requestFormDefinition(Form form) {
-		if (this.loggedIn) {
+		if (loggedIn) {
 			SoapRequestParams params = new ServerRequestParams();
 			params.setAction(BackgroundSoapRequest.ServerBaseAction
 					+ "downloadFormDefinitionRequest");
@@ -351,11 +349,11 @@ public class Client {
 	}
 
 	/**
-	 * count if all form definitions are received, the notify the listeners
+	 * count if all form definitions are received, then notify the listeners
 	 * @param result
 	 */
 	
-	public void receivedFormDefinition(ServerGetFormDefinitionResponse result) {
+	public void receivedFormDefinition(FormDefinition result) {
 		logcat ("form defintion received");
 		forms.get(formCount).addDefinition(result);
 		formCount++;
@@ -383,10 +381,10 @@ public class Client {
 			if (patientFieldsInsert != null) {
 				//notify(ClientMessages.PATIENT_FIELDS);
 			} else {
-				if (userData != null){
+				if (departments != null){
 					SoapRequestParams params = new ModuleRequestParams();
 					params.setMethod("getPatientFields");
-					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", actualDepartment.getId());
+					BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", actualDepartment.getId());
 					request.execute(new SoapRequestParams[] {});
 				}else{
 					requestUserData();
@@ -405,10 +403,10 @@ public class Client {
 			if (patientFieldsSearch != null) {
 				//notify(ClientMessages.PATIENT_FIELDS);
 			} else {
-				if (userData != null){
+				if (departments != null){
 					SoapRequestParams params = new ModuleRequestParams();
 					params.setMethod("getPatientFields");
-					BackgroundSoapRequestNew request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "search", actualDepartment.getId());
+					BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "search", actualDepartment.getId());
 					request.execute(new SoapRequestParams[] {});
 				}else{
 					requestUserData();
@@ -445,7 +443,7 @@ public class Client {
 		if (loggedIn) {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("createNewPatient");
-			BackgroundSoapRequestNew request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, actualDepartment.getId());
+			BackgroundSoapRequest request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, actualDepartment.getId());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
@@ -462,7 +460,7 @@ public class Client {
 		params.setAction(BackgroundSoapRequest.ServerBaseAction
 				+ "insertPatientRequest");
 		params.setMethod("insertPatient");
-		BackgroundSoapRequestNew request = new ServerInsertPatientRequest(params, sessionId, userId, response);
+		BackgroundSoapRequest request = new ServerInsertPatientRequest(params, sessionId, userId, response);
 		request.execute(new SoapRequestParams[] {});
 	}
 	
@@ -484,8 +482,7 @@ public class Client {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("searchPatient");
 			logcat("init module " + params.getMethod() + " request");
-			String language = "de";
-			BackgroundSoapRequestNew request = new ModuleSearchPatientRequest(params, moduleSessionId, language, search, actualDepartment.getId());
+			BackgroundSoapRequest request = new ModuleSearchPatientRequest(params, moduleSessionId, language, search, actualDepartment.getId());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
@@ -501,7 +498,7 @@ public class Client {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("getPatientById");
 			logcat("init module " + params.getMethod() + " request");
-			BackgroundSoapRequestNew request = new ModuleGetPatientByIdRequest(params, moduleSessionId, id);
+			BackgroundSoapRequest request = new ModuleGetPatientByIdRequest(params, moduleSessionId, id);
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
@@ -515,23 +512,6 @@ public class Client {
 		}
 	}
 	
-	/**
-	 * 
-	 * @return the user data
-	 */
-		
-	public ModuleUserDataResponse getUserData(){
-		return userData;
-	}
-	
-	/**
-	 * 
-	 * @return a string representing the user data
-	 */
-	@Deprecated
-	public String getUserText(){
-		return userData.getForDisplay();
-	}
 
 	/**
 	 * register an OnLoginListener in this client
@@ -558,16 +538,13 @@ public class Client {
 
 
 	/**
-	 * terminal station for all soap faults, implement corresponding behaviour
-	 * here
+	 * terminal station for all errors in data handling 
 	 * 
-	 * @param fault
+	 * @param Exception
 	 */
 
-	//TODO maybe deprecated if the new Background Request Class is used all over the place
-	
-	public void handleFault(SoapFaultResponse fault) {
-		logcat("SOAPfault: " + fault.toString());
+	public void handleError(Exception result) {
+		logcat("Error : " + result.getMessage());
 		if (loggingIn) {
 			loggingIn = false;
 			for (ClientListener listener : listeners) {
@@ -649,7 +626,6 @@ public class Client {
 	}
 	
 	/**
-	 * 
 	 * @return true if still logged in
 	 */
 	
@@ -675,6 +651,11 @@ public class Client {
 	private void logcat(String text) {
 		Log.i("client", text);
 	}
+
+	public List<Department> getDepartments() {
+		return departments;
+	}
+
 
 
 

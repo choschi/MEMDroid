@@ -7,15 +7,14 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
 public class FormGroup extends FormSoapObjectParser {
 	
 	
 	private String defaultName;
-	private int groupId;
+	private String groupId;
 	private FormName name;
-	private int textGroupNo;
+	private String textGroupNo;
 	
 	private List<FormQuestion> questions;
 	
@@ -31,10 +30,10 @@ public class FormGroup extends FormSoapObjectParser {
 				defaultName = property;
 			break;
 			case GROUP_ID:
-				groupId = parseInteger(property);
+				groupId = property;
 			break;
 			case TEXT_GROUP_NO:
-				textGroupNo = parseInteger(property);
+				setTextGroupNo(property);
 			break;
 		}
 		
@@ -53,6 +52,71 @@ public class FormGroup extends FormSoapObjectParser {
 				questions.add(new FormQuestion(property));
 			break;
 		}
+	}
+
+	/**
+	 * @return the defaultName
+	 */
+	public String getDefaultName() {
+		return defaultName;
+	}
+
+	/**
+	 * @param defaultName the defaultName to set
+	 */
+	public void setDefaultName(String defaultName) {
+		this.defaultName = defaultName;
+	}
+
+	/**
+	 * @return the groupId
+	 */
+	public String getGroupId() {
+		return groupId;
+	}
+
+	/**
+	 * @param groupId the groupId to set
+	 */
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public FormName getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(FormName name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the textGroupNo
+	 */
+	public String getTextGroupNo() {
+		return textGroupNo;
+	}
+
+	/**
+	 * @param textGroupNo the textGroupNo to set
+	 */
+	public void setTextGroupNo(String textGroupNo) {
+		this.textGroupNo = textGroupNo;
+	}
+	
+	/**
+	 * 
+	 * @return the list of form questions
+	 */
+	
+	public List<FormQuestion> getQuestions(){
+		return questions;
 	}
 
 }

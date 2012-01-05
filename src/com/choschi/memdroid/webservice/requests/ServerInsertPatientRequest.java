@@ -6,12 +6,11 @@ import android.util.Log;
 
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.NewPatient;
-import com.choschi.memdroid.data.Patient;
 import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ServerInsertPatientRequest extends BackgroundSoapRequestNew {
+public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 
 	/**
 	 * 
@@ -60,10 +59,9 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequestNew {
 	}
 	
 	@Override
-	protected Result parseResponse (SoapObject response){
+	protected void parseResponse (SoapObject response){
 		Log.d ("patient created",response.toString());
 		//patient = new NewPatient (response);
-		return null;
 	}
 	
 	
@@ -72,12 +70,12 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequestNew {
 	 */
 	
 	@Override
-	protected void onPostExecute(Result result){
+	protected void onPostExecute(Object result){
 		try{
 			Client.getInstance().savedPatient ();
 			return;
 		}catch (Exception ex){
-			super.onPostExecute(result);
+			super.onPostExecute(ex);
 		}
 	}
 }

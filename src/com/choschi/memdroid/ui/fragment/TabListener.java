@@ -1,4 +1,4 @@
-package com.choschi.memdroid.fragment;
+package com.choschi.memdroid.ui.fragment;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;

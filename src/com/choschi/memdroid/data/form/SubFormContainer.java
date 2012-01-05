@@ -7,8 +7,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.data.interfaces.AdapterItem;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
 public class SubFormContainer extends FormSoapObjectParser implements AdapterItem {
 	
@@ -45,7 +44,7 @@ public class SubFormContainer extends FormSoapObjectParser implements AdapterIte
 				optional = parseBoolean(property);
 			break;
 			case SCORE_TYPE:
-				scoreType = parseInteger(property);
+				setScoreType(parseInteger(property));
 			break;
 			case VERSION:
 				version = property;
@@ -69,12 +68,6 @@ public class SubFormContainer extends FormSoapObjectParser implements AdapterIte
 				this.name = new FormName(property);
 		}
 	}
-	
-	@Deprecated
-	public List<SubForm> getSubForms(){
-		return null;
-	}
-
 
 	@Override
 	public String getId() {
@@ -84,6 +77,102 @@ public class SubFormContainer extends FormSoapObjectParser implements AdapterIte
 	@Override
 	public String toString(){
 		return name.getName();
+	}
+
+
+	/**
+	 * @return the date
+	 */
+	public String getDate() {
+		return date;
+	}
+
+
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+
+	/**
+	 * @return the defaultName
+	 */
+	public String getDefaultName() {
+		return defaultName;
+	}
+
+
+	/**
+	 * @param defaultName the defaultName to set
+	 */
+	public void setDefaultName(String defaultName) {
+		this.defaultName = defaultName;
+	}
+
+
+	/**
+	 * @return the hidden
+	 */
+	public boolean isHidden() {
+		return hidden;
+	}
+
+
+	/**
+	 * @param hidden the hidden to set
+	 */
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
+
+
+	/**
+	 * @return the optional
+	 */
+	public boolean isOptional() {
+		return optional;
+	}
+
+
+	/**
+	 * @param optional the optional to set
+	 */
+	public void setOptional(boolean optional) {
+		this.optional = optional;
+	}
+
+
+	/**
+	 * @return the scoreType
+	 */
+	public int getScoreType() {
+		return scoreType;
+	}
+
+
+	/**
+	 * @param scoreType the scoreType to set
+	 */
+	public void setScoreType(int scoreType) {
+		this.scoreType = scoreType;
+	}
+
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 	
 }

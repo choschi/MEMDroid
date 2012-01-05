@@ -14,19 +14,15 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int consoleQuestionnaire=0x7f070014;
-        public static final int consoleStudies=0x7f07001b;
         public static final int departmentDialog=0x7f070000;
         public static final int departmentDialogDismissButton=0x7f070003;
         public static final int departmentDialogSpinner=0x7f070002;
         public static final int departmentDialogText=0x7f070001;
-        public static final int icon=0x7f070019;
-        public static final int listOfStudies=0x7f070013;
+        public static final int icon=0x7f070017;
         public static final int loginBox=0x7f070004;
         public static final int loginButton=0x7f070007;
         public static final int mainContent=0x7f070008;
-        public static final int mainMenuLogin=0x7f07001c;
-        public static final int mainMenuUserdata=0x7f07001d;
+        public static final int mainMenuLogin=0x7f070019;
         public static final int password=0x7f070006;
         public static final int patientDetailOutlet=0x7f07000c;
         public static final int patientFragmentView=0x7f070009;
@@ -38,31 +34,28 @@ public final class R {
         public static final int patientSearchScroller=0x7f070010;
         public static final int patientSearchScrollerContainer=0x7f070011;
         public static final int patientSearchSearchButton=0x7f070012;
-        public static final int studiesDetailOutlet=0x7f070018;
-        public static final int studiesFragmentView=0x7f070015;
-        public static final int studiesListOutlet=0x7f070016;
-        public static final int studiesSubListOutlet=0x7f070017;
-        public static final int studyName=0x7f07001a;
+        public static final int studiesDetailOutlet=0x7f070016;
+        public static final int studiesFragmentView=0x7f070013;
+        public static final int studiesListOutlet=0x7f070014;
+        public static final int studiesSubListOutlet=0x7f070015;
+        public static final int studyName=0x7f070018;
         public static final int username=0x7f070005;
     }
     public static final class layout {
         public static final int department_dialog=0x7f030000;
-        public static final int login_box=0x7f030001;
+        public static final int login_dialog=0x7f030001;
         public static final int main=0x7f030002;
         public static final int patient_fragment=0x7f030003;
         public static final int patient_new_fragment=0x7f030004;
         public static final int patient_search_fragment=0x7f030005;
-        public static final int questionnaire_view=0x7f030006;
-        public static final int studies_fragment=0x7f030007;
-        public static final int study_row=0x7f030008;
-        public static final int study_view=0x7f030009;
+        public static final int studies_fragment=0x7f030006;
+        public static final int study_row=0x7f030007;
     }
     public static final class menu {
         public static final int main_menu=0x7f060000;
     }
     public static final class string {
         public static final int app_name=0x7f0500cd;
-        public static final int console=0x7f0500ce;
         public static final int country_AD=0x7f050000;
         public static final int country_AE=0x7f050001;
         public static final int country_AF=0x7f050002;
@@ -259,36 +252,39 @@ public final class R {
         public static final int country_ZA=0x7f0500c1;
         public static final int country_ZM=0x7f0500c2;
         public static final int country_ZW=0x7f0500c3;
-        public static final int departmentDialogTitle=0x7f0500dc;
+        public static final int departmentDialogTitle=0x7f0500da;
         public static final int gender_f=0x7f0500c4;
         public static final int gender_m=0x7f0500c5;
         public static final int gender_u=0x7f0500c6;
-        public static final int hello=0x7f0500cc;
+        public static final int languageISO=0x7f0500cc;
         public static final int language_de=0x7f0500c7;
         public static final int language_en=0x7f0500c8;
         public static final int language_es=0x7f0500c9;
         public static final int language_fr=0x7f0500ca;
         public static final int language_it=0x7f0500cb;
-        public static final int loginButton=0x7f0500cf;
-        public static final int loginDialogTitle=0x7f0500dd;
-        public static final int logoutButton=0x7f0500d0;
+        public static final int loginButton=0x7f0500ce;
+        public static final int loginDialogTitle=0x7f0500db;
+        public static final int logoutButton=0x7f0500cf;
         /** 
     <string name="password">webService1</string>
     <string name="username">webservice</string>
     
+
+    <string name="password">webService1</string>
+    <string name="username">webservice</string>
+    
          */
-        public static final int mainListButtonCaption=0x7f0500d3;
-        public static final int mainSearchPatientButtonCaption=0x7f0500d4;
-        public static final int menuPatient=0x7f0500d5;
-        public static final int menuStudies=0x7f0500d6;
-        public static final int menuUserdata=0x7f0500d7;
-        public static final int password=0x7f0500d2;
-        public static final int patientNewButtonCaption=0x7f0500d8;
-        public static final int patientNewSubmitButtonCaption=0x7f0500da;
-        public static final int patientSearchButtonCaption=0x7f0500d9;
-        public static final int select=0x7f0500de;
-        public static final int selectDepartment=0x7f0500db;
-        public static final int username=0x7f0500d1;
+        public static final int mainListButtonCaption=0x7f0500d2;
+        public static final int mainSearchPatientButtonCaption=0x7f0500d3;
+        public static final int menuPatient=0x7f0500d4;
+        public static final int menuStudies=0x7f0500d5;
+        public static final int password=0x7f0500d1;
+        public static final int patientNewButtonCaption=0x7f0500d6;
+        public static final int patientNewSubmitButtonCaption=0x7f0500d8;
+        public static final int patientSearchButtonCaption=0x7f0500d7;
+        public static final int select=0x7f0500dc;
+        public static final int selectDepartment=0x7f0500d9;
+        public static final int username=0x7f0500d0;
     }
     public static final class style {
         public static final int console=0x7f040000;

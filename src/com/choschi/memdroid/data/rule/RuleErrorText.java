@@ -3,7 +3,6 @@ package com.choschi.memdroid.data.rule;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
 public class RuleErrorText extends FormSoapObjectParser {
 	

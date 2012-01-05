@@ -1,9 +1,10 @@
-package com.choschi.memdroid.webservice.requests;
+package com.choschi.memdroid.webservice;
 
 import java.io.IOException;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -11,13 +12,17 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.webservice.MemdocSoapSerializationEnvelope;
-import com.choschi.memdroid.webservice.ResultFactory;
-import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class BackgroundSoapRequestNew extends AsyncTask<SoapRequestParams, Void, Result> {
+/**
+ * 
+ * Base class for web service calls that extends AsyncTask to be able to run in a background thread
+ * 
+ * @author Christoph Isch
+ *
+ */
+
+public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Object> {
 
 /**
  * Final endpoints to use for developing use the test server ones...
@@ -44,7 +49,7 @@ public class BackgroundSoapRequestNew extends AsyncTask<SoapRequestParams, Void,
 	 * @param params
 	 */
 	
-	public BackgroundSoapRequestNew(SoapRequestParams params){
+	public BackgroundSoapRequest(SoapRequestParams params){
 		this.parameters = params;
 		this.request = new SoapObject(parameters.getNamespace(), parameters.getMethod());
 		this.envelope = new MemdocSoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -59,10 +64,11 @@ public class BackgroundSoapRequestNew extends AsyncTask<SoapRequestParams, Void,
 	 * 
 	 * to really do all the work in the background thread the response rendering is done 
 	 * in this thread as well.
+	 * @return 
 	 */
 	
 	@Override
-	protected Result doInBackground(SoapRequestParams... params) {
+	protected Object doInBackground(SoapRequestParams... params) {
 		 HttpTransportSE httpTransport = new HttpTransportSE(parameters.getUrl());
 		 httpTransport.debug = true;
 		 
@@ -81,40 +87,42 @@ public class BackgroundSoapRequestNew extends AsyncTask<SoapRequestParams, Void,
             }
         } catch (final IOException e)
         {
-            e.printStackTrace();
+            logcat(e.getMessage());
         } catch (final XmlPullParserException e)
         {
-            e.printStackTrace();
+        	logcat(e.getMessage());
         } catch (final Exception e)
         {
-            e.printStackTrace();
+        	logcat(e.getMessage());
         }
         
-        Result output = null;
         if (result != null)
         {
-            output = parseResponse((SoapObject) result);
+        	// this is only necessary because the server sends in 2 cases only a primitive answer rather than a meaningful object...
+        	if (result instanceof SoapPrimitive){
+        		SoapObject newResult = new SoapObject (parameters.getNamespace(),"response");
+        		newResult.addProperty("response",result.toString());
+        		parseResponse(newResult);
+        	}else{
+        		parseResponse((SoapObject) result);
+        	}
         }
- 
-        return output;
+        return null;
 	}
 	
-	protected Result parseResponse (SoapObject response){
-		return null;
-	}
+	protected abstract void parseResponse (SoapObject response);
 	
 	/**
 	 * if an error in the soap request itself occurred inform the client about the error. 
 	 */
 	
 	@Override
-	protected void onPostExecute(Result result){
-		try{
-			Log.d ("erronous result", result.toString());
-			Client.getInstance().handleFault((SoapFaultResponse)result);
-		}catch (Exception ex){
-			Log.d ("BackgroundSoapRequest",ex.getMessage());
-		}
+	protected void onPostExecute(Object result){
+		Client.getInstance().handleError((Exception)result);
+	}
+	
+	private void logcat(String message){
+		Log.d ("BackgroundSoapRequest",message);
 	}
 
 }

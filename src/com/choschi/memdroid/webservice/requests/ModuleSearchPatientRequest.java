@@ -9,10 +9,10 @@ import android.util.Log;
 
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.webservice.interfaces.Result;
+import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
+public class ModuleSearchPatientRequest extends BackgroundSoapRequest {
 
 	private List<String> patientIds;
 	
@@ -39,13 +39,12 @@ public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
 	
 	
 	@Override
-	protected Result parseResponse (SoapObject response){
+	protected void parseResponse (SoapObject response){
 		Log.d ("search patient",response.toString());
 		patientIds = new ArrayList<String>();
 		for (int i=0;i<response.getPropertyCount();i++){
 			patientIds.add(response.getProperty(i).toString());
 		}
-		return null;
 	}
 
 
@@ -54,12 +53,12 @@ public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
 	 */
 	
 	@Override
-	protected void onPostExecute(Result result){
+	protected void onPostExecute(Object result){
 		try{
 			Client.getInstance().receivedSearchedPatients (patientIds);
 			return;
 		}catch (Exception ex){
-			super.onPostExecute(result);
+			super.onPostExecute(ex);
 		}
 	}
 	

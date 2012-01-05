@@ -3,7 +3,6 @@ package com.choschi.memdroid.data.rule;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
 public class RuleText extends FormSoapObjectParser {
 
@@ -33,6 +32,20 @@ public class RuleText extends FormSoapObjectParser {
 	
 	public String getMessage(){
 		return message;
+	}
+
+	/**
+	 * @return the language
+	 */
+	public String getLanguage() {
+		return language;
+	}
+
+	/**
+	 * @param language the language to set
+	 */
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 }

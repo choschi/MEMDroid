@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.interfaces.AdapterItem;
-import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
 public class Patient extends FormSoapObjectParser implements AdapterItem{
 	
@@ -23,7 +22,7 @@ public class Patient extends FormSoapObjectParser implements AdapterItem{
 	@Override
 	protected void saveProperty(String property, Name name) {
 		switch (name){
-		case HASH_CODE:
+		case PATIENT_HASH_CODE:
 			hashCodes = property;
 			break;
 		case PATIENT_CLINIC_ID:

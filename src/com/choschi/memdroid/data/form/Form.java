@@ -2,51 +2,45 @@ package com.choschi.memdroid.data.form;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.SoapObjectParser;
-import com.choschi.memdroid.data.interfaces.AdapterItem;
+import com.choschi.memdroid.data.FormDefinition;
+import com.choschi.memdroid.data.FormSoapObjectParser;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
-//TODO alter this class to comply with the newly introduced scheme for the properties handling and generation
-
-public class Form extends SoapObjectParser implements AdapterItem{
+public class Form extends FormSoapObjectParser implements AdapterItem{
 	
-	private int id;
+	private String id;
 	private String name;
 	private String type;
 	private String date;
 	private String studyName;
 	private String version;
-	private Object definition;
+	private FormDefinition definition;
 	
-	public Form(SoapObject data) {
-		for (int i=0;i<data.getPropertyCount();i++){
-			setValue(i,data.getPropertyAsString(i));
-		}
+	public Form(SoapObject input) {
+		super(input);
 	}
 	
-	protected void setValue(int index,String value){
-		switch (index){
-			case 0:
-				this.setId(parseInteger(value));
+
+	@Override
+	protected void saveProperty(String property, Name name) {
+		switch (name){
+		case ID:
+			id = property;
 			break;
-			case 1:
-				this.setName(value);
+		case NAME:
+			this.name = property;
 			break;
-			case 2:
-				this.setType(value);
-			break;
-			case 3:
-				this.setDate(value);
-			break;
-			case 4:
-				this.setStudyName(value);
-			break;
-			case 5:
-				this.setVersion(value);
+		case TYPE:
+			type = property;
 			break;
 		}
 	}
+
+	@Override
+	protected void saveObject(SoapObject property, Name name) {		
+	}
 	
-	public boolean addDefinition (Object def){
+	public boolean addDefinition (FormDefinition def){
 		if (definition == null){
 			definition = def;
 			return true;
@@ -56,13 +50,13 @@ public class Form extends SoapObjectParser implements AdapterItem{
 
 	@Override
 	public String getId() {
-		return ""+id;
+		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -139,6 +133,5 @@ public class Form extends SoapObjectParser implements AdapterItem{
 	@Override
 	public String toString(){
 		return studyName;
-	}
-	
+	}	
 }

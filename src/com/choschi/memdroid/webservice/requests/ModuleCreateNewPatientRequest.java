@@ -1,8 +1,13 @@
 package com.choschi.memdroid.webservice.requests;
 
+import java.util.Arrays;
+
 import org.ksoap2.serialization.SoapObject;
 
+import android.util.Log;
+
 import com.choschi.memdroid.Client;
+import com.choschi.memdroid.data.NewPatient;
 import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
@@ -16,6 +21,9 @@ import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ModuleCreateNewPatientRequest extends BackgroundSoapRequestNew {
 
+	private NewPatient patient;
+	private PatientFieldData[] input;
+	
 	/**
 	 *  
 	 * @param params
@@ -29,14 +37,23 @@ public class ModuleCreateNewPatientRequest extends BackgroundSoapRequestNew {
 		super(params);
 		request.addProperty("moduleSessionId",moduleSessionId);
 		request.addProperty("language",language);
-		request.addProperty("deptId",departmentId);
-		SoapObject toSave = new SoapObject(params.getNamespace(), "patientFieldData");
+		request.addProperty("departmentId",departmentId);
 		for (PatientFieldData item : data){
-			toSave.addProperty("PatientFieldData",item.toSoapObject(params.getNamespace()));
+			request.addProperty("patientFieldDatas",item.toSoapObject(params.getNamespace()));
 		}
-		request.addProperty("patientFieldData",toSave);
+		input = data;
 	}
 
+	
+	@Override
+	protected Result parseResponse (SoapObject response){
+		Log.d ("patient created",response.toString());
+		patient = new NewPatient (response);
+		patient.setPatientFieldDatas(Arrays.asList(input));
+		return null;
+	}
+
+	
 	/**
 	 * go back to the UI thread and tell it what to do
 	 */
@@ -44,7 +61,7 @@ public class ModuleCreateNewPatientRequest extends BackgroundSoapRequestNew {
 	@Override
 	protected void onPostExecute(Result result){
 		try{
-			Client.getInstance().createdPatient ((ModuleCreateNewPatientResponse)result);
+			Client.getInstance().createdPatient (patient);
 			return;
 		}catch (Exception ex){
 			super.onPostExecute(result);

@@ -16,6 +16,9 @@ import com.choschi.memdroid.webservice.interfaces.Result;
  *
  */
 
+//TODO remove if really not used anymore
+
+@Deprecated
 public class ModuleGetPatientFieldsResponse implements Result {
 	
 	private List<PatientField> fields;

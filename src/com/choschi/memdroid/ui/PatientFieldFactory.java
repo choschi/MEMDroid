@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.data.interfaces.SpinnerItem;
+import com.choschi.memdroid.data.interfaces.AdapterItem;
 import com.choschi.memdroid.util.FixedLists;
 
 
@@ -144,10 +144,10 @@ public class PatientFieldFactory {
 	 * @return a spinner for the related data
 	 */
 	
-	private static View createSpinnerForAdapter (Context context, int id, List<SpinnerItem> data){
+	private static View createSpinnerForAdapter (Context context, int id, List<AdapterItem> data){
 		Spinner spinner = new Spinner(context);
 		spinner.setId(id);
-		ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<SpinnerItem>(context,
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(context,
 		          android.R.layout.simple_spinner_item, data);
 		spinner.setAdapter(adapter);
 	    return spinner;

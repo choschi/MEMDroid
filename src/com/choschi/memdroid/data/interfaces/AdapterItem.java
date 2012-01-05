@@ -8,6 +8,6 @@ package com.choschi.memdroid.data.interfaces;
  *
  */
 
-public interface SpinnerItem {
+public interface AdapterItem {
 	String getId();
 }

@@ -7,9 +7,10 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
+import com.choschi.memdroid.data.interfaces.AdapterItem;
 import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionResponse.Name;
 
-public class SubFormContainer extends FormSoapObjectParser {
+public class SubFormContainer extends FormSoapObjectParser implements AdapterItem {
 	
 	private String date;
 	private String defaultName;
@@ -72,6 +73,17 @@ public class SubFormContainer extends FormSoapObjectParser {
 	@Deprecated
 	public List<SubForm> getSubForms(){
 		return null;
+	}
+
+
+	@Override
+	public String getId() {
+		return ""+subformId;
+	}
+	
+	@Override
+	public String toString(){
+		return name.getName();
 	}
 	
 }

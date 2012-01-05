@@ -2,13 +2,10 @@ package com.choschi.memdroid.ui;
 
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,7 +14,7 @@ import android.widget.Spinner;
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.data.interfaces.SpinnerItem;
+import com.choschi.memdroid.data.interfaces.AdapterItem;
 import com.choschi.memdroid.ui.PatientFieldFactory.FieldType;
 
 /**
@@ -117,7 +114,7 @@ public class PatientFormElement extends LinearLayout implements OnTouchListener,
 			View child = right.getChildAt(0);
 			switch (type){
 				case MULTIPLECHOICE:
-					value = ((SpinnerItem)((Spinner)child).getSelectedItem()).getId();
+					value = ((AdapterItem)((Spinner)child).getSelectedItem()).getId();
 				break;
 				default:
 					value = ((EditText)child).getText().toString();

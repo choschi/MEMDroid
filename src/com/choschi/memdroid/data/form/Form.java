@@ -3,10 +3,11 @@ package com.choschi.memdroid.data.form;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.SoapObjectParser;
+import com.choschi.memdroid.data.interfaces.AdapterItem;
 
 //TODO alter this class to comply with the newly introduced scheme for the properties handling and generation
 
-public class Form extends SoapObjectParser{
+public class Form extends SoapObjectParser implements AdapterItem{
 	
 	private int id;
 	private String name;
@@ -53,11 +54,9 @@ public class Form extends SoapObjectParser{
 		return false;
 	}
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
+	@Override
+	public String getId() {
+		return ""+id;
 	}
 
 	/**
@@ -135,6 +134,11 @@ public class Form extends SoapObjectParser{
 	 */
 	public void setVersion(String version) {
 		this.version = version;
+	}
+	
+	@Override
+	public String toString(){
+		return studyName;
 	}
 	
 }

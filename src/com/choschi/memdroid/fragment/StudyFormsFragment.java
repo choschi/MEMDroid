@@ -1,40 +1,37 @@
 package com.choschi.memdroid.fragment;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.choschi.memdroid.Client;
-import com.choschi.memdroid.R;
-import com.choschi.memdroid.Client.ClientMessages;
-import com.choschi.memdroid.data.form.Form;
-import com.choschi.memdroid.data.ListOfFormsAdapter;
-import com.choschi.memdroid.data.Study;
-import com.choschi.memdroid.util.ClientListener;
 
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+
+import com.choschi.memdroid.Client;
+import com.choschi.memdroid.Client.ClientMessages;
+import com.choschi.memdroid.R;
+import com.choschi.memdroid.data.ListOfFormsAdapter;
+import com.choschi.memdroid.data.Study;
+import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.util.ClientListener;
 
 public class StudyFormsFragment extends ListFragment implements ClientListener{
 
     int mCurCheckPosition = 0;
 	Study study;
 	
+	/*
 	public StudyFormsFragment (Study std){
 		study = std;
 	}
-    
+    */
     
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
         	Client.getInstance().registerClientListener(this);
-        	//TODO way to go till then just give it an empty list
-        	//setListAdapter (new ListOfFormsAdapter(getActivity(),R.layout.study_row,study.getListOfForms()));
-        	List<Form> list = new ArrayList<Form>();
+        	List<Form> list = Client.getInstance().getActualStudy().getForms();
         	setListAdapter (new ListOfFormsAdapter(getActivity(),R.layout.study_row,list));
         }
        
@@ -64,11 +61,13 @@ public class StudyFormsFragment extends ListFragment implements ClientListener{
     void showDetails(int index) {
     	if (index != mCurCheckPosition){
 	        mCurCheckPosition = index;
+	        /*
 	        if (getListAdapter() != null){
 	        	Study study = (Study)getListAdapter().getItem(mCurCheckPosition);
 	        	Client.getInstance().requestListOfForms(study);
 	        	Log.d ("fragment",""+mCurCheckPosition);
 	        }
+	        */
     	}
     }
     

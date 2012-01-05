@@ -125,8 +125,9 @@ public class ResultFactory {
 				return new ServerGetFormDefinitionResponse(soapResponse);
 			case getUserInformationResponse:
 				return new ModuleUserDataResponse(soapResponse);
-			case getPatientFieldsResponse:
-				return new ModuleGetPatientFieldsResponse(soapResponse);
+			// TODO remove if removable
+			//case getPatientFieldsResponse:
+			//	return new ModuleGetPatientFieldsResponse(soapResponse);
 		}
 		return null;
 	}

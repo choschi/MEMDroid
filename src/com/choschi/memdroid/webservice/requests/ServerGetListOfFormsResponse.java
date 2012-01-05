@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
+import android.util.Log;
+
 import com.choschi.memdroid.data.form.Form;
 import com.choschi.memdroid.webservice.interfaces.Result;
 
@@ -24,6 +26,7 @@ public class ServerGetListOfFormsResponse implements Result{
 	 */
 	
 	public ServerGetListOfFormsResponse(SoapObject response){
+		Log.d ("forms response",response.toString());
 		forms = new ArrayList<Form>();
 		for (int i=0;i<response.getPropertyCount();i++){
 			forms.add(new Form ((SoapObject)response.getProperty(i)));

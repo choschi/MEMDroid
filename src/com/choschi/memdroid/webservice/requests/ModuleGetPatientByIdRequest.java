@@ -8,13 +8,14 @@ import org.ksoap2.serialization.SoapObject;
 import android.util.Log;
 
 import com.choschi.memdroid.Client;
+import com.choschi.memdroid.data.Patient;
 import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.webservice.interfaces.Result;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
-public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
+public class ModuleGetPatientByIdRequest extends BackgroundSoapRequestNew {
 
-	private List<String> patientIds;
+	private Patient patient;
 	
 	/**
 	 * 
@@ -25,26 +26,18 @@ public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
 	 * @param deptId
 	 */
 	
-	public ModuleSearchPatientRequest(SoapRequestParams params, String sessionId, String lang, PatientFieldData[] search, String deptId) {
+	public ModuleGetPatientByIdRequest(SoapRequestParams params, String sessionId, String id) {
 		super(params);
 		envelope.addMapping(params.getNamespace(), "PatientFieldData",PatientFieldData.class);
 		request.addProperty("moduleSessionId",sessionId);
-		request.addProperty("departmentId",deptId);
-		SoapObject patients = new SoapObject(params.getNamespace(), "patientFieldData");
-		for (PatientFieldData data : search){
-			patients.addProperty("PatientFieldData",data.toSoapObject(params.getNamespace()));
-		}
-		request.addProperty("patientFieldData",patients);
+		request.addProperty("patientId",id);
 	}
 	
 	
 	@Override
 	protected Result parseResponse (SoapObject response){
-		Log.d ("search patient",response.toString());
-		patientIds = new ArrayList<String>();
-		for (int i=0;i<response.getPropertyCount();i++){
-			patientIds.add(response.getProperty(i).toString());
-		}
+		Log.d ("patient received",response.toString());
+		patient = new Patient (response);
 		return null;
 	}
 
@@ -56,7 +49,7 @@ public class ModuleSearchPatientRequest extends BackgroundSoapRequestNew {
 	@Override
 	protected void onPostExecute(Result result){
 		try{
-			Client.getInstance().receivedSearchedPatients (patientIds);
+			Client.getInstance().receivedSearchedPatient (patient);
 			return;
 		}catch (Exception ex){
 			super.onPostExecute(result);

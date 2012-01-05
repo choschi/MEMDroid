@@ -141,4 +141,8 @@ public class Study extends SoapObjectParser {
 	public void addForm(Form form){
 		forms.add(form);
 	}
+	
+	public List<Form> getForms(){
+		return forms;
+	}
 }

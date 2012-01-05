@@ -10,6 +10,10 @@ import android.util.Log;
 
 public abstract class FormSoapObjectParser extends SoapObjectParser {
 	public FormSoapObjectParser (SoapObject input){
+		parseObject(input);
+	}
+	
+	protected void parseObject (SoapObject input){
 		for (int i=0;i<input.getPropertyCount();i++){
 			//Log.d ("rendering",input.getPropertyAsString(i));
 			Object property = input.getProperty(i);

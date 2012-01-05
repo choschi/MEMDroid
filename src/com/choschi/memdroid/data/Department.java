@@ -3,7 +3,7 @@ package com.choschi.memdroid.data;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import com.choschi.memdroid.data.interfaces.SpinnerItem;
+import com.choschi.memdroid.data.interfaces.AdapterItem;
 
 /**
  * 
@@ -13,7 +13,7 @@ import com.choschi.memdroid.data.interfaces.SpinnerItem;
  * 
  */
 
-public class Department extends SoapObjectParser implements SpinnerItem {
+public class Department extends SoapObjectParser implements AdapterItem {
 
 	private String clinicId;
 	private String clinicName;

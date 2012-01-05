@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.choschi.memdroid.R;
-import com.choschi.memdroid.data.interfaces.SpinnerItem;
+import com.choschi.memdroid.data.interfaces.AdapterItem;
 
 /**
  * 
@@ -21,9 +21,9 @@ public class FixedLists {
 	
 	private static FixedLists instance = new FixedLists();
 	
-	private List<SpinnerItem> languages;
-	private List<SpinnerItem> countries;
-	private List<SpinnerItem> genders;
+	private List<AdapterItem> languages;
+	private List<AdapterItem> countries;
+	private List<AdapterItem> genders;
 	
 	private FixedLists(){
 		
@@ -38,9 +38,9 @@ public class FixedLists {
 	 */
 	
 	
-	public List<SpinnerItem> getCountries(Context context){
+	public List<AdapterItem> getCountries(Context context){
 		if (countries == null){
-			countries = new ArrayList<SpinnerItem>();
+			countries = new ArrayList<AdapterItem>();
 			countries.add(new Country("AD", context.getString(R.string.country_AD)));
 			countries.add(new Country("AE", context.getString(R.string.country_AE)));
 			countries.add(new Country("AF", context.getString(R.string.country_AF)));
@@ -245,9 +245,9 @@ public class FixedLists {
 	 * iso language codes with the names according to locale
 	 */
 	
-	public List<SpinnerItem> getLanguages(Context context){
+	public List<AdapterItem> getLanguages(Context context){
 		if (languages == null){
-			languages = new ArrayList<SpinnerItem>();
+			languages = new ArrayList<AdapterItem>();
 			languages.add(new Language("de", context.getString(R.string.language_de)));
 			languages.add(new Language("en", context.getString(R.string.language_en)));
 			languages.add(new Language("es", context.getString(R.string.language_es)));
@@ -261,9 +261,9 @@ public class FixedLists {
 	 * gender codes with the names according to locale
 	 */
 	
-	public List<SpinnerItem> getGenders (Context context){
+	public List<AdapterItem> getGenders (Context context){
 		if (genders == null){
-			genders = new ArrayList<SpinnerItem>();
+			genders = new ArrayList<AdapterItem>();
 			genders.add(new Language("f", context.getString(R.string.gender_f)));
 			genders.add(new Language("m", context.getString(R.string.gender_m)));
 			genders.add(new Language("u", context.getString(R.string.gender_u)));

@@ -79,8 +79,12 @@ public class PatientNewFragment extends Fragment implements ClientListener,OnCli
 				
 				// First of all extract the data from the PatientFormElements
 				
-				PatientFieldData[] data = new PatientFieldData[formChildren.size()];
-				int counter = 0;
+				PatientFieldData[] data = new PatientFieldData[formChildren.size()+1];
+				
+				// OMG, dirty hack due to the need of the departementId in the fields too, not only the request header
+				
+				data[0] = new PatientFieldData ("1",Client.getInstance().getDepartment().getId());
+				int counter = 1;
 				for (PatientFormElement item : formChildren){
 					data[counter] = item.getPatientFieldData();
 					counter++;

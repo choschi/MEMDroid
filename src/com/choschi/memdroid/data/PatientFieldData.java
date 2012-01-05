@@ -33,6 +33,12 @@ public class PatientFieldData implements KvmSerializable,Serializable {
 		value = val;
 	}
 	
+	public PatientFieldData (SoapObject input){
+		for (int i=0;i<input.getPropertyCount();i++){
+			setProperty(i, input.getProperty(i));
+		}
+	}
+	
 	@Override
 	public Object getProperty(int arg0) {
 		Object out = null;
@@ -85,5 +91,12 @@ public class PatientFieldData implements KvmSerializable,Serializable {
 		out.addProperty ("value",value);
 		return out;
 	}
-
+	
+	public String getId(){
+		return fieldId;
+	}
+	
+	public String getValue(){
+		return value;
+	}
 }

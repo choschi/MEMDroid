@@ -198,8 +198,10 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			break;
 			case SHOW_PROGRESS_DIALOG:
 				showDialog(PROGRESS_DIALOG);
+			break;
 			case PATIENT_FIELDS:
 				// all the necessary data is loaded, add the views to the action bar
+
 				progressDialog.dismiss();
 				ActionBar actionBar = getActionBar();
 			    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -217,7 +219,6 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			                    this, "studies", StudyFragment.class));
 			    actionBar.addTab(studies);
 				break;
-			
 			case SHOW_DATE_PICKER:
 				showDialog(DATE_DIALOG);
 				break;

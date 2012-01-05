@@ -71,6 +71,18 @@ public class ServerGetFormDefinitionResponse extends FormSoapObjectParser implem
 		LINKED_QUESTION ("linkedQuestion"),
 		LABEL_DEACTIVATE ("labelsThenDeactivate"),
 		SUBFORM_ACTIVATE ("subformsThenActivate"),
+		PATIENT_FIELD_DATA ("patientFieldDatas"),
+		PATIENT_ID ("patientId"),
+		HASH_CODE ("hashCodes"),
+		PATIENT_CLINIC_ID ("patientClinicId"),
+		PATIENT_ITEM ("item"),
+		PATIENT_ENCRYPTED_ID ("encryptedId"),
+		PATIENT_MRN ("hashedMrn"),
+		PATIENT_PERMISSION ("permissions"),
+		PATIENT_YEAR_OF_BIRTH ("yearOfBirth"),
+		PATIENT_PERMISSION_GROUP_ID ("groupId"),
+		PATIENT_PERMISSION_ID ("patientPermissionId"),
+		PATIENT_PERMISSION_NAME ("permission"),
 		;
 		
 		private String name;

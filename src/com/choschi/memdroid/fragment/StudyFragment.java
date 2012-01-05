@@ -63,7 +63,8 @@ public class StudyFragment extends Fragment implements ClientListener {
 				if (getActivity() != null){
 					View listView = getActivity().findViewById(R.id.studiesListOutlet);
 					listView.setVisibility(1);
-					Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
+					//Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
+					Fragment formsFragment = new StudyFormsFragment();
 					FragmentTransaction listTransaction = getFragmentManager().beginTransaction();
 					// Replace whatever is in the fragment_container view with this fragment,
 					// and add the transaction to the back stack

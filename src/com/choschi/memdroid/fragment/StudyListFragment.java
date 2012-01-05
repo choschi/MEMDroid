@@ -15,7 +15,7 @@ import android.widget.ListView;
 
 public class StudyListFragment extends ListFragment implements ClientListener  {
 	
-    int mCurCheckPosition = 0;
+    int mCurCheckPosition = Integer.MIN_VALUE;
 	
     
     
@@ -64,7 +64,8 @@ public class StudyListFragment extends ListFragment implements ClientListener  {
     
 	@Override
 	public void notify(ClientMessages message) {
-		switch (message){}
+		switch (message){
+		}
 	}
 	
 }

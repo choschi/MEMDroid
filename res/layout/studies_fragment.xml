@@ -3,7 +3,9 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/studiesFragmentView">
+    android:id="@+id/studiesFragmentView"
+    android:background="@drawable/background_start"
+    >
     <LinearLayout
     	android:orientation="vertical"
     	android:layout_height="fill_parent"

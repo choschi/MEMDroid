@@ -33,8 +33,10 @@ public class ModuleGetPatientByIdRequest extends BackgroundSoapRequest {
 	
 	@Override
 	protected void parseResponse (SoapObject response){
-		Log.d ("patient received",response.toString());
-		patient = new Patient (response);
+		if (response != null){
+			Log.d ("patient received",response.toString());
+			patient = new Patient (response);
+		}
 	}
 
 

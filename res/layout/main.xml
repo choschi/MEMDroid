@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:weightSum="1"
-    android:id="@+id/mainContent">
-</LinearLayout>
+    android:id="@+id/mainContent"
+ 	android:background="@drawable/background_start">
+    <LinearLayout
+    	android:layout_width="400dp"
+    	android:layout_height="400dp"
+    	android:orientation="vertical"
+    	android:layout_marginLeft="450dp"
+    	android:layout_marginTop="60dp"
+    	android:id="@+id/mainContentStartup"
+    >
+    <ImageView 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/logo_start"
+    />
+    <Button
+    android:id="@+id/openLoginButton"
+    	android:layout_marginLeft="100dp"
+    	android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:background="@drawable/start_login_button"
+        android:text="@string/loginButton"/>
+    </LinearLayout>
+    <LinearLayout 
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="horizontal"
+    	android:id="@+id/fragmentContainer">
+    </LinearLayout>
+</FrameLayout>

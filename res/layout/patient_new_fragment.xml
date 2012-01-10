@@ -16,10 +16,10 @@
 		android:orientation="vertical">
 		>
 		<Button android:id="@+id/patientNewSubmitButton"
-			android:layout_height="50dp"
-			android:layout_width="300dp"
-			android:layout_margin="5dp" android:textColor="#000"
-			android:background="#fff" android:text="@string/patientNewSubmitButtonCaption" />
+			android:layout_height="wrap_content"
+			android:layout_width="200dp"
+			android:layout_margin="5dp" android:textColor="#fff"
+			android:background="@drawable/button" android:text="@string/patientNewSubmitButtonCaption" />
 		/>
 	</LinearLayout>
 

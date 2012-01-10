@@ -1,5 +1,6 @@
 package com.choschi.memdroid.ui.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListFragment;
@@ -10,9 +11,9 @@ import android.widget.ListView;
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.R;
-import com.choschi.memdroid.data.ListOfFormsAdapter;
+import com.choschi.memdroid.data.ListOfAdapterItemAdapter;
 import com.choschi.memdroid.data.Study;
-import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.interfaces.ClientListener;
 
 public class StudyFormsFragment extends ListFragment implements ClientListener{
@@ -31,8 +32,9 @@ public class StudyFormsFragment extends ListFragment implements ClientListener{
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
         	Client.getInstance().registerClientListener(this);
-        	List<Form> list = Client.getInstance().getActualStudy().getForms();
-        	setListAdapter (new ListOfFormsAdapter(getActivity(),R.layout.study_row,list));
+        	List<AdapterItem> list = new ArrayList<AdapterItem>();
+        	list.addAll(Client.getInstance().getActualStudy().getForms());
+        	setListAdapter (new ListOfAdapterItemAdapter(getActivity(),R.layout.study_row,list));
         }
        
         if (savedInstanceState != null) {

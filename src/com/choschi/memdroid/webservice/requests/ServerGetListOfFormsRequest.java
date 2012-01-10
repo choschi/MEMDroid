@@ -24,8 +24,10 @@ public class ServerGetListOfFormsRequest extends BackgroundSoapRequest {
 	@Override
 	protected void parseResponse(SoapObject response) {
 		forms = new ArrayList<Form>();
-		for (int i=0;i<response.getPropertyCount();i++){
-			forms.add(new Form ((SoapObject)response.getProperty(i)));
+		if (response.getPropertyCount()>0){
+			for (int i=0;i<response.getPropertyCount();i++){
+				forms.add(new Form ((SoapObject)response.getProperty(i)));
+			}
 		}
 	}
 	

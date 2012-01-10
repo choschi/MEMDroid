@@ -21,4 +21,6 @@
     <string name="departmentDialogTitle">Choose Department</string>
     <string name="loginDialogTitle">Please login</string>
     <string name="select">Confirm selection</string>
+    <string name="usernameLabel">Username</string>
+    <string name="passwordLabel">Password</string>
 </resources>

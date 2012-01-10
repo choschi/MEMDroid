@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,9 +28,9 @@ import android.widget.Spinner;
 import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.data.Department;
 import com.choschi.memdroid.interfaces.ClientListener;
+import com.choschi.memdroid.ui.TabListener;
 import com.choschi.memdroid.ui.fragment.PatientFragment;
 import com.choschi.memdroid.ui.fragment.StudyFragment;
-import com.choschi.memdroid.ui.fragment.TabListener;
 import com.choschi.memdroid.util.FixedLists;
 
 /**
@@ -64,6 +65,12 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
         FixedLists.getInstance().getLanguages(getApplicationContext());
         FixedLists.getInstance().getGenders(getApplicationContext());
         Client.getInstance().setLanguage(getApplicationContext().getString(R.string.languageISO));
+        Button loginButton = (Button) this.findViewById(R.id.openLoginButton);
+        loginButton.setOnClickListener(this);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(false);
     }
 	
 	@Override
@@ -115,6 +122,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 		switch (id){
 			case LOGIN_DIALOG:
 				loginDialog = new Dialog(this);
+				loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 				loginDialog.setContentView(R.layout.login_dialog);
 				loginDialog.setTitle(R.string.loginDialogTitle);
 				Button loginButton = (Button) loginDialog.findViewById(R.id.loginButton);
@@ -128,6 +136,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				return progressDialog;
 			case DEPARTMENT_DIALOG:
 				departmentDialog = new Dialog(this);
+				departmentDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 				departmentDialog.setContentView(R.layout.department_dialog);
 				departmentDialog.setTitle(R.string.departmentDialogTitle);
 				Spinner departmentSpinner = (Spinner)departmentDialog.findViewById(R.id.departmentDialogSpinner);
@@ -172,6 +181,9 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				Client.getInstance().requestPatientFieldsInsert();
 				showDialog(PROGRESS_DIALOG);
 			break;
+			case R.id.openLoginButton:
+				this.showLoginDialog();
+			break;
 		}
 	}
 	
@@ -199,26 +211,31 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			break;
 			case PATIENT_FIELDS:
 				// all the necessary data is loaded, add the views to the action bar
-
+				View main = this.findViewById(R.id.mainContentStartup);
+				main.setVisibility(View.INVISIBLE);
 				progressDialog.dismiss();
 				ActionBar actionBar = getActionBar();
 			    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-			    actionBar.setDisplayShowTitleEnabled(false);
-			    
+
 			    Tab patient = actionBar.newTab()
 			            .setText(R.string.menuPatient)
 			            .setTabListener(new TabListener<PatientFragment>(
 			                    this, "patient", PatientFragment.class));
 			    actionBar.addTab(patient);
-			    
+
 			    Tab studies = actionBar.newTab()
 			            .setText(R.string.menuStudies)
 			            .setTabListener(new TabListener<StudyFragment>(
 			                    this, "studies", StudyFragment.class));
 			    actionBar.addTab(studies);
+			    
 				break;
 			case SHOW_DATE_PICKER:
 				showDialog(DATE_DIALOG);
+				break;
+			case PATIENT_SEARCH:
+			case PATIENT_SAVE:
+				progressDialog.dismiss();
 				break;
 		}
 	}

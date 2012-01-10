@@ -108,7 +108,9 @@ public abstract class FormSoapObjectParser extends SoapObjectParser {
 	}
 	
 	public FormSoapObjectParser (SoapObject input){
-		parseObject(input);
+		if (input != null){
+			parseObject(input);
+		}
 	}
 	
 	protected void parseObject (SoapObject input){

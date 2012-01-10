@@ -7,11 +7,14 @@ import android.util.Log;
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.NewPatient;
 import com.choschi.memdroid.data.PatientFieldData;
+import com.choschi.memdroid.data.PatientPermission;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ServerInsertPatientRequest extends BackgroundSoapRequest {
-
+	
+	private boolean state;
+	
 	/**
 	 * 
 	 * @param params
@@ -51,7 +54,9 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 		request.addProperty ("language",language);
 		request.addProperty ("patientClinicId",patient.getPatientClinicId());
 		request.addProperty ("patientId",patient.getId());
-		// TODO resolve this issue after reply from mr. abt
+		for (PatientPermission perm : patient.getPermissions()){
+			request.addProperty("perms",perm.toSoapObject(params.getNamespace()));
+		}
 		request.addProperty ("perms","");//patient.getPermissions());
 		request.addProperty ("yearOfBirth",patient.getYearOfBirth());
 		Log.d ("request",request.toString());
@@ -61,7 +66,7 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 	@Override
 	protected void parseResponse (SoapObject response){
 		Log.d ("patient created",response.toString());
-		//patient = new NewPatient (response);
+		state = Boolean.parseBoolean(response.toString());
 	}
 	
 	
@@ -72,7 +77,7 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 	@Override
 	protected void onPostExecute(Object result){
 		try{
-			Client.getInstance().savedPatient ();
+			Client.getInstance().savedPatient (state);
 			return;
 		}catch (Exception ex){
 			super.onPostExecute(ex);

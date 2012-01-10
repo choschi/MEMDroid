@@ -19,10 +19,11 @@ import com.choschi.memdroid.ui.PatientFieldFactory.FieldType;
 
 /**
  * 
- * @author Christoph Isch
- * 
  * Provides a view container with two rows for the PatientFields
  * the first row is considered to contain a label, the second one to contain the form element
+ * 
+ * @author Christoph Isch
+ * 
  */
 
 public class PatientFormElement extends LinearLayout implements OnTouchListener,OnDateSetListener {
@@ -31,7 +32,6 @@ public class PatientFormElement extends LinearLayout implements OnTouchListener,
 	private LinearLayout right;
 	private PatientField field;
 	private FieldType type;
-	private String value;
 
 	
 	/**
@@ -110,18 +110,17 @@ public class PatientFormElement extends LinearLayout implements OnTouchListener,
 	 */
 	
 	public PatientFieldData getPatientFieldData(){
-		if (value == null){
-			View child = right.getChildAt(0);
-			switch (type){
-				case MULTIPLECHOICE:
-					value = ((AdapterItem)((Spinner)child).getSelectedItem()).getId();
-				break;
-				default:
-					value = ((EditText)child).getText().toString();
-				break;
-			}
+		String val = "";
+		View child = right.getChildAt(0);
+		switch (type){
+			case MULTIPLECHOICE:
+				val = ((AdapterItem)((Spinner)child).getSelectedItem()).getId();
+			break;
+			default:
+				val = ((EditText)child).getText().toString();
+			break;
 		}
-		return new PatientFieldData (""+field.getFieldId(),value);
+		return new PatientFieldData (""+field.getFieldId(),val);
 	}
 
 

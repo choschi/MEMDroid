@@ -87,8 +87,8 @@ public class NewPatient extends Patient{
 	public void setYearOfBirth(String yearOfBirth) {
 		this.yearOfBirth = yearOfBirth;
 	}
-	
-	public String[] getPermissions(){
+	@Deprecated
+	public String[] getPermissionsOld(){
 		if (stringPermissions == null){
 			stringPermissions = new String[permissions.size()];
 			int counter = 0;
@@ -98,6 +98,10 @@ public class NewPatient extends Patient{
 			}
 		}
 		return stringPermissions;
+	}
+	
+	public List<PatientPermission> getPermissions(){
+		return permissions;
 	}
 	
 }

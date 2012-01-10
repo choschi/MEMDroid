@@ -6,9 +6,9 @@ import com.choschi.memdroid.interfaces.Serializable;
 
 /**
  * 
- * @author Christoph Isch
- * 
  * is the data object for the patient field which can be sent to the web service
+ * 
+ * @author Christoph Isch
  * 
  */
 

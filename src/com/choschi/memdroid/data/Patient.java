@@ -7,7 +7,7 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.interfaces.AdapterItem;
 
-public class Patient extends FormSoapObjectParser implements AdapterItem{
+public class Patient extends FormSoapObjectParser implements AdapterItem {
 	
 	private String hashCodes; 
 	private int patientClinicId; 
@@ -56,7 +56,18 @@ public class Patient extends FormSoapObjectParser implements AdapterItem{
 	
 	@Override
 	public String toString(){
-		return "Patient";
+		String output = "";
+		if (patientFieldDatas != null){
+			for (PatientFieldData item : patientFieldDatas){
+				if (item.getId().compareToIgnoreCase("6") == 0){
+					output += item.getValue();
+				}
+				if (item.getId().compareToIgnoreCase("8") == 0){
+					output += " "+item.getValue();
+				}
+			}
+		}
+		return output;
 	}
 
 	/**

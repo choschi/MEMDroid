@@ -1,6 +1,7 @@
 package com.choschi.memdroid.data.form;
 
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import com.choschi.memdroid.data.FormDefinition;
 import com.choschi.memdroid.data.FormSoapObjectParser;
@@ -18,22 +19,17 @@ public class Form extends FormSoapObjectParser implements AdapterItem{
 	
 	public Form(SoapObject input) {
 		super(input);
+		id = ((SoapPrimitive)input.getProperty(0)).toString();
+		name = ((SoapPrimitive)input.getProperty(1)).toString();
+		type = ((SoapPrimitive)input.getProperty(2)).toString();
+		date = ((SoapPrimitive)input.getProperty(3)).toString();
+		studyName = ((SoapPrimitive)input.getProperty(4)).toString();
+		version = ((SoapPrimitive)input.getProperty(5)).toString();
 	}
 	
 
 	@Override
 	protected void saveProperty(String property, Name name) {
-		switch (name){
-		case ID:
-			id = property;
-			break;
-		case NAME:
-			this.name = property;
-			break;
-		case TYPE:
-			type = property;
-			break;
-		}
 	}
 
 	@Override

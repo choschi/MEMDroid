@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- the theme applied to the application or activity -->
+    <style name="MemdroidTheme" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/MemdroidActionBar</item>
+    </style>
+
+    <!-- style for the action bar, simply to change the background and adjust the padding on the left side -->
+    <style name="MemdroidActionBar" parent="@android:Widget.Holo.ActionBar">
+        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:paddingLeft">120dp</item>
+    </style>
+</resources>

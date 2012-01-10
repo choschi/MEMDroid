@@ -21,4 +21,6 @@
     <string name="departmentDialogTitle">Abteilung auswählen</string>
     <string name="loginDialogTitle">Bitte einloggen</string>
     <string name="select">Auswahl bestätigen</string>
+    <string name="usernameLabel">Benutzername</string>
+    <string name="passwordLabel">Passwort</string>
 </resources>

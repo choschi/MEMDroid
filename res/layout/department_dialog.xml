@@ -3,26 +3,37 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/departmentDialog"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp">
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="#6a7b87">
+    <ImageView 
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:src="@drawable/login_dialog_logo"
+    	android:layout_marginBottom="30dp"
+    />
     <TextView
     	android:id="@+id/departmentDialogText"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:background="#fff"
+        android:typeface="serif"
+        android:textSize="20sp"
+        android:layout_marginBottom="40dp"
         android:text="@string/selectDepartment"/>
     <Spinner 
     	android:layout_width="300dp"
     	android:layout_height="wrap_content"
     	android:id="@+id/departmentDialogSpinner"
+    	android:layout_marginLeft="50dp"
+    	android:layout_marginBottom="40dp"
     />
     <Button
     	android:id="@+id/departmentDialogDismissButton"
-    	android:layout_width="300dp"
+    	android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:textColor="#000"
-        android:background="#fff"
+        android:background="@drawable/start_login_button"
+        android:layout_marginLeft="100dp"
         android:text="@string/select"/>
 </LinearLayout>

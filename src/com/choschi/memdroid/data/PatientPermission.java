@@ -2,7 +2,9 @@ package com.choschi.memdroid.data;
 
 import org.ksoap2.serialization.SoapObject;
 
-public class PatientPermission extends FormSoapObjectParser {
+import com.choschi.memdroid.interfaces.Serializable;
+
+public class PatientPermission extends FormSoapObjectParser implements Serializable {
 	
 	private String groupId;
 	private String patientPermissionId;
@@ -65,4 +67,12 @@ public class PatientPermission extends FormSoapObjectParser {
 		this.patientPermissionId = patientPermissionId;
 	}
 
+	@Override
+	public SoapObject toSoapObject(String namespace) {
+		SoapObject output = new SoapObject (namespace,"perms");
+		output.addProperty("item", groupId);
+		output.addProperty("item", patientPermissionId);
+		output.addProperty("item", permission);
+		return output;
+	}
 }

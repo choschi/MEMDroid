@@ -3,6 +3,7 @@ package com.choschi.memdroid.webservice;
 import java.io.IOException;
 
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.transport.HttpTransportSE;
@@ -103,6 +104,9 @@ public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams,
         		SoapObject newResult = new SoapObject (parameters.getNamespace(),"response");
         		newResult.addProperty("response",result.toString());
         		parseResponse(newResult);
+        	}else if (result instanceof SoapFault){
+        		Log.d ("background soap request",((SoapFault)result).toString());
+        		parseResponse (null);
         	}else{
         		parseResponse((SoapObject) result);
         	}

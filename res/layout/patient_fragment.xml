@@ -3,28 +3,28 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/patientFragmentView">
+    android:id="@+id/patientFragmentView"
+    android:background="@drawable/background_start">
     <LinearLayout
     	android:orientation="vertical"
     	android:layout_height="fill_parent"
     	android:layout_width="fill_parent"
-    	android:layout_weight="3"
-    	android:layout_marginTop="100dp">
+    	android:layout_weight="3">
         <Button 
         	android:id="@+id/patientSearchButton"
 	        android:layout_width="fill_parent"
-	        android:layout_height="50dp"
+	        android:layout_height="wrap_content"
 	        android:layout_margin="5dp"
-	        android:textColor="#000"
-	        android:background="#fff"
+	        android:textColor="#fff"
+	        android:background="@drawable/button"
 	        android:text="@string/patientSearchButtonCaption"/>
 	    <Button 
         	android:id="@+id/patientNewButton"
 	        android:layout_width="fill_parent"
-	        android:layout_height="50dp"
+	        android:layout_height="wrap_content"
 	        android:layout_margin="5dp"
-	        android:textColor="#000"
-	        android:background="#fff"
+	        android:textColor="#fff"
+	        android:background="@drawable/button"
 	        android:text="@string/patientNewButtonCaption"/>
 	</LinearLayout>
 	<LinearLayout 

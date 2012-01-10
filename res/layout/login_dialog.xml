@@ -3,30 +3,67 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loginBox"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp">
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="#6a7b87">
+    <ImageView 
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:src="@drawable/login_dialog_logo"
+    	android:layout_marginBottom="40dp"
+    />
+    <LinearLayout 
+    	android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_marginTop="20dp"
+    	android:layout_marginBottom="20dp">
+   	<TextView 
+   		android:text="@string/usernameLabel"
+   		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:layout_weight="5"
+   		android:textSize="20sp"
+   	/>
     <EditText
     	android:id="@+id/username"
-        android:layout_width="100dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:background="#fff"
+        android:layout_weight="3"
         android:inputType="text"
         android:text="@string/username"/>
+   	</LinearLayout>
+   	 <LinearLayout 
+    	android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_marginTop="20dp"
+    	android:layout_marginBottom="20dp">
+   	<TextView 
+   		android:text="@string/passwordLabel"
+   		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:layout_weight="5"
+   		android:textSize="20sp"
+   	/>
     <EditText 
     	android:id="@+id/password"
-        android:layout_width="100dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:background="#fff"
+        android:layout_weight="3"
         android:inputType="textPassword"
-        android:text="@string/password"/>
+        android:text="@string/password"
+        />
+    </LinearLayout>
     <Button
     	android:id="@+id/loginButton"
-    	android:layout_width="300dp"
+    	android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:textColor="#000"
-        android:background="#fff"
-        android:text="@string/loginButton"/>
+        android:background="@drawable/start_login_button"
+        android:text="@string/loginButton"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="120dp"
+        />
 </LinearLayout>

@@ -30,11 +30,11 @@ public class ModuleSearchPatientRequest extends BackgroundSoapRequest {
 		envelope.addMapping(params.getNamespace(), "PatientFieldData",PatientFieldData.class);
 		request.addProperty("moduleSessionId",sessionId);
 		request.addProperty("departmentId",deptId);
-		SoapObject patients = new SoapObject(params.getNamespace(), "patientFieldData");
+		//SoapObject patients = new SoapObject(params.getNamespace(), "patientFieldData");
 		for (PatientFieldData data : search){
-			patients.addProperty("PatientFieldData",data.toSoapObject(params.getNamespace()));
+			request.addProperty("patientFieldData",data.toSoapObject(params.getNamespace()));
 		}
-		request.addProperty("patientFieldData",patients);
+		//request.addProperty("patientFieldData",patients);
 	}
 	
 	

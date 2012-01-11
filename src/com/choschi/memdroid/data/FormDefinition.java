@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
+import com.choschi.memdroid.data.form.FormQuestion;
 import com.choschi.memdroid.data.form.SubFormContainer;
 import com.choschi.memdroid.data.rule.MultipleChoiceRulesContainer;
 
@@ -137,5 +138,13 @@ public class FormDefinition extends FormSoapObjectParser {
 	 */
 	public void setName(FormName name) {
 		this.name = name;
+	}
+	
+	public List<FormQuestion> getQuestions(){
+		List<FormQuestion> questions = new ArrayList<FormQuestion>();
+		for (SubFormContainer container : subForms){
+			questions.addAll(container.getQuestions());
+		}
+		return questions;
 	}
 }

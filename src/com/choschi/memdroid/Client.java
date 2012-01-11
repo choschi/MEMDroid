@@ -16,7 +16,6 @@ import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.data.form.Form;
-import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.interfaces.ClientListener;
 import com.choschi.memdroid.util.SHA256;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
@@ -67,7 +66,7 @@ public class Client {
 		PATIENT_FIELDS,
 		SHOW_DATE_PICKER,
 		PATIENT_SEARCH,
-		PATIENT_SAVE,
+		PATIENT_SAVE, SHOW_FORM,
 	}
 	
 	public static final int LOGIN_SUCCESS = 0;
@@ -106,8 +105,7 @@ public class Client {
 
 	private Boolean loggedIn = false;
 	private Boolean loggingIn = false;
-
-	private List<Form> forms;
+	
 	private boolean downloadingForms = false;
 	private int formCount = 0;
 
@@ -121,6 +119,9 @@ public class Client {
 	private Patient actualPatient; 
 
 	private List<Department> departments;
+
+
+	private Form actualForm;
 	
 
 	
@@ -329,10 +330,11 @@ public class Client {
 	
 	public void receivedListOfForms(List<Form> result) {
 		logcat ("received a list of forms");
-		forms = result;
+		//forms = result;
 		formCount = 0;
-		if (formCount < forms.size()){
-			Client.getInstance().requestFormDefinition(forms.get(formCount));
+		if (formCount < result.size()){
+			actualStudy.addForm(result.get(formCount));
+			Client.getInstance().requestFormDefinition(actualStudy.getForms().get(formCount));
 		}else{
 			logcat ("no form definitions available");
 			downloadingForms = false;
@@ -366,16 +368,10 @@ public class Client {
 	
 	public void receivedFormDefinition(FormDefinition result) {
 		logcat ("form defintion received");
-		forms.get(formCount).addDefinition(result);
+		actualStudy.getForms().get(formCount).addDefinition(result);
 		formCount++;
-		if (formCount < forms.size()){
-			if (formCount < 2){
-				Client.getInstance().requestFormDefinition(forms.get(formCount));
-			}else{
-				logcat ("all form definitions received");
-				downloadingForms = false;
-				notify(ClientMessages.STUDY_DETAILS);
-			}
+		if (formCount < actualStudy.getForms().size()){
+			Client.getInstance().requestFormDefinition(actualStudy.getForms().get(formCount));
 		}else{
 			logcat ("all form definitions received");
 			downloadingForms = false;
@@ -533,10 +529,8 @@ public class Client {
 	}
 	
 	
-	public List<AdapterItem> getPatients(){
-		List<AdapterItem> output = new ArrayList<AdapterItem>();
-		output.addAll(patients);
-		return output;
+	public List<Patient> getPatients(){
+		return patients;
 	}
 
 	/**
@@ -603,7 +597,7 @@ public class Client {
 	 */
 
 	public List<Study> getListOfStudies() {
-		return this.studies;
+		return studies;
 	}
 
 	/**
@@ -620,6 +614,16 @@ public class Client {
 	 */
 	public void setActualStudy(Study actualStudy) {
 		this.actualStudy = actualStudy;
+	}
+	
+
+	public void showForm(Form form) {
+		actualForm = form;
+		notify (ClientMessages.SHOW_FORM);
+	}
+	
+	public Form getActualForm(){
+		return actualForm;
 	}
 	
 	/**

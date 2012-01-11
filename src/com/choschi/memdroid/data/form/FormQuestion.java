@@ -200,4 +200,8 @@ public class FormQuestion extends FormSoapObjectParser {
 		this.unit = unit;
 	}
 	
+	public String getLabel(){
+		return defaultName;
+	}
+	
 }

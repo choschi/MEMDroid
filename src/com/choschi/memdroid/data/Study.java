@@ -7,12 +7,14 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
 import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
 
-public class Study extends SoapObjectParser {
+public class Study extends SoapObjectParser implements AdapterItem{
 	
 	private String id;
 	private String name;
+	private String title;
 	private String type;
 	private String startDate;
 	private String endDate;
@@ -23,9 +25,10 @@ public class Study extends SoapObjectParser {
 		forms = new ArrayList<Form>();
 		id = ((SoapPrimitive)input.getProperty(0)).toString();
 		name = ((SoapPrimitive)input.getProperty(1)).toString();
-		type = ((SoapPrimitive)input.getProperty(2)).toString();
-		startDate = ((SoapPrimitive)input.getProperty(3)).toString();
-		endDate = ((SoapPrimitive)input.getProperty(4)).toString();
+		title = ((SoapPrimitive)input.getProperty(2)).toString();
+		type = ((SoapPrimitive)input.getProperty(3)).toString();
+		startDate = ((SoapPrimitive)input.getProperty(4)).toString();
+		endDate = ((SoapPrimitive)input.getProperty(5)).toString();
 	}
 	
 	public String getId() {
@@ -84,7 +87,7 @@ public class Study extends SoapObjectParser {
 	
 	@Override
 	public String toString(){
-		return "Study: "+this.getName()+"("+this.getId()+") from "+this.getStartDate()+" till "+this.getEndDate();
+		return title;
 	}
 	
 	public void addForm(Form form){
@@ -93,5 +96,19 @@ public class Study extends SoapObjectParser {
 	
 	public List<Form> getForms(){
 		return forms;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

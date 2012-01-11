@@ -1,5 +1,7 @@
 package com.choschi.memdroid.data.form;
 
+import java.util.List;
+
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
@@ -128,6 +130,15 @@ public class Form extends FormSoapObjectParser implements AdapterItem{
 	
 	@Override
 	public String toString(){
-		return studyName;
-	}	
+		return name;
+	}
+	
+	/**
+	 * 
+	 * @return all the questions of the form
+	 */
+	
+	public List<FormQuestion> getQuestions(){
+		return definition.getQuestions();
+	}
 }

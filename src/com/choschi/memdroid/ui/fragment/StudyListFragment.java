@@ -1,17 +1,21 @@
 package com.choschi.memdroid.ui.fragment;
 
-import com.choschi.memdroid.Client;
-import com.choschi.memdroid.R;
-import com.choschi.memdroid.Client.ClientMessages;
-import com.choschi.memdroid.data.ListOfStudiesAdapter;
-import com.choschi.memdroid.data.Study;
-import com.choschi.memdroid.interfaces.ClientListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+
+import com.choschi.memdroid.Client;
+import com.choschi.memdroid.Client.ClientMessages;
+import com.choschi.memdroid.R;
+import com.choschi.memdroid.data.ListOfAdapterItemAdapter;
+import com.choschi.memdroid.data.Study;
+import com.choschi.memdroid.interfaces.AdapterItem;
+import com.choschi.memdroid.interfaces.ClientListener;
 
 public class StudyListFragment extends ListFragment implements ClientListener  {
 	
@@ -24,8 +28,9 @@ public class StudyListFragment extends ListFragment implements ClientListener  {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
         	Client.getInstance().registerClientListener(this);
-        	//Client.getInstance().requestListOfStudies();
-        	setListAdapter (new ListOfStudiesAdapter(getActivity(),R.layout.study_row,Client.getInstance().getListOfStudies()));
+        	List<AdapterItem> list = new ArrayList<AdapterItem>();
+        	list.addAll(Client.getInstance().getListOfStudies());
+        	setListAdapter (new ListOfAdapterItemAdapter(getActivity(),R.layout.study_row,list));
         }
        
         if (savedInstanceState != null) {

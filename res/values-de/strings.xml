@@ -23,4 +23,5 @@
     <string name="select">Auswahl bestätigen</string>
     <string name="usernameLabel">Benutzername</string>
     <string name="passwordLabel">Passwort</string>
+    <string name="formSaveButtonCaption">Formular speichern</string>
 </resources>

@@ -96,4 +96,17 @@ public class FormSection extends FormSoapObjectParser {
 	public List<FormGroup> getGroups(){
 		return groups;
 	}
+	
+	/**
+	 * 
+	 * @return all the questions in this sections groups
+	 */
+	
+	public List<FormQuestion> getQuestions(){
+		List<FormQuestion> questions = new ArrayList<FormQuestion>();
+		for (FormGroup group : groups){
+			questions.addAll(group.getQuestions());
+		}
+		return questions;
+	}
 }

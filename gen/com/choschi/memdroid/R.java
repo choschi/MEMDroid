@@ -30,13 +30,16 @@ public final class R {
         public static final int departmentDialogDismissButton=0x7f080003;
         public static final int departmentDialogSpinner=0x7f080002;
         public static final int departmentDialogText=0x7f080001;
+        public static final int formSaveButton=0x7f08001d;
+        public static final int formScroller=0x7f08001b;
+        public static final int formScrollerContainer=0x7f08001c;
         public static final int fragmentContainer=0x7f08000b;
-        public static final int icon=0x7f08001b;
+        public static final int icon=0x7f08001e;
         public static final int loginBox=0x7f080004;
         public static final int loginButton=0x7f080007;
         public static final int mainContent=0x7f080008;
         public static final int mainContentStartup=0x7f080009;
-        public static final int mainMenuLogin=0x7f08001d;
+        public static final int mainMenuLogin=0x7f080020;
         public static final int openLoginButton=0x7f08000a;
         public static final int password=0x7f080006;
         public static final int patientDetailOutlet=0x7f08000f;
@@ -54,7 +57,7 @@ public final class R {
         public static final int studiesFragmentView=0x7f080017;
         public static final int studiesListOutlet=0x7f080018;
         public static final int studiesSubListOutlet=0x7f080019;
-        public static final int studyName=0x7f08001c;
+        public static final int studyName=0x7f08001f;
         public static final int username=0x7f080005;
     }
     public static final class layout {
@@ -65,7 +68,8 @@ public final class R {
         public static final int patient_new_fragment=0x7f030004;
         public static final int patient_search_fragment=0x7f030005;
         public static final int studies_fragment=0x7f030006;
-        public static final int study_row=0x7f030007;
+        public static final int study_form_fragment=0x7f030007;
+        public static final int study_row=0x7f030008;
     }
     public static final class menu {
         public static final int main_menu=0x7f070000;
@@ -269,6 +273,7 @@ public final class R {
         public static final int country_ZM=0x7f0600c2;
         public static final int country_ZW=0x7f0600c3;
         public static final int departmentDialogTitle=0x7f0600da;
+        public static final int formSaveButtonCaption=0x7f0600df;
         public static final int gender_f=0x7f0600c4;
         public static final int gender_m=0x7f0600c5;
         public static final int gender_u=0x7f0600c6;

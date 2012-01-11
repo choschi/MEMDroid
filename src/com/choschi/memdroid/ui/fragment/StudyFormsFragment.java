@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -13,6 +14,7 @@ import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.data.ListOfAdapterItemAdapter;
 import com.choschi.memdroid.data.Study;
+import com.choschi.memdroid.data.form.Form;
 import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.interfaces.ClientListener;
 
@@ -20,12 +22,6 @@ public class StudyFormsFragment extends ListFragment implements ClientListener{
 
     int mCurCheckPosition = 0;
 	Study study;
-	
-	/*
-	public StudyFormsFragment (Study std){
-		study = std;
-	}
-    */
     
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -61,16 +57,12 @@ public class StudyFormsFragment extends ListFragment implements ClientListener{
      * whole new activity in which it is displayed.
      */
     void showDetails(int index) {
-    	if (index != mCurCheckPosition){
-	        mCurCheckPosition = index;
-	        /*
-	        if (getListAdapter() != null){
-	        	Study study = (Study)getListAdapter().getItem(mCurCheckPosition);
-	        	Client.getInstance().requestListOfForms(study);
-	        	Log.d ("fragment",""+mCurCheckPosition);
-	        }
-	        */
-    	}
+        mCurCheckPosition = index;
+        if (getListAdapter() != null){
+        	Form form = (Form)getListAdapter().getItem(mCurCheckPosition);
+        	Client.getInstance().showForm(form);
+        	Log.d ("details",""+mCurCheckPosition+": "+form.toString());
+        }
     }
     
 	@Override

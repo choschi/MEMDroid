@@ -59,20 +59,37 @@ public class StudyFragment extends Fragment implements ClientListener {
 				}
 			break;
 			case STUDY_DETAILS:
-				Log.d ("fragment", "the listener for STUDIES_LIST has been called!");
+				Log.d ("fragment", "the listener for STUDY_DETAILS has been called!");
 				if (getActivity() != null){
-					View listView = getActivity().findViewById(R.id.studiesListOutlet);
-					listView.setVisibility(1);
+					View outletView = getActivity().findViewById(R.id.studiesSubListOutlet);
+					outletView.setVisibility(1);
 					//Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
 					Fragment formsFragment = new StudyFormsFragment();
-					FragmentTransaction listTransaction = getFragmentManager().beginTransaction();
+					FragmentTransaction formsTransaction = getFragmentManager().beginTransaction();
 					// Replace whatever is in the fragment_container view with this fragment,
 					// and add the transaction to the back stack
-					listTransaction.replace(R.id.studiesSubListOutlet, formsFragment);
+					formsTransaction.replace(R.id.studiesSubListOutlet, formsFragment);
 					//transaction.addToBackStack(null);
 					// Commit the transaction
-					listTransaction.commit();
+					formsTransaction.commit();
 				}
+			break;
+			case SHOW_FORM:
+				Log.d ("fragment", "the listener for SHOW_FORM has been called!");
+				if (getActivity() != null){
+					View formView = getActivity().findViewById(R.id.studiesDetailOutlet);
+					formView.setVisibility(1);
+					//Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
+					Fragment formFragment = new StudyFormFragment(Client.getInstance().getActualForm());
+					FragmentTransaction formTransaction = getFragmentManager().beginTransaction();
+					// Replace whatever is in the fragment_container view with this fragment,
+					// and add the transaction to the back stack
+					formTransaction.replace(R.id.studiesDetailOutlet, formFragment);
+					//transaction.addToBackStack(null);
+					// Commit the transaction
+					formTransaction.commit();
+				}
+			break;
 		}
 	}
 }

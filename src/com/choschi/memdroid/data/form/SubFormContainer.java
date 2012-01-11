@@ -175,4 +175,16 @@ public class SubFormContainer extends FormSoapObjectParser implements AdapterIte
 		this.version = version;
 	}
 	
+	/**
+	 * 
+	 * @return all the questions in the sections
+	 */
+	
+	public List<FormQuestion> getQuestions(){
+		List<FormQuestion> questions = new ArrayList<FormQuestion>();
+		for (FormSection section : sections){
+			questions.addAll(section.getQuestions());
+		}
+		return questions;
+	}
 }

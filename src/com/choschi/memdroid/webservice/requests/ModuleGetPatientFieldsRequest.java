@@ -6,7 +6,7 @@ import java.util.List;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.patient.PatientField;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 

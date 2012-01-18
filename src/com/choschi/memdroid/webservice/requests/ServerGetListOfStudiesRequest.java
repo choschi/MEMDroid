@@ -14,6 +14,14 @@ public class ServerGetListOfStudiesRequest extends BackgroundSoapRequest {
 	
 	List<Study> studies;
 	
+	/**
+	 * 
+	 * @param params
+	 * @param sessionId
+	 * @param language
+	 * @param studyType
+	 */
+	
 	public ServerGetListOfStudiesRequest(SoapRequestParams params,String sessionId, String language, String studyType) {
 		super(params);
 		request.addProperty ("language",language);

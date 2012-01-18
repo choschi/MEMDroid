@@ -4,7 +4,6 @@ package com.choschi.memdroid.ui.fragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,15 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.R;
 import com.choschi.memdroid.Client.ClientMessages;
+import com.choschi.memdroid.R;
 import com.choschi.memdroid.interfaces.ClientListener;
 
 /**
  * 
- * @author Christoph Isch
- * 
  * Master Fragment for the patient views
+ * 
+ * @author Christoph Isch
  * 
  */
 
@@ -78,7 +77,6 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 					newTransaction.replace(R.id.patientDetailOutlet, newFragment);
 
 					newTransaction.commit();
-					Log.d("patientFragment","newPatient pressed");
 				break;
 			case R.id.patientSearchButton:
 					View searchView = getActivity().findViewById(R.id.patientDetailOutlet);
@@ -89,7 +87,6 @@ public class PatientFragment extends Fragment implements ClientListener,OnClickL
 					searchTransaction.replace(R.id.patientDetailOutlet, searchFragment);
 
 					searchTransaction.commit();
-					Log.d("patientFragment","searchPatient pressed");
 				break;
 			}
 		}catch (Exception ex){

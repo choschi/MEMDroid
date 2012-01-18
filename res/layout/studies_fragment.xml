@@ -18,7 +18,14 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_weight="2"
-		android:id="@+id/studiesSubListOutlet">
+		android:id="@+id/studiesFormListOutlet">
+	</LinearLayout>
+	<LinearLayout 
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="2"
+		android:id="@+id/studiesSubFormListOutlet">
 	</LinearLayout>
 	<LinearLayout 
 		android:orientation="vertical"

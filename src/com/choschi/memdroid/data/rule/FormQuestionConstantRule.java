@@ -1,11 +1,24 @@
-package com.choschi.memdroid.data.form;
+package com.choschi.memdroid.data.rule;
 
 import org.ksoap2.serialization.SoapObject;
 
 
+/**
+ * 
+ * class for FormQuestionRule, these are ignored for instance but nonetheless parsed through data retrieval
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class FormQuestionConstantRule extends FormQuestionRule {
 
 	private String value;
+	
+	/**
+	 * constructor
+	 * @param input
+	 */
 	
 	public FormQuestionConstantRule(SoapObject input) {
 		super(input);
@@ -22,6 +35,11 @@ public class FormQuestionConstantRule extends FormQuestionRule {
 			break;
 		}
 	}
+	
+	/**
+	 * get the value of the constant rule
+	 * @return value
+	 */
 	
 	public String getValue(){
 		return value;

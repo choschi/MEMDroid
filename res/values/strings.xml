@@ -24,4 +24,7 @@
     <string name="usernameLabel">Username</string>
     <string name="passwordLabel">Password</string>
     <string name="formSaveButtonCaption">Save Form</string>
+    <string name="noPatientText">You have not selected a patient, please do so before choosing a study.</string>
+    <string name="buttonOkay">Okay</string>
+    <string name="patientSelected">Patient selected</string>
 </resources>

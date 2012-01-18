@@ -9,5 +9,11 @@ package com.choschi.memdroid.interfaces;
  */
 
 public interface AdapterItem {
+	
+	/**
+	 * get the id to identify the item
+	 * @return the id
+	 */
+	
 	String getId();
 }

@@ -4,6 +4,14 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
 
+/**
+ * 
+ * RulesSubformActivator, not commented on purpose
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class RuleSubformActivator extends FormSoapObjectParser {
 
 	private boolean hidden;

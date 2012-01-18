@@ -1,11 +1,20 @@
-package com.choschi.memdroid.data;
+package com.choschi.memdroid.data.patient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
+import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.interfaces.AdapterItem;
+
+/**
+ * 
+ * class the represents the patient data
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class Patient extends FormSoapObjectParser implements AdapterItem {
 	
@@ -14,6 +23,10 @@ public class Patient extends FormSoapObjectParser implements AdapterItem {
 	private List<PatientFieldData> patientFieldDatas;  
 	private String patientId; 
 	
+	/**
+	 * constructor 
+	 * @param response
+	 */
 	
 	public Patient (SoapObject response){
 		super(response);
@@ -98,10 +111,20 @@ public class Patient extends FormSoapObjectParser implements AdapterItem {
 		this.patientClinicId = patientClinicId;
 	}
 	
+	/**
+	 * set the list of the PatientFieldData
+	 * @return
+	 */
+	
 	public List<PatientFieldData> getPatientFieldDatas() {
 		return patientFieldDatas;
 	}
-
+	
+	/**
+	 * get the list of the PatientFieldData objects
+	 * @param patientFieldDatas
+	 */
+	
 	public void setPatientFieldDatas(List<PatientFieldData> patientFieldDatas) {
 		this.patientFieldDatas = patientFieldDatas;
 	}

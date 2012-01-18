@@ -7,6 +7,14 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
 
+/**
+ * 
+ * FormSection is essentially a container for FormGroup items 
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class FormSection extends FormSoapObjectParser {
 	
 	
@@ -15,6 +23,11 @@ public class FormSection extends FormSoapObjectParser {
 	private int textSectionNo;
 	
 	private List<FormGroup> groups;
+	
+	/**
+	 * constructor
+	 * @param input
+	 */
 	
 	public FormSection (SoapObject input){
 		super(input);

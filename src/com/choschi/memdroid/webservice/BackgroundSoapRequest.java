@@ -25,14 +25,17 @@ import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams, Void, Object> {
 
-/**
- * Final endpoints to use for developing use the test server ones...
- */
+	/**
+	 * Final endpoints to use in production environment, for developing use the test server ones...
+	 */
 
 
 //	public static String ModuleEndpoint = "https://demomodule.memdoc.org/moduleWsServer/MemdocModule.php?wsdl";
 //	public static String ServerEndpoint = "https://memdocdemo.memdoc.org/memdocWsServer/MemdocServer?wsdl";
 
+	/**
+	 * test server endpoints
+	 */
 	
 	public static String ModuleEndpoint = "http://195.176.223.108/moduleWsServer/MemdocModule.php?wsdl";
 	public static String ServerEndpoint = "http://memdoctest.memdoc.org/memdocWsServer/MemdocServer";
@@ -99,13 +102,13 @@ public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams,
         
         if (result != null)
         {
-        	// this is only necessary because the server sends in 2 cases only a primitive answer rather than a meaningful object...
+        	// this is only necessary because the server in 2 cases only sends a primitive answer rather than a meaningful object...
         	if (result instanceof SoapPrimitive){
         		SoapObject newResult = new SoapObject (parameters.getNamespace(),"response");
         		newResult.addProperty("response",result.toString());
         		parseResponse(newResult);
         	}else if (result instanceof SoapFault){
-        		Log.d ("background soap request",((SoapFault)result).toString());
+        		logcat (((SoapFault)result).toString());
         		parseResponse (null);
         	}else{
         		parseResponse((SoapObject) result);
@@ -126,7 +129,7 @@ public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams,
 	}
 	
 	private void logcat(String message){
-		Log.d ("BackgroundSoapRequest",message);
+		Log.i ("BackgroundSoapRequest",message);
 	}
 
 }

@@ -6,7 +6,19 @@ import org.ksoap2.serialization.SoapPrimitive;
 
 import android.util.Log;
 
+/**
+ * 
+ * Is a base class for all the data received from the server, that has actually been packed in a object like structur
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public abstract class FormSoapObjectParser extends SoapObjectParser {
+	
+	/**
+	 * defines the names of elements that are recognised in the parsing process
+	 */
 	
 	public enum Name{
 		UNDEFINED ("undefined"),
@@ -107,29 +119,44 @@ public abstract class FormSoapObjectParser extends SoapObjectParser {
 		}
 	}
 	
+	/**
+	 * constructor, only parses not null SoapObjects
+	 * @param input
+	 */
+	
 	public FormSoapObjectParser (SoapObject input){
 		if (input != null){
 			parseObject(input);
 		}
 	}
 	
+	/**
+	 * this is the basic parser
+	 * @param input
+	 */
+	
 	protected void parseObject (SoapObject input){
 		for (int i=0;i<input.getPropertyCount();i++){
 			Object property = input.getProperty(i);
 			PropertyInfo properties = new PropertyInfo();
 			input.getPropertyInfo(i,properties);
+			// try to parse an input as primitive, if it fails try to parse it as object
 			try{
 				this.handle((SoapPrimitive)property, properties.getName());
 			}catch (Exception ex){
-				//Log.d ("handling primitive",ex.getMessage());
 				try{
 					this.handle((SoapObject)property, properties.getName());
 				}catch (Exception nex){
-					//Log.d ("handling object",nex.getMessage());
 				}
 			}
 		}
 	}
+	
+	/**
+	 * handles the SoapPrimitive input types
+	 * @param property
+	 * @param propertyName
+	 */
 	
 	protected void handle (SoapPrimitive property, String propertyName){
 		boolean found = false;
@@ -139,10 +166,17 @@ public abstract class FormSoapObjectParser extends SoapObjectParser {
 				found = true;
 			}
 		}
+		// if an input type is not found, then tell the programmer
 		if (!found){
-			Log.d("primitve renderer in "+this.getClass(),"no handle for "+propertyName);
+			Log.i("primitve renderer in "+this.getClass(),"no handle for "+propertyName);
 		}
 	}
+	
+	/**
+	 * handles the SoapObject input types
+	 * @param property
+	 * @param propertyName
+	 */
 	
 	protected void handle (SoapObject property, String propertyName){
 		boolean found = false;
@@ -152,12 +186,25 @@ public abstract class FormSoapObjectParser extends SoapObjectParser {
 				found = true;
 			}
 		}
+		// if an input type is not found, then tell the programmer
 		if (!found){
-			Log.d("object renderer in "+this.getClass(),"no handle for "+propertyName);
+			Log.i("object renderer in "+this.getClass(),"no handle for "+propertyName);
 		}
 	}
 	
+	/**
+	 * the real projection on the object data is done in subclasses
+	 * @param property
+	 * @param name
+	 */
+	
 	protected abstract void saveProperty (String property,Name name);
+	
+	/**
+	 * the real projection on the object type is done in subclasses
+	 * @param property
+	 * @param name
+	 */
 	
 	protected abstract void saveObject (SoapObject property, Name name);
 }

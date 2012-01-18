@@ -6,6 +6,17 @@ import java.util.List;
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
+import com.choschi.memdroid.data.rule.FormQuestionConstantRule;
+import com.choschi.memdroid.data.rule.FormQuestionQuestionRule;
+import com.choschi.memdroid.data.rule.FormQuestionRule;
+
+/**
+ * 
+ * class representing a single FormQuestion in a questionnaire
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class FormQuestion extends FormSoapObjectParser {
 
@@ -200,8 +211,22 @@ public class FormQuestion extends FormSoapObjectParser {
 		this.unit = unit;
 	}
 	
+	/**
+	 * get the label
+	 * @return label string
+	 */
+	
 	public String getLabel(){
 		return defaultName;
+	}
+	
+	/**
+	 * get all the FormQuestionLabel objects 
+	 * @return
+	 */
+	
+	public List<FormQuestionLabel> getAllLabels(){
+		return labels;
 	}
 	
 }

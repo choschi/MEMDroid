@@ -1,8 +1,17 @@
-package com.choschi.memdroid.data;
+package com.choschi.memdroid.data.patient;
 
 import org.ksoap2.serialization.SoapObject;
 
+import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.interfaces.Serializable;
+
+/**
+ * 
+ * Contains a PatientPermission data set
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class PatientPermission extends FormSoapObjectParser implements Serializable {
 	
@@ -10,6 +19,10 @@ public class PatientPermission extends FormSoapObjectParser implements Serializa
 	private String patientPermissionId;
 	private String permission;
 	
+	/**
+	 * constructor
+	 * @param input
+	 */
 	
 	public PatientPermission(SoapObject input) {
 		super(input);
@@ -34,6 +47,10 @@ public class PatientPermission extends FormSoapObjectParser implements Serializa
 	protected void saveObject(SoapObject property, Name name) {
 
 	}
+	
+	/**
+	 * @return get the permission character
+	 */
 	
 	public String getCharacter(){
 		return permission;

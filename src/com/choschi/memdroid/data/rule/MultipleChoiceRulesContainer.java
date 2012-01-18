@@ -8,6 +8,14 @@ import org.ksoap2.serialization.SoapObject;
 import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.data.form.FormQuestionLabel;
 
+/**
+ * 
+ * contains all the rules for a form
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class MultipleChoiceRulesContainer extends FormSoapObjectParser {
 	
 	private RuleErrorText errorText;

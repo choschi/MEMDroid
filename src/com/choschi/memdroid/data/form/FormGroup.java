@@ -5,8 +5,15 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
+
+/**
+ * 
+ * Form Group is a container for a list of FormQuestion
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class FormGroup extends FormSoapObjectParser {
 	
@@ -18,6 +25,10 @@ public class FormGroup extends FormSoapObjectParser {
 	
 	private List<FormQuestion> questions;
 	
+	/**
+	 * constructor
+	 * @param input
+	 */
 	
 	public FormGroup (SoapObject input){
 		super(input);

@@ -6,14 +6,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.data.PatientFieldData;
+import com.choschi.memdroid.data.form.FormAnswer;
 import com.choschi.memdroid.data.form.FormQuestion;
 import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.ui.FormQuestionFactory.PresentationType;
@@ -109,19 +112,40 @@ public class FormElement extends LinearLayout implements OnTouchListener,OnDateS
 	 * 
 	 * @return actual patient field data
 	 */
-	//TODO change whenever you know what the type of the field is needed to send back the form data
-	public PatientFieldData getPatientFieldData(){
+	// TODO check if you return the correct stuff for the different presentation types
+	public FormAnswer getAnswer(){
 		String val = "";
 		View child = right.getChildAt(0);
 		switch (type){
-			case MULTIPLECHOICE:
+			case DROPDOWN:
 				val = ((AdapterItem)((Spinner)child).getSelectedItem()).getId();
+			break;
+			case SLIDER_1:
+			case SLIDER_2:
+				val = ""+((SeekBar)child).getProgress();
+			break;
+			case RADIO_BUTTON:
+				RadioGroup group = ((RadioGroup)child);
+				for (int i=0; i<group.getChildCount();i++){
+					RadioButton button = (RadioButton)group.getChildAt(i);
+					if (button.isChecked()){
+						val = ""+button.getId();
+						break;
+					}
+				}
+			break;
+			case CHECKBOX:
+				CheckBox box = (CheckBox)child;
+				val = "0";
+				if (box.isChecked()){
+					val = ""+box.getId();
+				}
 			break;
 			default:
 				val = ((EditText)child).getText().toString();
 			break;
 		}
-		return new PatientFieldData (""+question.getQuestionId(),val);
+		return new FormAnswer (question.getDefaultName(),val);
 	}
 
 

@@ -1,9 +1,16 @@
-package com.choschi.memdroid.data.form;
+package com.choschi.memdroid.data.rule;
 
 import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
-import com.choschi.memdroid.data.rule.RuleText;
+
+/**
+ * 
+ * base class for all the form question rules, which are ignored for instance
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public abstract class FormQuestionRule extends FormSoapObjectParser {
 
@@ -11,6 +18,11 @@ public abstract class FormQuestionRule extends FormSoapObjectParser {
 	private String operator;
 	private int ruleId;
 	private RuleText ruleText;
+	
+	/**
+	 * constructor
+	 * @param input
+	 */
 	
 	public FormQuestionRule(SoapObject input) {
 		super(input);
@@ -40,17 +52,37 @@ public abstract class FormQuestionRule extends FormSoapObjectParser {
 		}
 	}
 	
+	/**
+	 * is the rule mandatory
+	 * @return
+	 */
+	
 	public boolean isMandatory(){
 		return mandatory;
 	}
+	
+	/**
+	 * what is the operator
+	 * @return
+	 */
 	
 	public String getOperator(){
 		return operator;
 	}
 	
+	/**
+	 * get the id
+	 * @return
+	 */
+	
 	public int getId (){
 		return ruleId;
 	}
+	
+	/**
+	 * get the message if the rule is not fulfilled
+	 * @return
+	 */
 	
 	public String getMessage(){
 		return ruleText.getMessage();

@@ -5,11 +5,18 @@ import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.interfaces.AdapterItem;
 
-public class SubFormContainer extends FormSoapObjectParser implements AdapterItem {
+/**
+ * 
+ * SubForm contains all the FormSection elements which make up the sub form
+ * 
+ * @author Christoph Isch
+ *
+ */
+
+public class SubForm extends FormSoapObjectParser implements AdapterItem {
 	
 	private String date;
 	private String defaultName;
@@ -23,7 +30,12 @@ public class SubFormContainer extends FormSoapObjectParser implements AdapterIte
 	
 	private List<FormSection> sections;
 	
-	public SubFormContainer (SoapObject input){
+	/**
+	 * constructor
+	 * @param input
+	 */
+	
+	public SubForm (SoapObject input){
 		super (input);
 	}
 	

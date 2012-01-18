@@ -16,11 +16,19 @@ import android.widget.LinearLayout;
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.Client.ClientMessages;
-import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.data.PatientFieldData;
+import com.choschi.memdroid.data.patient.PatientField;
+import com.choschi.memdroid.data.patient.PatientFieldData;
 import com.choschi.memdroid.interfaces.ClientListener;
 import com.choschi.memdroid.ui.PatientFieldFactory;
 import com.choschi.memdroid.ui.PatientFormElement;
+
+/**
+ * 
+ * Displays the form for the collection of data for anew patient
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class PatientNewFragment extends Fragment implements ClientListener,OnClickListener  {
 		

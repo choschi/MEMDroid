@@ -5,9 +5,16 @@ import java.util.List;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import com.choschi.memdroid.data.FormDefinition;
 import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.interfaces.AdapterItem;
+
+/**
+ * 
+ * Form container class, strips all the form data together
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class Form extends FormSoapObjectParser implements AdapterItem{
 	
@@ -18,6 +25,12 @@ public class Form extends FormSoapObjectParser implements AdapterItem{
 	private String studyName;
 	private String version;
 	private FormDefinition definition;
+	
+	/**
+	 * same problem here as it is with study, the data is just put plain in an array
+	 * so no FormSoapObjectParser black magic
+	 * @param input
+	 */
 	
 	public Form(SoapObject input) {
 		super(input);
@@ -37,6 +50,12 @@ public class Form extends FormSoapObjectParser implements AdapterItem{
 	@Override
 	protected void saveObject(SoapObject property, Name name) {		
 	}
+	
+	/**
+	 * set the definition fot this form
+	 * @param def
+	 * @return true on success, false on already defined
+	 */
 	
 	public boolean addDefinition (FormDefinition def){
 		if (definition == null){
@@ -140,5 +159,13 @@ public class Form extends FormSoapObjectParser implements AdapterItem{
 	
 	public List<FormQuestion> getQuestions(){
 		return definition.getQuestions();
+	}
+	/**
+	 * get the sub forms
+	 * @return
+	 */
+	
+	public List<SubForm> getSubforms(){
+		return definition.getSubforms();
 	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    	<string name="gender_f">female</string>
-    	<string name="gender_m">male</string>
-    	<string name="gender_u">unspecified</string>
+    	<string name="gender_f">weiblich</string>
+    	<string name="gender_m">männlich</string>
+    	<string name="gender_u">keine Angabe</string>
 </resources>

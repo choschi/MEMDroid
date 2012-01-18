@@ -1,5 +1,6 @@
 package com.choschi.memdroid.ui.fragment;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,20 +13,20 @@ import com.choschi.memdroid.Client;
 import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.data.ListOfAdapterItemAdapter;
-import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.data.form.SubForm;
 import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.interfaces.ClientListener;
 
 /**
  * 
- * displays the list of the forms on the study fragment view
+ * Fragment which displays the list of sub forms
  * 
  * @author Christoph Isch
  *
  */
 
-public class StudyFormsFragment extends ListFragment implements ClientListener{
-
+public class StudySubformFragment extends ListFragment implements ClientListener{
+	
     int mCurCheckPosition = 0;
     
     @Override
@@ -34,7 +35,7 @@ public class StudyFormsFragment extends ListFragment implements ClientListener{
         if (savedInstanceState == null) {
         	Client.getInstance().registerClientListener(this);
         	List<AdapterItem> list = new ArrayList<AdapterItem>();
-        	list.addAll(Client.getInstance().getActualStudy().getForms());
+        	list.addAll(Client.getInstance().getActualForm().getSubforms());
         	setListAdapter (new ListOfAdapterItemAdapter(getActivity(),R.layout.study_row,list));
         }
        
@@ -64,8 +65,8 @@ public class StudyFormsFragment extends ListFragment implements ClientListener{
     void showDetails(int index) {
         mCurCheckPosition = index;
         if (getListAdapter() != null){
-        	Form form = (Form)getListAdapter().getItem(mCurCheckPosition);
-        	Client.getInstance().showForm(form);
+        	SubForm form = (SubForm)getListAdapter().getItem(mCurCheckPosition);
+        	Client.getInstance().showSubForm(form);
         }
     }
     

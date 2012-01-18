@@ -8,6 +8,14 @@ import org.ksoap2.serialization.SoapObject;
 import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.data.form.FormQuestion;
 
+/**
+ * 
+ * RuleQuestionDeactivator, not commented on purpose
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class RuleQuestionDeactivator extends FormSoapObjectParser {
 	
 	private String dataType;

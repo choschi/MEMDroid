@@ -1,9 +1,17 @@
-package com.choschi.memdroid.data;
+package com.choschi.memdroid.data.patient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
+
+/**
+ * 
+ * subclasses the Patient, this facilitates the handling of patient data when saving to the web services
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class NewPatient extends Patient{
 	
@@ -12,8 +20,11 @@ public class NewPatient extends Patient{
 	private String mrn;
 	private List<PatientPermission> permissions;
 	private String yearOfBirth;
-	private String[] stringPermissions;
 	
+	/**
+	 * constructor
+	 * @param response
+	 */
 	
 	public NewPatient (SoapObject response){
 		super(response);
@@ -87,18 +98,11 @@ public class NewPatient extends Patient{
 	public void setYearOfBirth(String yearOfBirth) {
 		this.yearOfBirth = yearOfBirth;
 	}
-	@Deprecated
-	public String[] getPermissionsOld(){
-		if (stringPermissions == null){
-			stringPermissions = new String[permissions.size()];
-			int counter = 0;
-			for (PatientPermission permission : permissions){
-				stringPermissions[counter] = permission.getCharacter();
-				counter++;
-			}
-		}
-		return stringPermissions;
-	}
+	
+	/**
+	 * get the list of permissions
+	 * @return
+	 */
 	
 	public List<PatientPermission> getPermissions(){
 		return permissions;

@@ -2,8 +2,16 @@ package com.choschi.memdroid.data.rule;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
+import com.choschi.memdroid.data.form.FormName;
+
+/**
+ * 
+ * RuleLabelIf is paired with a rule, not commented on purpose
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class RuleLabelsIf extends FormSoapObjectParser {
 	

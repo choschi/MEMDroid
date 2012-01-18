@@ -12,6 +12,15 @@ import com.choschi.memdroid.Client;
 import com.choschi.memdroid.R;
 import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.interfaces.ClientListener;
+
+/**
+ * 
+ * Study Fragment is the container view for the display of studies
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class StudyFragment extends Fragment implements ClientListener {
 
 	int mCurCheckPosition = 0;
@@ -44,7 +53,7 @@ public class StudyFragment extends Fragment implements ClientListener {
 	public void notify(ClientMessages message) {
 			switch (message){
 			case STUDIES_LIST:
-				Log.d ("fragment", "the listener for STUDIES_LIST has been called!");
+				Log.i ("fragment", "the listener for STUDIES_LIST has been called!");
 				if (getActivity() != null){
 					View listView = getActivity().findViewById(R.id.studiesListOutlet);
 					listView.setVisibility(1);
@@ -59,28 +68,44 @@ public class StudyFragment extends Fragment implements ClientListener {
 				}
 			break;
 			case STUDY_DETAILS:
-				Log.d ("fragment", "the listener for STUDY_DETAILS has been called!");
+				Log.i ("fragment", "the listener for STUDY_DETAILS has been called!");
 				if (getActivity() != null){
-					View outletView = getActivity().findViewById(R.id.studiesSubListOutlet);
+					View outletView = getActivity().findViewById(R.id.studiesFormListOutlet);
 					outletView.setVisibility(1);
 					//Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
 					Fragment formsFragment = new StudyFormsFragment();
 					FragmentTransaction formsTransaction = getFragmentManager().beginTransaction();
 					// Replace whatever is in the fragment_container view with this fragment,
 					// and add the transaction to the back stack
-					formsTransaction.replace(R.id.studiesSubListOutlet, formsFragment);
+					formsTransaction.replace(R.id.studiesFormListOutlet, formsFragment);
 					//transaction.addToBackStack(null);
 					// Commit the transaction
 					formsTransaction.commit();
 				}
 			break;
 			case SHOW_FORM:
-				Log.d ("fragment", "the listener for SHOW_FORM has been called!");
+				Log.i ("fragment", "the listener for SHOW_FORM has been called!");
 				if (getActivity() != null){
 					View formView = getActivity().findViewById(R.id.studiesDetailOutlet);
 					formView.setVisibility(1);
 					//Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
-					Fragment formFragment = new StudyFormFragment(Client.getInstance().getActualForm());
+					Fragment subformsFragment = new StudySubformFragment();
+					FragmentTransaction subformTransaction = getFragmentManager().beginTransaction();
+					// Replace whatever is in the fragment_container view with this fragment,
+					// and add the transaction to the back stack
+					subformTransaction.replace(R.id.studiesSubFormListOutlet, subformsFragment);
+					//transaction.addToBackStack(null);
+					// Commit the transaction
+					subformTransaction.commit();
+				}
+			break;
+			case SHOW_SUB_FORM:
+				Log.i ("fragment", "the listener for SHOW_FORM has been called!");
+				if (getActivity() != null){
+					View formView = getActivity().findViewById(R.id.studiesDetailOutlet);
+					formView.setVisibility(1);
+					//Fragment formsFragment = new StudyFormsFragment(Client.getInstance().getActualStudy());
+					Fragment formFragment = new StudyFormFragment(Client.getInstance().getActualSubForm());
 					FragmentTransaction formTransaction = getFragmentManager().beginTransaction();
 					// Replace whatever is in the fragment_container view with this fragment,
 					// and add the transaction to the back stack

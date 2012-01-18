@@ -4,6 +4,14 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
 
+/**
+ * 
+ * contains the error message for a rule, not commented on purpose
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class RuleErrorText extends FormSoapObjectParser {
 	
 	private String language;

@@ -24,4 +24,7 @@
     <string name="usernameLabel">Benutzername</string>
     <string name="passwordLabel">Passwort</string>
     <string name="formSaveButtonCaption">Formular speichern</string>
+    <string name="noPatientText">Bitte einen Patienten wählen, bevor eine Studie gewählt wird</string>
+    <string name="buttonOkay">In Ordnung</string>
+    <string name="patientSelected">Patient ausgewählt.</string>
 </resources>

@@ -12,15 +12,29 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * 
+ * Represents a ListAdapter for AdapterItems, which unifies the handling of giving lists of Objects to Lists and Spinners 
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class ListOfAdapterItemAdapter extends ArrayAdapter<AdapterItem> {
 
 	private List<AdapterItem> items;
+	
+	/**
+	 * constructor
+	 * @param context
+	 * @param textViewResourceId
+	 * @param items
+	 */
 	
 	public ListOfAdapterItemAdapter (Context context, int textViewResourceId, List<AdapterItem> items) {
         super(context, textViewResourceId, items);
         this.items = items;
 	}
-	
 	
 	@Override
     public View getView(int position, View convertView, ViewGroup parent) {

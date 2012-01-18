@@ -2,12 +2,10 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.serialization.SoapObject;
 
-import android.util.Log;
-
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.data.NewPatient;
-import com.choschi.memdroid.data.PatientFieldData;
-import com.choschi.memdroid.data.PatientPermission;
+import com.choschi.memdroid.data.patient.NewPatient;
+import com.choschi.memdroid.data.patient.PatientFieldData;
+import com.choschi.memdroid.data.patient.PatientPermission;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
@@ -27,7 +25,7 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 	// The PatientDataFields are available in the NewPatient parameter, but getting them directly by id to fill
 	// the country, gender and language field feels very awkward...
 	
-	public ServerInsertPatientRequest(SoapRequestParams params, String sessionId, String userId, NewPatient patient) {
+	public ServerInsertPatientRequest(SoapRequestParams params, String sessionId, String userId, String departmentId, NewPatient patient) {
 		super(params);
 		request.addProperty ("serverSessionId",sessionId);
 		request.addProperty ("userId",userId);
@@ -46,7 +44,7 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 			}
 		}
 		request.addProperty ("countryId",country);
-		request.addProperty ("departmentId",Client.getInstance().getDepartment().getId());
+		request.addProperty ("departmentId",departmentId);
 		request.addProperty ("encryptedId",patient.getEncryptedId());
 		request.addProperty ("gender",gender);
 		request.addProperty ("hashCodes",patient.getHashCodes());
@@ -59,13 +57,11 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 		}
 		request.addProperty ("perms","");//patient.getPermissions());
 		request.addProperty ("yearOfBirth",patient.getYearOfBirth());
-		Log.d ("request",request.toString());
 		envelope.headerOut = null;
 	}
 	
 	@Override
 	protected void parseResponse (SoapObject response){
-		Log.d ("patient created",response.toString());
 		state = Boolean.parseBoolean(response.toString());
 	}
 	

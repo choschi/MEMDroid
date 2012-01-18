@@ -2,16 +2,29 @@ package com.choschi.memdroid.data.form;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.FormName;
 import com.choschi.memdroid.data.FormSoapObjectParser;
+import com.choschi.memdroid.interfaces.AdapterItem;
 
-public class FormQuestionLabel extends FormSoapObjectParser {
+/**
+ * 
+ * a label for a FormQuestion that has more than one possible answer
+ * 
+ * @author Christoph Isch
+ *
+ */
+
+public class FormQuestionLabel extends FormSoapObjectParser implements AdapterItem {
 
 	private boolean defaultValue;
-	private int labelId;
+	private String labelId;
 	private int value;
 	private int valueRange;
 	private FormName name;
+	
+	/**
+	 * constructor
+	 * @param input
+	 */
 	
 	public FormQuestionLabel(SoapObject input) {
 		super(input);
@@ -24,7 +37,7 @@ public class FormQuestionLabel extends FormSoapObjectParser {
 				defaultValue = parseBoolean(property);
 			break;
 			case LABEL_ID:
-				labelId = parseInteger(property);
+				labelId = property;
 			break;
 			case VALUE:
 				value = parseInteger(property);
@@ -44,13 +57,27 @@ public class FormQuestionLabel extends FormSoapObjectParser {
 		}
 	}
 	
-	public int getId (){
+	/**
+	 * get the label id
+	 */
+	
+	public String getId (){
 		return labelId;
 	}
+	
+	/**
+	 * see if this should be selected by default
+	 * @return state
+	 */
 	
 	public boolean isDefault(){
 		return defaultValue;
 	}
+	
+	/**
+	 * label means in this case the String representation of the label as a whole
+	 * @return
+	 */
 	
 	public String getLabel(){
 		return name.getName();
@@ -82,5 +109,10 @@ public class FormQuestionLabel extends FormSoapObjectParser {
 	 */
 	public void setValueRange(int valueRange) {
 		this.valueRange = valueRange;
+	}
+	
+	@Override
+	public String toString(){
+		return name.getName();
 	}
 }

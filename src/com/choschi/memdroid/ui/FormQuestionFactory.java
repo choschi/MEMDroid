@@ -1,39 +1,49 @@
 package com.choschi.memdroid.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.choschi.memdroid.data.PatientField;
 import com.choschi.memdroid.data.form.FormQuestion;
+import com.choschi.memdroid.data.form.FormQuestionLabel;
 import com.choschi.memdroid.interfaces.AdapterItem;
-import com.choschi.memdroid.util.FixedLists;
 
 
 /**
+ *
+ * Creates the FormElements all the FormQuestions
  * 
  * @author Christoph Isch
  *
- * Creates the PatientFormElements all sorts of PatientFields
  */
 
 public class FormQuestionFactory {
 	
 	// outer type
-	//TODO get real values here
 	public enum PresentationType{
 		UNDEFINED ("undefined"),
-		MULTIPLECHOICE ("multiplechoice"),
+		REAL ("real"),
 		DATE ("date"),
-		ALPHANUM ("alphanumeric"),
-		TEXT ("all"),
-		NUMBER ("number"),
+		RADIO_BUTTON ("radiobutton"),
+		DROPDOWN ("dropdown"),
+		STRING ("string"),
+		CHECKBOX ("checkbox"),
+		SLIDER_1 ("slider1"),
+		SLIDER_2 ("slider2"),
+		INTEGER ("integer"),
 		;
 		private String type;
 		
@@ -48,20 +58,12 @@ public class FormQuestionFactory {
 	}
 	
 	// inner type
-	//TODO get real values here
 	public enum DataType{
 		UNDEFINED ("undefined"),
-		COUNTRY ("country"),
-		COUNTRY2 ("country2"),
-		DEPARTMENT ("department"),
-		NONE ("none"),
-		MRN ("mrn"),
-		SSN ("ssn"),
-		FIRSTNAME ("firstname"),
-		LASTNAME ("lastname"),
-		DATE_OF_BIRTH ("dob"),
-		LANGUAGE ("lang"),
-		GENDER ("gender"),
+		NULLVALUE ("NULLVALUE"),
+		INTEGER ("integer"),
+		STRING ("string"),
+		REAL ("real"),
 		;
 		private String type;
 		
@@ -77,14 +79,12 @@ public class FormQuestionFactory {
 	
 	/**
 	 * 
-	 * factory method for the PatientFormElements
+	 * factory method for the FormElements
 	 * 
 	 * @param question
 	 * @param context
-	 * @return a patient form ui element
+	 * @return a form ui element
 	 */
-	
-	//TODO change the factory so that it makes something useful with the FormQuestion Elements
 	
 	public static FormElement factory (FormQuestion question, Context context){
 		PresentationType presentation = PresentationType.UNDEFINED;
@@ -105,30 +105,54 @@ public class FormQuestionFactory {
 	    label.setText(question.getLabel());
 	    form.fillLeft(label);
 		if (data == DataType.UNDEFINED || presentation == PresentationType.UNDEFINED){
-			Log.d ("PatientFieldFactory",question.getPresentationType()+":"+question.getDataType()+": einer der beiden typen ist noch nicht implementiert");
+			Log.i ("FormElementFactory",question.getPresentationType()+":"+question.getDataType()+": one of the two types is not yet implemented");
 		}else{
 			switch (presentation){
-				case MULTIPLECHOICE:
-					switch (data){
-						case COUNTRY:
-						case COUNTRY2:
-							form.fillRight(createSpinnerForAdapter(context,question.getQuestionId(),FixedLists.getInstance().getCountries(null)), presentation);
-						break;
-						case DEPARTMENT:
-							// Department can not be chosen anymore at this point 							
-							return null;
-						case LANGUAGE:
-							form.fillRight(createSpinnerForAdapter(context,question.getQuestionId(),FixedLists.getInstance().getLanguages(null)), presentation);
-						break;
-						case GENDER:
-							form.fillRight(createSpinnerForAdapter(context,question.getQuestionId(),FixedLists.getInstance().getGenders(null)), presentation);
-						break;
+				case RADIO_BUTTON:
+					RadioGroup radios = new RadioGroup(context);
+					if(question.getAllLabels() != null){
+						for (FormQuestionLabel item : question.getAllLabels()){
+							RadioButton radio = new RadioButton(context);
+							radio.setText(item.toString());
+							radio.setId(item.getValue());
+							radio.setActivated(item.isDefault());
+							radios.addView(radio);
+						}
+					}
+					form.fillRight(radios, presentation);
+				break;
+				case DROPDOWN:
+					List<AdapterItem> items = new ArrayList<AdapterItem>();
+					items.addAll(question.getAllLabels());
+					form.fillRight(createSpinnerForAdapter(context,question.getQuestionId(),items), presentation);
+				break;
+				case CHECKBOX:
+					if(question.getAllLabels() != null){
+						if (question.getAllLabels().size()> 1){
+							Log.i ("FormQuestionFactory","who the heck had the idea use more than one checkbox!");
+						}
+						FormQuestionLabel item = question.getAllLabels().get(0);
+						CheckBox box = new CheckBox(context);
+						box.setText(item.toString());
+						box.setId(item.getValue());
+						box.setChecked(item.isDefault());
+						form.fillRight(box,presentation);
 					}
 				break;
+				case SLIDER_1:
+				case SLIDER_2:
+					SeekBar slider = new SeekBar(context);
+					LayoutParams params = new LinearLayout.LayoutParams(200, LayoutParams.WRAP_CONTENT);
+					slider.setLayoutParams(params);
+					slider.setId(question.getQuestionId());
+					form.fillRight(slider, presentation);
+				break;
+				case INTEGER:
+				case STRING:
+				case REAL:
 				case DATE:
-				case ALPHANUM:
-				case NUMBER:
-				case TEXT:
+				case UNDEFINED:
+				default:
 					EditText inputView = new EditText(context);
 					inputView.setWidth(200);
 					form.fillRight(inputView,presentation);
@@ -140,7 +164,7 @@ public class FormQuestionFactory {
 	
 	/**
 	 * 
-	 * creates spinners for multiple choice fields
+	 * creates spinners for multiple choice and dropdown fields
 	 * 
 	 * @param context
 	 * @param id

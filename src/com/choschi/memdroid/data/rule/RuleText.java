@@ -4,6 +4,14 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.choschi.memdroid.data.FormSoapObjectParser;
 
+/**
+ * 
+ * RuleText, not commented on purpose
+ * 
+ * @author Christoph Isch
+ *
+ */
+
 public class RuleText extends FormSoapObjectParser {
 
 	private String language;

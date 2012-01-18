@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -41,16 +42,22 @@ import com.choschi.memdroid.util.FixedLists;
  *
  */
 
-public class MEMDroidActivity extends Activity implements OnClickListener,ClientListener, OnCancelListener {
+public class MEMDroidActivity extends Activity implements OnClickListener,ClientListener, OnCancelListener, DialogInterface.OnClickListener {
     
 	public static final int LOGIN_DIALOG = 0;
 	public static final int PROGRESS_DIALOG = 1;
 	public static final int DEPARTMENT_DIALOG = 2;
-	public static final int DATE_DIALOG = 3;    
+	public static final int DATE_DIALOG = 3;
+	public static final int NO_PATIENT_DIALOG = 4;
+	public static final int PATIENT_DIALOG = 5;
 	private Dialog loginDialog;
 	private ProgressDialog progressDialog;
 	private Dialog departmentDialog;
 	private DatePickerDialog dateDialog;
+	private AlertDialog alrt;
+	private AlertDialog alert;
+	
+	private MenuItem logoutButton;
 	
 	/**
 	 * setting the main view layout from the resources directory
@@ -85,9 +92,10 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    // login is pressed, show the login dialog
+	    // logout is pressed, logout
 	    case R.id.mainMenuLogin:
-	    	this.showLoginDialog();
+	    	logoutButton.setEnabled(false);
+	    	Client.getInstance().logOut();
 	      	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
@@ -151,6 +159,27 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				Calendar c = Calendar.getInstance();
 				dateDialog = new DatePickerDialog(this,Client.getInstance().getDateWaiter(),c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH));
 				return dateDialog;
+			case NO_PATIENT_DIALOG:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(R.string.noPatientText);
+				builder.setCancelable(false);
+				builder.setPositiveButton(
+					R.string.buttonOkay,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					}
+				);
+				alert = builder.create();
+				return alert;
+			case PATIENT_DIALOG:
+				AlertDialog.Builder build = new AlertDialog.Builder(this);
+				build.setMessage(R.string.patientSelected);
+				build.setCancelable(false);
+				build.setPositiveButton(R.string.buttonOkay,this);
+				alrt = build.create();
+				return alrt;
 		}
 		return null;
 	}
@@ -173,6 +202,7 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				Client.getInstance().registerClientListener(this);
 				Client.getInstance().login(username,password);
 			break;
+			// and the click on the department dismiss/select button
 			case R.id.departmentDialogDismissButton:
 				departmentDialog.dismiss();
 				Spinner departmentSpinner = (Spinner)departmentDialog.findViewById(R.id.departmentDialogSpinner);
@@ -195,7 +225,14 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	public void notify (ClientMessages message){
 		switch (message){
 			case USER_DATA:
-				showDialog(DEPARTMENT_DIALOG);
+				// if there's only one department chose it right away
+				if (Client.getInstance().getDepartments().size() > 1){
+					showDialog(DEPARTMENT_DIALOG);
+				}else{
+					Client.getInstance().setActualDepartment(Client.getInstance().getDepartments().get(0));
+					Client.getInstance().requestPatientFieldsInsert();
+					showDialog(PROGRESS_DIALOG);
+				}
 			break;
 			case LOGIN_FAILED:
 				showDialog(LOGIN_DIALOG);
@@ -229,6 +266,9 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			                    this, "studies", StudyFragment.class));
 			    actionBar.addTab(studies);
 			    
+			    View frags = this.findViewById(R.id.fragmentContainer);
+				frags.setVisibility(View.VISIBLE);
+			    logoutButton.setEnabled(true);
 				break;
 			case SHOW_DATE_PICKER:
 				showDialog(DATE_DIALOG);
@@ -236,6 +276,20 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			case PATIENT_SEARCH:
 			case PATIENT_SAVE:
 				progressDialog.dismiss();
+				break;
+			case NO_PATIENT:
+				showDialog(NO_PATIENT_DIALOG);
+				break;
+			case PATIENT_SELECTED:
+				showDialog(PATIENT_DIALOG);
+				break;
+			case RESTORE_BASE:
+				View base = this.findViewById(R.id.mainContentStartup);
+				base.setVisibility(View.VISIBLE);
+				ActionBar actionB = getActionBar();
+				actionB.removeAllTabs();
+				View fragments = this.findViewById(R.id.fragmentContainer);
+				fragments.setVisibility(View.INVISIBLE);
 				break;
 		}
 	}
@@ -245,4 +299,15 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 		MEMDroidActivity.this.finish();
 	}
 
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		dialog.dismiss();
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+	    logoutButton = menu.getItem(0);
+	    return true;
+	}
+	
 }

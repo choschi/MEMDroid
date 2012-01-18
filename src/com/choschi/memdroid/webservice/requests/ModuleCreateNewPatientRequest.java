@@ -4,11 +4,9 @@ import java.util.Arrays;
 
 import org.ksoap2.serialization.SoapObject;
 
-import android.util.Log;
-
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.data.NewPatient;
-import com.choschi.memdroid.data.PatientFieldData;
+import com.choschi.memdroid.data.patient.NewPatient;
+import com.choschi.memdroid.data.patient.PatientFieldData;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
@@ -47,7 +45,6 @@ public class ModuleCreateNewPatientRequest extends BackgroundSoapRequest {
 	
 	@Override
 	protected void parseResponse (SoapObject response){
-		Log.d ("patient created",response.toString());
 		patient = new NewPatient (response);
 		patient.setPatientFieldDatas(Arrays.asList(input));
 	}

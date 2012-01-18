@@ -2,8 +2,6 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.serialization.SoapObject;
 
-import android.util.Log;
-
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
@@ -27,7 +25,6 @@ public class ServerLoginRequest extends BackgroundSoapRequest {
 		request.addProperty ("serverSessionId",sessionId);
 		request.addProperty ("signature",signature);
 		request.addProperty ("userId",userId);
-		Log.d ("request",request.toString());
 		envelope.headerOut = null;
 	}
 	

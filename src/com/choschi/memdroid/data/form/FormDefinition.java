@@ -1,12 +1,11 @@
-package com.choschi.memdroid.data;
+package com.choschi.memdroid.data.form;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.serialization.SoapObject;
 
-import com.choschi.memdroid.data.form.FormQuestion;
-import com.choschi.memdroid.data.form.SubFormContainer;
+import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.data.rule.MultipleChoiceRulesContainer;
 
 /**
@@ -17,7 +16,7 @@ import com.choschi.memdroid.data.rule.MultipleChoiceRulesContainer;
 
 public class FormDefinition extends FormSoapObjectParser {
 	
-	private List<SubFormContainer> subForms;
+	private List<SubForm> subForms;
 	private String creationDate;
 	private String defaultName;
 	private String formId;
@@ -59,15 +58,11 @@ public class FormDefinition extends FormSoapObjectParser {
 			break;
 			case SUBFORM:
 				if (subForms == null){
-					subForms = new ArrayList<SubFormContainer>();
+					subForms = new ArrayList<SubForm>();
 				}
-				subForms.add(new SubFormContainer(property));
+				subForms.add(new SubForm(property));
 			break;
 		}
-	}
-
-	public List<SubFormContainer> getSubForms(){
-		return subForms;
 	}
 
 	/**
@@ -140,11 +135,25 @@ public class FormDefinition extends FormSoapObjectParser {
 		this.name = name;
 	}
 	
+	/**
+	 * get a list of all the form questions in the children of this object
+	 * @return a list of form questions
+	 */
+	
 	public List<FormQuestion> getQuestions(){
 		List<FormQuestion> questions = new ArrayList<FormQuestion>();
-		for (SubFormContainer container : subForms){
+		for (SubForm container : subForms){
 			questions.addAll(container.getQuestions());
 		}
 		return questions;
+	}
+	
+	/**
+	 * get all the sub forms of this instance
+	 * @return a list of sub forms
+	 */
+	
+	public List<SubForm> getSubforms(){
+		return subForms;
 	}
 }

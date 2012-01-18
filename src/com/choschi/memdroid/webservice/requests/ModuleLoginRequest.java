@@ -2,8 +2,6 @@ package com.choschi.memdroid.webservice.requests;
 
 import org.ksoap2.serialization.SoapObject;
 
-import android.util.Log;
-
 import com.choschi.memdroid.Client;
 import com.choschi.memdroid.data.ModuleLoginData;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
@@ -26,7 +24,6 @@ public class ModuleLoginRequest extends BackgroundSoapRequest {
 		request.addProperty ("passWord",password);
 		request.addProperty ("serverSessionId",sessionId);
 		request.addProperty ("userName",username);
-		Log.d ("request", request.toString());
 	}
 	
 	@Override

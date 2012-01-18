@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.choschi.memdroid.data.PatientField;
+import com.choschi.memdroid.data.patient.PatientField;
 import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.util.FixedLists;
 
@@ -101,7 +101,7 @@ public class PatientFieldFactory {
 	    label.setText(field.getLabel());
 	    form.fillLeft(label);
 		if (fixedType == FixedFieldType.UNDEFINED || type == FieldType.UNDEFINED){
-			Log.d ("PatientFieldFactory",field.getFieldType()+":"+field.getFixedFieldType()+": einer der beiden typen ist noch nicht implementiert");
+			Log.i ("PatientFieldFactory",field.getFieldType()+":"+field.getFixedFieldType()+": einer der beiden typen ist noch nicht implementiert");
 		}else{
 			switch (type){
 				case MULTIPLECHOICE:

@@ -3,8 +3,6 @@ package com.choschi.memdroid.data;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import android.util.Log;
-
 /**
  * Wrapper for the Module login request response
  * @author choschi
@@ -24,7 +22,6 @@ public class ModuleLoginData{
 	 */
 	
 	public ModuleLoginData(SoapObject response){
-		Log.d ("reponse",response.toString());
 		moduleSessionId = ((SoapPrimitive)response.getProperty("moduleSessionId")).toString();
 		signature = ((SoapPrimitive)response.getProperty("signature")).toString();
 		userId = ((SoapPrimitive)response.getProperty("userId")).toString();

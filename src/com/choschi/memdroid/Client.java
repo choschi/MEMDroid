@@ -8,14 +8,16 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.util.Log;
 
 import com.choschi.memdroid.data.Department;
-import com.choschi.memdroid.data.FormDefinition;
 import com.choschi.memdroid.data.ModuleLoginData;
-import com.choschi.memdroid.data.NewPatient;
-import com.choschi.memdroid.data.Patient;
-import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.data.PatientFieldData;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.data.form.Form;
+import com.choschi.memdroid.data.form.FormAnswer;
+import com.choschi.memdroid.data.form.FormDefinition;
+import com.choschi.memdroid.data.form.SubForm;
+import com.choschi.memdroid.data.patient.NewPatient;
+import com.choschi.memdroid.data.patient.Patient;
+import com.choschi.memdroid.data.patient.PatientField;
+import com.choschi.memdroid.data.patient.PatientFieldData;
 import com.choschi.memdroid.interfaces.ClientListener;
 import com.choschi.memdroid.util.SHA256;
 import com.choschi.memdroid.webservice.BackgroundSoapRequest;
@@ -31,6 +33,7 @@ import com.choschi.memdroid.webservice.requests.ModuleUserDataRequest;
 import com.choschi.memdroid.webservice.requests.ServerGetFormDefinitionRequest;
 import com.choschi.memdroid.webservice.requests.ServerGetListOfFormsRequest;
 import com.choschi.memdroid.webservice.requests.ServerGetListOfStudiesRequest;
+import com.choschi.memdroid.webservice.requests.ServerInsertFormRequest;
 import com.choschi.memdroid.webservice.requests.ServerInsertPatientRequest;
 import com.choschi.memdroid.webservice.requests.ServerLoginRequest;
 import com.choschi.memdroid.webservice.requests.ServerSessionIdRequest;
@@ -66,18 +69,13 @@ public class Client {
 		PATIENT_FIELDS,
 		SHOW_DATE_PICKER,
 		PATIENT_SEARCH,
-		PATIENT_SAVE, SHOW_FORM,
+		PATIENT_SAVE,
+		SHOW_FORM,
+		SHOW_SUB_FORM,
+		NO_PATIENT,
+		PATIENT_SELECTED,
+		RESTORE_BASE,
 	}
-	
-	public static final int LOGIN_SUCCESS = 0;
-	public static final int LOGIN_FAILED = 1;
-	public static final int REQUEST_FAILED = 3;
-	public static final int SHOW_PROGRESS_DIALOG = 4;
-	public static final int USER_DATA = 10;
-	public static final int STUDIES_LIST = 20;
-	public static final int STUDY_DETAILS = 21;
-	public static final int PATIENT_FIELDS = 30;
-
 
 	/**
 	 * variables needed in "session" management
@@ -120,8 +118,9 @@ public class Client {
 
 	private List<Department> departments;
 
-
 	private Form actualForm;
+	
+	private SubForm actualSubForm;
 	
 
 	
@@ -471,11 +470,14 @@ public class Client {
 		params.setAction(BackgroundSoapRequest.ServerBaseAction
 				+ "insertPatientRequest");
 		params.setMethod("insertPatient");
-		BackgroundSoapRequest request = new ServerInsertPatientRequest(params, sessionId, userId, response);
+		BackgroundSoapRequest request = new ServerInsertPatientRequest(params, sessionId, userId, actualDepartment.getId(), response);
 		request.execute(new SoapRequestParams[] {});
 	}
 	
-	
+	/**
+	 * call back for the ServerInsertPatientRequest
+	 * @param state
+	 */
 	
 	public void savedPatient(boolean state){
 		notify (ClientMessages.PATIENT_SAVE);
@@ -519,6 +521,10 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * saves the received patient to a list of searched patients results
+	 * @param patient
+	 */
 	
 	public void receivedSearchedPatient(Patient patient){
 		patientsToGo--;
@@ -528,6 +534,34 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * a patient has been selected, tell the user so
+	 */
+	
+	public void showSelectPatientWarning(){
+		notify (ClientMessages.NO_PATIENT);
+	}
+	
+	/**
+	 * insert data for a form in the database
+	 * @param insert
+	 */
+	
+	public void insertForm(FormAnswer[] insert){
+		if (loggedIn){
+			SoapRequestParams params = new ServerRequestParams();
+			params.setAction(BackgroundSoapRequest.ServerBaseAction
+					+ "insertFormRequest");
+			params.setMethod("insertForm");
+			BackgroundSoapRequest request = new ServerInsertFormRequest(params, sessionId, userId, actualDepartment.getId(), actualPatient.getId(), actualForm, actualSubForm, insert);
+			request.execute(new SoapRequestParams[] {});
+		}
+	}
+	
+	/**
+	 * get a list of all the patient search results
+	 * @return
+	 */
 	
 	public List<Patient> getPatients(){
 		return patients;
@@ -616,18 +650,46 @@ public class Client {
 		this.actualStudy = actualStudy;
 	}
 	
+	/**
+	 * show the form
+	 * @param form
+	 */
 
 	public void showForm(Form form) {
 		actualForm = form;
 		notify (ClientMessages.SHOW_FORM);
 	}
 	
+	/**
+	 * show the selectd sub form
+	 * @param form
+	 */
+	
+	public void showSubForm(SubForm form) {
+		actualSubForm = form;
+		notify (ClientMessages.SHOW_SUB_FORM);
+	}
+	
+	/**
+	 * what is the actually active form
+	 * @return the form
+	 */
+	
 	public Form getActualForm(){
 		return actualForm;
 	}
 	
 	/**
-	 * 
+	 * what is the actually selected sub form
+	 * @return
+	 */
+	
+	public SubForm getActualSubForm(){
+		return actualSubForm;
+	}
+	
+	/**
+	 * get the actual department
 	 * @return the actual Department
 	 */
 	
@@ -636,7 +698,7 @@ public class Client {
 	}
 	
 	/**
-	 * 
+	 * set the department
 	 * @param department to set
 	 */
 	
@@ -644,12 +706,19 @@ public class Client {
 		actualDepartment = department;
 	}
 	
+	/**
+	 * tell the ui to present a date picker dialog
+	 * @param caller
+	 */
 	
 	public void showDatePicker (OnDateSetListener caller){
 		waitingForDate = caller;
 		notify(ClientMessages.SHOW_DATE_PICKER);
 	}
 	
+	/*
+	 * a date has been selected send it to the waiting object
+	 */
 
 	public OnDateSetListener getDateWaiter() {
 		return waitingForDate;
@@ -668,8 +737,30 @@ public class Client {
 	 */
 	
 	public void logOut() {
-		// TODO really implement here the logout functionality
-		this.loggedIn = false;
+		loggedIn = false;
+		username = "";
+		password = "";
+		sessionId = "";
+		userId = "";
+		signature = "";
+		moduleSessionId = "";
+		moduleId = "";
+		patientFieldsInsert = null;
+		patientFieldsSearch = null;
+		actualStudy = null;
+		studies = null;
+		loggingIn = false;
+		downloadingForms = false;
+		formCount = 0;
+		actualDepartment = null;
+		waitingForDate = null;
+		patientsToGo = 0;
+		patients = null;
+		actualPatient = null; 
+		departments = null;
+		actualForm = null;
+		actualSubForm = null;
+		notify (ClientMessages.RESTORE_BASE);
 	}
 
 	/**
@@ -682,14 +773,29 @@ public class Client {
 		Log.i("client", text);
 	}
 
+	/**
+	 * get a list of all the possible departments for the user
+	 * @return list of departments
+	 */
+	
 	public List<Department> getDepartments() {
 		return departments;
 	}
 
+	/**
+	 * define which is the patient we are going to collect data for
+	 * @param patient
+	 */
+	
 	public void setActualPatient(Patient patient) {
-		//TODO give visual feedback to user that the patient is now selected
 		actualPatient = patient;
+		notify(ClientMessages.PATIENT_SELECTED);
 	}
+	
+	/**
+	 * get the patient of interest
+	 * @return patient
+	 */
 	
 	public Patient getActualPatient(){
 		return actualPatient;

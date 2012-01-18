@@ -1,6 +1,8 @@
-package com.choschi.memdroid.data;
+package com.choschi.memdroid.data.patient;
 
 import org.ksoap2.serialization.SoapObject;
+
+import com.choschi.memdroid.data.FormSoapObjectParser;
 
 
 /**
@@ -30,6 +32,11 @@ public class PatientField extends FormSoapObjectParser{
 	private boolean useTime;
 	private boolean useUnspecifiedGender;
 	private String validationRegularExpression;
+	
+	/**
+	 * constructor
+	 * @param response
+	 */
 	
 	public PatientField (SoapObject response){
 		super(response);

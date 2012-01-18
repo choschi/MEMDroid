@@ -1,13 +1,14 @@
 package com.choschi.memdroid.webservice.parameters;
 
 /**
- * wrapper for the soap request parameters 
+ * wrapper for the soap request parameters, abstract so that it can not be instantiated
+ *  
  * @author Christoph Isch
  *
  */
 
 
-public class SoapRequestParams {
+public abstract class SoapRequestParams {
 	private String soapAction;
 	private String soapMethod;
 	protected String soapNamespace;

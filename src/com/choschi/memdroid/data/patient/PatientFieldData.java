@@ -1,7 +1,8 @@
-package com.choschi.memdroid.data;
+package com.choschi.memdroid.data.patient;
 
 import org.ksoap2.serialization.SoapObject;
 
+import com.choschi.memdroid.data.FormSoapObjectParser;
 import com.choschi.memdroid.interfaces.Serializable;
 
 /**
@@ -14,7 +15,6 @@ import com.choschi.memdroid.interfaces.Serializable;
 
 public class PatientFieldData extends FormSoapObjectParser implements Serializable {
 
-	//public static Class PATIENT_FIELD_DATA_CLASS = PatientFieldData.class;
 	private String fieldId;
 	private String value;
 	
@@ -29,6 +29,11 @@ public class PatientFieldData extends FormSoapObjectParser implements Serializab
 		fieldId = id;
 		value = val;
 	}
+	
+	/**
+	 * init the object with a web service response input
+	 * @param input
+	 */
 	
 	public PatientFieldData (SoapObject input){
 		super (input);
@@ -56,9 +61,19 @@ public class PatientFieldData extends FormSoapObjectParser implements Serializab
 		return out;
 	}
 	
+	/**
+	 * get the field id
+	 * @return id of the field
+	 */
+	
 	public String getId(){
 		return fieldId;
 	}
+	
+	/**
+	 * get the value of the field
+	 * @return
+	 */
 	
 	public String getValue(){
 		return value;

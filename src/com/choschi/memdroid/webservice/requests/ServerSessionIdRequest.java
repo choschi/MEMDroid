@@ -13,7 +13,6 @@ public class ServerSessionIdRequest extends BackgroundSoapRequest {
 	
 	/**
 	 * 
-	 * Constructor
 	 * @param params
 	 */
 	public ServerSessionIdRequest (SoapRequestParams params){

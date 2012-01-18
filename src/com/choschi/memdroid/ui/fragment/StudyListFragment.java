@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -16,6 +15,14 @@ import com.choschi.memdroid.data.ListOfAdapterItemAdapter;
 import com.choschi.memdroid.data.Study;
 import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.interfaces.ClientListener;
+
+/**
+ * 
+ * displays the list of all the studies on the StudyFragment
+ * 
+ * @author Christoph Isch
+ *
+ */
 
 public class StudyListFragment extends ListFragment implements ClientListener  {
 	
@@ -62,7 +69,6 @@ public class StudyListFragment extends ListFragment implements ClientListener  {
 	        if (getListAdapter() != null){
 	        	Study study = (Study)getListAdapter().getItem(mCurCheckPosition);
 	        	Client.getInstance().requestListOfForms(study);
-	        	Log.d ("fragment",""+mCurCheckPosition);
 	        }
     	}
     }

@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.choschi.memdroid.Client;
-import com.choschi.memdroid.data.PatientField;
-import com.choschi.memdroid.data.PatientFieldData;
+import com.choschi.memdroid.data.patient.PatientField;
+import com.choschi.memdroid.data.patient.PatientFieldData;
 import com.choschi.memdroid.interfaces.AdapterItem;
 import com.choschi.memdroid.ui.PatientFieldFactory.FieldType;
 

@@ -54,7 +54,7 @@ public abstract class FormQuestionRule extends FormSoapObjectParser {
 	
 	/**
 	 * is the rule mandatory
-	 * @return
+	 * @return true or false
 	 */
 	
 	public boolean isMandatory(){
@@ -63,7 +63,7 @@ public abstract class FormQuestionRule extends FormSoapObjectParser {
 	
 	/**
 	 * what is the operator
-	 * @return
+	 * @return the operator sign e.g. =,<= etc.
 	 */
 	
 	public String getOperator(){
@@ -72,7 +72,7 @@ public abstract class FormQuestionRule extends FormSoapObjectParser {
 	
 	/**
 	 * get the id
-	 * @return
+	 * @return the id
 	 */
 	
 	public int getId (){
@@ -81,7 +81,7 @@ public abstract class FormQuestionRule extends FormSoapObjectParser {
 	
 	/**
 	 * get the message if the rule is not fulfilled
-	 * @return
+	 * @return the error message
 	 */
 	
 	public String getMessage(){

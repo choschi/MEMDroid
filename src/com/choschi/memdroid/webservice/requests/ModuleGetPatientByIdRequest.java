@@ -16,9 +16,7 @@ public class ModuleGetPatientByIdRequest extends BackgroundSoapRequest {
 	 * 
 	 * @param params
 	 * @param sessionId
-	 * @param lang
-	 * @param search
-	 * @param deptId
+	 * @param id
 	 */
 	
 	public ModuleGetPatientByIdRequest(SoapRequestParams params, String sessionId, String id) {

@@ -29,6 +29,7 @@ public class FormQuestion extends FormSoapObjectParser {
 	private int score;
 	private int textQuestionNo;
 	private String unit;
+	private String displayTitle;
 	
 	private List<FormQuestionRule> constantRules;
 	private List<FormQuestionRule> questionRules;
@@ -67,6 +68,9 @@ public class FormQuestion extends FormSoapObjectParser {
 			break;
 			case UNIT:
 				unit = property;
+			break;
+			case QUESTION_TEXT:
+				displayTitle = property;
 			break;
 		}
 	}
@@ -222,11 +226,25 @@ public class FormQuestion extends FormSoapObjectParser {
 	
 	/**
 	 * get all the FormQuestionLabel objects 
-	 * @return
+	 * @return list of all labels
 	 */
 	
 	public List<FormQuestionLabel> getAllLabels(){
 		return labels;
+	}
+
+	/**
+	 * @return the displayTitle
+	 */
+	public String getDisplayTitle() {
+		return displayTitle;
+	}
+
+	/**
+	 * @param displayTitle the displayTitle to set
+	 */
+	public void setDisplayTitle(String displayTitle) {
+		this.displayTitle = displayTitle;
 	}
 	
 }

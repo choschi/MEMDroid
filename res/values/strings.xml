@@ -4,12 +4,8 @@
     <string name="app_name">MEMDroid</string>
     <string name="loginButton">Login</string>
     <string name="logoutButton">Logout</string>
-    <string name="username">isch</string>
-	<string name="password">u7jER76j</string>
-    <!--
-    <string name="password">webService1</string>
-    <string name="username">webservice</string>
-    -->
+    <string name="username"></string>
+	<string name="password"></string>
     <string name="mainListButtonCaption">List of Studies</string>
     <string name="mainSearchPatientButtonCaption">Search Patient</string>
     <string name="menuPatient">Patient</string>
@@ -27,4 +23,6 @@
     <string name="noPatientText">You have not selected a patient, please do so before choosing a study.</string>
     <string name="buttonOkay">Okay</string>
     <string name="patientSelected">Patient selected</string>
+    <string name="dismiss">close dialog</string>
+    <string name="errorDialogTitle">An error occurred</string>
 </resources>

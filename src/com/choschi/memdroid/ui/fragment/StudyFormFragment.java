@@ -106,8 +106,11 @@ public class StudyFormFragment extends Fragment implements ClientListener,OnClic
 				FormAnswer[] insert = new FormAnswer[formChildren.size()];
 				int counter = 0;
 				for (FormElement item : formChildren){
-					insert[counter] = item.getAnswer();
-					counter++;
+					FormAnswer answer = item.getAnswer();
+					if (answer != null){
+						insert[counter] = answer;
+						counter++;
+					}
 				}
 				
 				// then insert the data on the server

@@ -100,9 +100,9 @@ public class FormQuestionFactory {
 			}
 		}
 		FormElement form = new FormElement(context,question);
-		
 		TextView label = new TextView(context);
-	    label.setText(question.getLabel());
+		label.setTextSize(label.getTextSize()*0.9f);
+	    label.setText(question.getDisplayTitle());
 	    form.fillLeft(label);
 		if (data == DataType.UNDEFINED || presentation == PresentationType.UNDEFINED){
 			Log.i ("FormElementFactory",question.getPresentationType()+":"+question.getDataType()+": one of the two types is not yet implemented");

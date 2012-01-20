@@ -113,7 +113,7 @@ public class Patient extends FormSoapObjectParser implements AdapterItem {
 	
 	/**
 	 * set the list of the PatientFieldData
-	 * @return
+	 * @return list of PatientFieldData
 	 */
 	
 	public List<PatientFieldData> getPatientFieldDatas() {

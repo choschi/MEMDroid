@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.choschi.memdroid.Client;
+import com.choschi.memdroid.Client.Language;
 import com.choschi.memdroid.data.patient.PatientField;
 import com.choschi.memdroid.data.patient.PatientFieldData;
 import com.choschi.memdroid.interfaces.AdapterItem;
@@ -128,7 +129,8 @@ public class PatientFormElement extends LinearLayout implements OnTouchListener,
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
 		EditText child = (EditText)right.getChildAt(0);
-		child.setText(dayOfMonth+"."+(monthOfYear+1)+"."+year);
+		String date = Client.getInstance().getDateForLanguage(dayOfMonth,monthOfYear,year,Language.DE);
+		child.setText(date);
 	}
 
 	@Override

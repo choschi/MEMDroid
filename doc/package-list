@@ -1,0 +1,12 @@
+com.choschi.memdroid
+com.choschi.memdroid.data
+com.choschi.memdroid.data.form
+com.choschi.memdroid.data.patient
+com.choschi.memdroid.data.rule
+com.choschi.memdroid.interfaces
+com.choschi.memdroid.ui
+com.choschi.memdroid.ui.fragment
+com.choschi.memdroid.util
+com.choschi.memdroid.webservice
+com.choschi.memdroid.webservice.parameters
+com.choschi.memdroid.webservice.requests

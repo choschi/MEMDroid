@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.choschi.memdroid.Client;
+import com.choschi.memdroid.util.SoapFaultException;
 import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 /**
@@ -108,8 +109,8 @@ public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams,
         		newResult.addProperty("response",result.toString());
         		parseResponse(newResult);
         	}else if (result instanceof SoapFault){
-        		logcat (((SoapFault)result).toString());
-        		parseResponse (null);
+        		Exception fault = new SoapFaultException(((SoapFault)result).toString());
+        		return fault;
         	}else{
         		parseResponse((SoapObject) result);
         	}
@@ -128,8 +129,7 @@ public abstract class BackgroundSoapRequest extends AsyncTask<SoapRequestParams,
 		Client.getInstance().handleError((Exception)result);
 	}
 	
-	private void logcat(String message){
-		Log.i ("BackgroundSoapRequest",message);
+	private void logcat (String msg){
+		Log.i ("BackgroundSoapRequest",msg);
 	}
-
 }

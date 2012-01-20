@@ -162,7 +162,7 @@ public class Form extends FormSoapObjectParser implements AdapterItem{
 	}
 	/**
 	 * get the sub forms
-	 * @return
+	 * @return list of SubForm
 	 */
 	
 	public List<SubForm> getSubforms(){

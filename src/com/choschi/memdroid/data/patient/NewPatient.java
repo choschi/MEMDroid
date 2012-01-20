@@ -101,7 +101,7 @@ public class NewPatient extends Patient{
 	
 	/**
 	 * get the list of permissions
-	 * @return
+	 * @return list of PatientPermission
 	 */
 	
 	public List<PatientPermission> getPermissions(){

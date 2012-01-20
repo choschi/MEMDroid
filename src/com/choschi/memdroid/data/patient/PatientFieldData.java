@@ -72,7 +72,7 @@ public class PatientFieldData extends FormSoapObjectParser implements Serializab
 	
 	/**
 	 * get the value of the field
-	 * @return
+	 * @return the value as string
 	 */
 	
 	public String getValue(){

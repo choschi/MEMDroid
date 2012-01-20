@@ -14,12 +14,11 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 	private boolean state;
 	
 	/**
-	 * 
 	 * @param params
-	 * @param moduleId
 	 * @param sessionId
-	 * @param signature
 	 * @param userId
+	 * @param departmentId
+	 * @param patient
 	 */
 	
 	// The PatientDataFields are available in the NewPatient parameter, but getting them directly by id to fill
@@ -55,7 +54,6 @@ public class ServerInsertPatientRequest extends BackgroundSoapRequest {
 		for (PatientPermission perm : patient.getPermissions()){
 			request.addProperty("perms",perm.toSoapObject(params.getNamespace()));
 		}
-		request.addProperty ("perms","");//patient.getPermissions());
 		request.addProperty ("yearOfBirth",patient.getYearOfBirth());
 		envelope.headerOut = null;
 	}

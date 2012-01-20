@@ -112,7 +112,7 @@ public class FormElement extends LinearLayout implements OnTouchListener,OnDateS
 	 * 
 	 * @return actual patient field data
 	 */
-	// TODO check if you return the correct stuff for the different presentation types
+
 	public FormAnswer getAnswer(){
 		String val = "";
 		View child = right.getChildAt(0);
@@ -145,6 +145,9 @@ public class FormElement extends LinearLayout implements OnTouchListener,OnDateS
 				val = ((EditText)child).getText().toString();
 			break;
 		}
+		if (val == ""){
+			return null;
+		}
 		return new FormAnswer (question.getDefaultName(),val);
 	}
 
@@ -153,7 +156,8 @@ public class FormElement extends LinearLayout implements OnTouchListener,OnDateS
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
 		EditText child = (EditText)right.getChildAt(0);
-		child.setText(dayOfMonth+"."+(monthOfYear+1)+"."+year);
+		String date = Client.getInstance().getDateForLanguage(dayOfMonth,monthOfYear,year,null);
+		child.setText(date);
 	}
 
 	@Override

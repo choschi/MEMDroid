@@ -13,7 +13,7 @@ import com.choschi.memdroid.webservice.parameters.SoapRequestParams;
 
 public class ServerInsertFormRequest extends BackgroundSoapRequest {
 	
-	private boolean state;
+	//private boolean state;
 	
 	/**
 	 * 
@@ -38,7 +38,9 @@ public class ServerInsertFormRequest extends BackgroundSoapRequest {
 		SoapObject subformData = new SoapObject (params.getNamespace(),"subformData");
 		subformData.addProperty ("subformId",subform.getId());
 		for (FormAnswer item : answers){
-			subformData.addProperty("answers",item.toSoapObject(params.getNamespace()));
+			if (item != null){
+				subformData.addProperty("answers",item.toSoapObject(params.getNamespace()));
+			}
 		}
 		formData.addProperty("subformData",subformData);
 		request.addProperty("formData",formData);
@@ -48,7 +50,6 @@ public class ServerInsertFormRequest extends BackgroundSoapRequest {
 	@Override
 	protected void parseResponse (SoapObject response){
 		Log.d ("form inserted",response.toString());
-		
 	}
 	
 	
@@ -59,7 +60,7 @@ public class ServerInsertFormRequest extends BackgroundSoapRequest {
 	@Override
 	protected void onPostExecute(Object result){
 		try{
-			Client.getInstance().savedPatient (state);
+			Client.getInstance().savedForm (result);
 			return;
 		}catch (Exception ex){
 			super.onPostExecute(ex);

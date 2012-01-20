@@ -108,7 +108,15 @@ public class PatientFieldFactory {
 					switch (fixedType){
 						case COUNTRY:
 						case COUNTRY2:
-							form.fillRight(createSpinnerForAdapter(context,field.getFieldId(),FixedLists.getInstance().getCountries(null)), type);
+							Spinner view = (Spinner) createSpinnerForAdapter(context,field.getFieldId(),FixedLists.getInstance().getCountries(null));
+							int index = 0;
+							for (int i=0;i<FixedLists.getInstance().getCountries(null).size();i++){
+								if(FixedLists.getInstance().getCountries(null).get(i).getId().compareToIgnoreCase("ch") == 0){
+									index = i;
+								}
+							}
+							view.setSelection(index);
+							form.fillRight(view,type);
 						break;
 						case DEPARTMENT:
 							// Department can not be chosen anymore at this point 							

@@ -4,12 +4,8 @@
     <string name="app_name">MEMDroid</string>
     <string name="loginButton">Einloggen</string>
     <string name="logoutButton">Ausloggen</string>
-    <string name="username">isch</string>
-	<string name="password">u7jER76j</string>
-    <!--
-    <string name="password">webService1</string>
-    <string name="username">webservice</string>
-    -->
+    <string name="username"></string>
+	<string name="password"></string>
     <string name="mainListButtonCaption">Liste der Studien</string>
     <string name="mainSearchPatientButtonCaption">Patienten suchen</string>
     <string name="menuPatient">Patienten</string>
@@ -27,4 +23,6 @@
     <string name="noPatientText">Bitte einen Patienten wählen, bevor eine Studie gewählt wird</string>
     <string name="buttonOkay">In Ordnung</string>
     <string name="patientSelected">Patient ausgewählt.</string>
+    <string name="dismiss">Dialog schliessen</string>
+    <string name="errorDialogTitle">Fehler!</string>
 </resources>

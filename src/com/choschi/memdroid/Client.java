@@ -1,8 +1,9 @@
 package com.choschi.memdroid;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.util.Log;
@@ -75,8 +76,35 @@ public class Client {
 		NO_PATIENT,
 		PATIENT_SELECTED,
 		RESTORE_BASE,
+		ERROR_DIALOG,
 	}
-
+	
+	/**
+	 * enum for the languages
+	 */
+	
+	public enum Language{
+		UNDEFINED ("undefined","undefined"),
+		EN ("en","english"),
+		DE ("de","deutsch"),
+		;
+		private String name;
+		private String iso;
+		Language (String iso,String name){
+			this.name = name;
+			this.iso = iso;
+		}
+		
+		public String toString(){
+			return name;
+		}
+		
+		public String getIso(){
+			return iso;
+		}
+	}
+	
+	
 	/**
 	 * variables needed in "session" management
 	 */
@@ -88,7 +116,7 @@ public class Client {
 	private String signature;
 	private String moduleSessionId;
 	private String moduleId;
-	private String language = "en";
+	private Language language = Language.EN;
 	
 	/**
 	 * data received from server and surely valid for the whole session
@@ -122,7 +150,7 @@ public class Client {
 	
 	private SubForm actualSubForm;
 	
-
+	private String errorMessage;
 	
 	/**
 	 * private constructor, only class methods can create an instance of the
@@ -144,7 +172,11 @@ public class Client {
 	}
 	
 	public void setLanguage(String lang){
-		language = lang;
+		for (Language item : Language.values()){
+			if (item.getIso().compareToIgnoreCase(lang)==0){
+				language = item;
+			}
+		}
 		logcat ("the language is: "+language);
 	}
 	
@@ -255,7 +287,7 @@ public class Client {
 	 * second step successful -> received module session id after user has been
 	 * verified by module issue the first and last step of the login process
 	 * 
-	 * @param response
+	 * @param departments
 	 */
 
 	public void receivedUserData(List<Department> departments) {
@@ -281,7 +313,7 @@ public class Client {
 						+ "getListOfStudiesRequest");
 				params.setMethod("getListOfStudies");
 				BackgroundSoapRequest request = new ServerGetListOfStudiesRequest(
-						params, sessionId, language, "multicenter");
+						params, sessionId, language.getIso(), "multicenter");
 				request.execute(new SoapRequestParams[] {});
 			}
 		}
@@ -314,7 +346,7 @@ public class Client {
 			params.setAction(BackgroundSoapRequest.ServerBaseAction + "GetListOfFormsRequest");
 			params.setMethod("getListOfForms");
 			BackgroundSoapRequest request = new ServerGetListOfFormsRequest(
-					params, sessionId, language,  "multicenter", study.getName());
+					params, sessionId, language.getIso(),  "multicenter", study.getName());
 			request.execute(new SoapRequestParams[] {});
 
 		}
@@ -353,9 +385,8 @@ public class Client {
 					+ "downloadFormDefinitionRequest");
 			params.setMethod("downloadFormDefinition");
 			logcat("init server " + params.getMethod() + " request");
-			logcat(Locale.getDefault().getDisplayLanguage());
 			BackgroundSoapRequest request = new ServerGetFormDefinitionRequest(
-					params, sessionId, language, form.getStudyName(), form.getVersion());
+					params, sessionId, language.getIso(), form.getStudyName(), form.getVersion());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
@@ -392,7 +423,7 @@ public class Client {
 				if (departments != null){
 					SoapRequestParams params = new ModuleRequestParams();
 					params.setMethod("getPatientFields");
-					BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "insert", actualDepartment.getId());
+					BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language.getIso(), "insert", actualDepartment.getId());
 					request.execute(new SoapRequestParams[] {});
 				}else{
 					requestUserData();
@@ -414,7 +445,7 @@ public class Client {
 				if (departments != null){
 					SoapRequestParams params = new ModuleRequestParams();
 					params.setMethod("getPatientFields");
-					BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language, "search", actualDepartment.getId());
+					BackgroundSoapRequest request = new ModuleGetPatientFieldsRequest(params, moduleSessionId, language.getIso(), "search", actualDepartment.getId());
 					request.execute(new SoapRequestParams[] {});
 				}else{
 					requestUserData();
@@ -452,7 +483,7 @@ public class Client {
 			notify(ClientMessages.SHOW_PROGRESS_DIALOG);
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("createNewPatient");
-			BackgroundSoapRequest request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language, data, actualDepartment.getId());
+			BackgroundSoapRequest request = new ModuleCreateNewPatientRequest(params, moduleSessionId, language.getIso(), data, actualDepartment.getId());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
@@ -496,7 +527,7 @@ public class Client {
 			SoapRequestParams params = new ModuleRequestParams();
 			params.setMethod("searchPatient");
 			logcat("init module " + params.getMethod() + " request");
-			BackgroundSoapRequest request = new ModuleSearchPatientRequest(params, moduleSessionId, language, search, actualDepartment.getId());
+			BackgroundSoapRequest request = new ModuleSearchPatientRequest(params, moduleSessionId, language.getIso(), search, actualDepartment.getId());
 			request.execute(new SoapRequestParams[] {});
 		}
 	}
@@ -559,8 +590,19 @@ public class Client {
 	}
 	
 	/**
+	 * call back being called after a form has been saved
+	 * @param result
+	 */
+	
+	public void savedForm (Object result){
+		if (result != null){
+			handleError((Exception)result);
+		}
+	}
+	
+	/**
 	 * get a list of all the patient search results
-	 * @return
+	 * @return list of patients
 	 */
 	
 	public List<Patient> getPatients(){
@@ -594,19 +636,17 @@ public class Client {
 	/**
 	 * terminal station for all errors in data handling 
 	 * 
-	 * @param Exception
+	 * @param result
 	 */
 	
 	public void handleError(Exception result) {
-		logcat("Error : " + result.getMessage());
+		displayErrorMessage(result.toString());
 		if (loggingIn) {
 			loggingIn = false;
-			for (ClientListener listener : listeners) {
-				listener.notify(ClientMessages.LOGIN_FAILED);
-			}
+			notify(ClientMessages.LOGIN_FAILED);
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @return the fields for the patient insert
@@ -632,6 +672,15 @@ public class Client {
 
 	public List<Study> getListOfStudies() {
 		return studies;
+	}
+	
+	/**
+	 * get the application language
+	 * @return the actual language
+	 */
+	
+	public Language getLanguage(){
+		return language;
 	}
 
 	/**
@@ -681,7 +730,7 @@ public class Client {
 	
 	/**
 	 * what is the actually selected sub form
-	 * @return
+	 * @return subForm
 	 */
 	
 	public SubForm getActualSubForm(){
@@ -716,12 +765,57 @@ public class Client {
 		notify(ClientMessages.SHOW_DATE_PICKER);
 	}
 	
-	/*
+	/**
 	 * a date has been selected send it to the waiting object
 	 */
 
 	public OnDateSetListener getDateWaiter() {
 		return waitingForDate;
+	}
+	
+	/**
+	 * generates a date string according to the language
+	 * @param dayOfMonth
+	 * @param monthOfYear
+	 * @param year
+	 * @param lang
+	 * @return date in string format
+	 */
+	
+	public String getDateForLanguage(int dayOfMonth, int monthOfYear, int year, Language lang) {
+		monthOfYear += 1;
+		String day ="";
+		String month = "";
+		if (dayOfMonth < 10){
+			day = "0"+dayOfMonth;
+		}else{
+			day = ""+dayOfMonth;
+		}
+		if (monthOfYear < 10){
+			month = "0"+monthOfYear;
+		}else{
+			month = ""+monthOfYear;
+		}
+		String output = "";
+		if (lang == null){
+			// this is a workaround as long as the server only supports timestamps
+			lang = Language.UNDEFINED;
+		}
+		switch (lang){
+		case EN:
+			output = month+"/"+day+"/"+year;
+			break;
+		case DE:
+			output = day+"."+month+"."+year;
+			break;
+		case UNDEFINED:
+		default:
+			GregorianCalendar date = new GregorianCalendar (year,monthOfYear,dayOfMonth);
+			Date time = date.getTime();
+			output = ""+time.getTime();
+			break;
+		}
+		return output;
 	}
 	
 	/**
@@ -763,6 +857,25 @@ public class Client {
 		notify (ClientMessages.RESTORE_BASE);
 	}
 
+	/**
+	 * set the error message and notifies the activity to show the error dialog
+	 * @param msg
+	 */
+	
+	public void displayErrorMessage(String msg){
+		errorMessage = msg;
+		notify(ClientMessages.ERROR_DIALOG);
+	}
+	
+	/**
+	 * get the actual error message
+	 * @return the error message
+	 */
+	
+	public String getErrorMessage(){
+		return errorMessage;
+	}
+	
 	/**
 	 * logs a message to the log cat debug tool
 	 *

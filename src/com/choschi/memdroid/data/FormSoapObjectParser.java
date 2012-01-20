@@ -106,6 +106,8 @@ public abstract class FormSoapObjectParser extends SoapObjectParser {
 		PATIENT_FIELD_USE_TIME ("useTime"),
 		PATIENT_FIELD_USE_UNSPECIFIED_GENDER ("useUnspecifiedGender"),
 		PATIENT_FIELD_VALIDATION_REGULAR_EXPRESSION ("validationRegularExpression"),
+		QUESTION_TEXT ("questionText"),
+
 		;
 		
 		private String name;

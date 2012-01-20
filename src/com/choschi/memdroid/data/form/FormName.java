@@ -50,7 +50,7 @@ public class FormName extends FormSoapObjectParser {
 	
 	/**
 	 * get the language of the actual name object
-	 * @return
+	 * @return language
 	 */
 	
 	public String getLanguage(){
@@ -59,7 +59,7 @@ public class FormName extends FormSoapObjectParser {
 	
 	/**
 	 * this returns the display name
-	 * @return
+	 * @return name
 	 */
 	
 	public String getName(){
@@ -68,7 +68,7 @@ public class FormName extends FormSoapObjectParser {
 	
 	/**
 	 * get the description
-	 * @return
+	 * @return description
 	 */
 	
 	public String getDescription (){

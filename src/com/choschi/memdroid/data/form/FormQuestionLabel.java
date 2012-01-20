@@ -76,7 +76,7 @@ public class FormQuestionLabel extends FormSoapObjectParser implements AdapterIt
 	
 	/**
 	 * label means in this case the String representation of the label as a whole
-	 * @return
+	 * @return label as String
 	 */
 	
 	public String getLabel(){

@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.choschi.memdroid.Client.ClientMessages;
 import com.choschi.memdroid.data.Department;
@@ -50,12 +51,14 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 	public static final int DATE_DIALOG = 3;
 	public static final int NO_PATIENT_DIALOG = 4;
 	public static final int PATIENT_DIALOG = 5;
+	public static final int ERROR_DIALOG = 6;
 	private Dialog loginDialog;
 	private ProgressDialog progressDialog;
 	private Dialog departmentDialog;
 	private DatePickerDialog dateDialog;
 	private AlertDialog alrt;
 	private AlertDialog alert;
+	private Dialog errorDialog;
 	
 	private MenuItem logoutButton;
 	
@@ -180,6 +183,17 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				build.setPositiveButton(R.string.buttonOkay,this);
 				alrt = build.create();
 				return alrt;
+			case ERROR_DIALOG:
+				errorDialog = new Dialog(this);
+				errorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				errorDialog.setContentView(R.layout.error_dialog);
+				errorDialog.setTitle(R.string.errorDialogTitle);
+				TextView message = (TextView) errorDialog.findViewById(R.id.errorDialogMessage);
+				message.setText (Client.getInstance().getErrorMessage());
+				Button errorDismissButton = (Button) errorDialog.findViewById(R.id.errorDialogDismissButton);
+				errorDismissButton.setOnClickListener(this);
+				errorDialog.setCancelable (false);
+				return errorDialog;
 		}
 		return null;
 	}
@@ -213,6 +227,9 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 			break;
 			case R.id.openLoginButton:
 				this.showLoginDialog();
+			break;
+			case R.id.errorDialogDismissButton:
+				errorDialog.dismiss();
 			break;
 		}
 	}
@@ -291,11 +308,15 @@ public class MEMDroidActivity extends Activity implements OnClickListener,Client
 				View fragments = this.findViewById(R.id.fragmentContainer);
 				fragments.setVisibility(View.INVISIBLE);
 				break;
+			case ERROR_DIALOG:
+				showDialog(ERROR_DIALOG);
+				break;
 		}
 	}
 
 	@Override
 	public void onCancel(DialogInterface arg0) {
+		Client.getInstance().logOut();
 		MEMDroidActivity.this.finish();
 	}
 
